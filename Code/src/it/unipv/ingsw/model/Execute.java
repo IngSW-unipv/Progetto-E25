@@ -1,4 +1,4 @@
-package it.unipv.ingsw;
+package it.unipv.ingsw.model;
 
 public class Execute {
 

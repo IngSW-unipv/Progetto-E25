@@ -1,11 +1,9 @@
 package it.unipv.ingsw.model.spedizione;
 
-public class Spedizione {
+public class Tappa {
 
-	public Spedizione() {
+	public Tappa() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 
 }

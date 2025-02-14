@@ -1,5 +1,7 @@
 package it.unipv.ingsw.model.shippable;
 
-public class IShippable {
+public interface IShippable {
+	
+	public int getSize();
 
 }

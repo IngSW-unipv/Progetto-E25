@@ -1,11 +1,9 @@
 package it.unipv.ingsw.model.spedizione;
 
-public class Spedizione {
+public class QRcode {
 
-	public Spedizione() {
+	public QRcode() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 
 }

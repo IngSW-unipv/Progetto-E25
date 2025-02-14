@@ -1,5 +1,7 @@
 package it.unipv.ingsw.model.utenze;
 
-public class EndUsers extends Utente{
+import it.unipv.ingsw.model.Observer;
+
+public class EndUsers extends Utente implements Observer{
 
 }

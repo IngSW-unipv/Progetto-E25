@@ -1,5 +1,7 @@
 package it.unipv.ingsw.model.utenze;
 
-public class Admin extends ASuperUser {
+import it.unipv.ingsw.model.Observer;
+
+public class Admin extends ASuperUser implements Observer{
 
 }

@@ -1,4 +1,4 @@
-package it.unipv.ingsw.model.shippable;
+package it.unipv.ingsw.model.spedizione.shippable;
 
 public interface IShippable {
 	

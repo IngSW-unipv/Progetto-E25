@@ -1,4 +1,4 @@
-package it.unipv.ingsw.model.puntoDeposito;
+package it.unipv.ingsw.model.spedizione.puntoDeposito;
 
 public class Scompartimento {
 

@@ -5,6 +5,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+//per utilizzare package shippable
+import it.unipv.ingsw.model.spedizione.shippable.*;
+
 public class Spedizione {
 
 	public Spedizione() {
@@ -18,11 +21,14 @@ public class Spedizione {
 		InputStreamReader in=new InputStreamReader(System.in);
 		BufferedReader keyboard=new BufferedReader(in);
 		
+		Pacco pacco_spedire= new Pacco();
 		String nome_destinatario;
 		boolean controllo=false;
 
-		//richiesta inserimento dati dall'utente
-		System.out.printf("Inserire dettagli pacco: dimensione e peso"); //come li faccio a recuperare i dati?
+//richiesta inserimento dati dall'utente
+		System.out.printf("Inserire dettagli pacco"); 
+		int dimensione_pacco=pacco_spedire.setSize();
+		int peso_pacco=pacco_spedire.setWeight();
 		
 		while(controllo==true) { //permetto all'utente di avere piu possibilità di inserire i dati se sbagliati
 			try {
@@ -32,7 +38,6 @@ public class Spedizione {
 			}catch(IOException e){
 				System.out.printf("Errore inserimento dati destinatario");
 				controllo= false;
-				//poi ci capiamo come risolvere sta cosa
 			}
 			
 		}
@@ -47,8 +52,8 @@ public class Spedizione {
 			pagamento.effettuaPagamento;  //eccezione la devo gestire io??
 			codice_spedizione= qrCode.generaQRcodice();
 			
-			//trasferimento dati sul database
-		
+			//TRAFERIMENTO DATI SUL DATABASE
+			//nota: dopo il salvataggio, devo pulire i campi
 		*/
 		
 	}

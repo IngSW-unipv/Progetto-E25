@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
+import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
 
-public class Locker {
+public class Locker implements IPuntoDeposito{
 	
 	private Pacco pacco;
 	private String idLocker;
@@ -39,14 +40,29 @@ public class Locker {
     	}
     }
     
-    
-	
+
 	public boolean paccoPresente() {
 		return pacco != null;
 	}
 	
 	public void depositaPacco(Pacco pacco) {
 		this.pacco = pacco;
+	}
+	
+	@Override
+	public void getPosizione() {
+		
+	}
+	
+	@Override
+	public void checkQR() {
+		
+	}
+	
+	@Override
+	public boolean checkDisponibilita() {
+
+		return true;
 	}
 	
 }

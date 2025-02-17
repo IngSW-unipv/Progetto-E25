@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 
 //per utilizzare package shippable
 import it.unipv.ingsw.model.spedizione.shippable.*;
+import it.unipv.ingsw.model.utenze.*;
 
 public class Spedizione {
 
@@ -22,18 +23,26 @@ public class Spedizione {
 		BufferedReader keyboard=new BufferedReader(in);
 		
 		Pacco pacco_spedire= new Pacco();
-		String nome_destinatario;
+		Destinatario destinatario_pacco;
 		boolean controllo=false;
+		String email_destinatario=null;
 
 //richiesta inserimento dati dall'utente
 		System.out.printf("Inserire dettagli pacco"); 
-		int dimensione_pacco=pacco_spedire.setSize();
+		String dimensione_pacco=pacco_spedire.setSize();  //non sono sicura di usare gli emun
 		int peso_pacco=pacco_spedire.setWeight();
-		
-		while(controllo==true) { //permetto all'utente di avere piu possibilità di inserire i dati se sbagliati
-			try {
-				System.out.printf("Inserire dettagli del destinatario");
-				nome_destinatario=keyboard.readLine();		
+
+		while(controllo==false) { //permetto all'utente di avere piu possibilità di inserire i dati se sbagliati
+			try { //non sono sicura che siano questi i dati da inserire 
+				System.out.printf("Inserire nome del destinatario");
+				destinatario_pacco.setNome(keyboard.readLine());
+				
+				System.out.printf("Inserire cognome del destinatario");
+				destinatario_pacco.setCognome(keyboard.readLine());	
+				
+				System.out.printf("Inserire email del destinatario");
+				email_destinatario=keyboard.readLine();    
+				
 				controllo= true;
 			}catch(IOException e){
 				System.out.printf("Errore inserimento dati destinatario");
@@ -42,14 +51,13 @@ public class Spedizione {
 			
 		}
 
-		//bisogna chiedere i dettagli del mittente o fa il sistema in automatico???
 		
 		System.out.printf("Si vuole aggiungere una copertura assicurativa?"); //devo aggiungere tipo le possibili coperture??
 		
 		//devo usare il getPosizione del locker per capire quali ci sono??
 		System.out.printf("Controllo disponibilità nel locker scelto"); //??
 		/*locker.checkDisponibilita();
-			pagamento.effettuaPagamento;  //eccezione la devo gestire io??
+			pagamento.effettuaPagamento;  
 			codice_spedizione= qrCode.generaQRcodice();
 			
 			//TRAFERIMENTO DATI SUL DATABASE

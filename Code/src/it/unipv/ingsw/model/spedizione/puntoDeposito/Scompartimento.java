@@ -1,15 +1,11 @@
 package it.unipv.ingsw.model.spedizione.puntoDeposito;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
 
 public class Scompartimento {
 	
 	private Pacco paccoInScompartimento;
 
-	Map<Integer, Scompartimento> scompartimentoMap = new HashMap<>();
 	
 	public void put(int i, Scompartimento scompartimento) {
 		
@@ -23,7 +19,7 @@ public class Scompartimento {
 		
 	}
 	
-	public Scompartimento() {
+	public Scompartimento(String string) {
 		this.paccoInScompartimento = null; // inizialmente vuoto
 	}
 	

@@ -8,11 +8,27 @@ public class Pacco implements IShippable{
 	
 	private int weight;
 	private int size;
+	private String id;
+	private boolean paccoRitirato; // indica se il pacco e stato ritirato o meno
 	
 	public Pacco() {
 		// TODO Auto-generated constructor stub
 		size=0;
 		weight=0;
+		this.id = id;
+		this.paccoRitirato = paccoRitirato;
+	}
+	
+	public String getId() {
+		return id;
+	}
+	
+	public boolean paccoRitirato() {
+		return paccoRitirato;
+	}
+	
+	public void setPaccoRitirato (boolean paccoRitirato) {
+		this.paccoRitirato = paccoRitirato;
 	}
 
 	@Override

@@ -10,15 +10,15 @@ public abstract class ASuperUser {
 		this.utenteLoggato=false;
 	}
 	
-    public static boolean login(String mail, String password) {
-        if (mail.equals(mail) && password.equals(password)) {
+    public boolean login(String mail, String password) {
+        if (this.mail.equals(mail) && this.password.equals(password)) {
             utenteLoggato = true;
             return true;  //login riuscito
         } 
         return false;  //credenziali sbagliate
     }
     
-    public static boolean logout() {
+    public boolean logout() {
         if (utenteLoggato) {
             utenteLoggato = false;
             return true;     //logout riuscito
@@ -26,7 +26,7 @@ public abstract class ASuperUser {
         return false;   //nessun utente loggato
     }    
 
-    public static boolean isLoggedIn() {
+    public boolean isLoggedIn() {
         return utenteLoggato;
     }
 }

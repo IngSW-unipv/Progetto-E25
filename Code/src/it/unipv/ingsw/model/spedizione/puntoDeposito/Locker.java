@@ -8,21 +8,38 @@ import it.unipv.ingsw.model.spedizione.shippable.Pacco;
 public class Locker {
 	
 	private Pacco pacco;
-	private String lockerId;
+	private String idLocker;
 	private Map<String, Scompartimento> scompartimenti; // ogni scompartimento e' identificato da un unico Key
 	
 	public Locker(String lockerId, int numeroScompartimenti) {
-		this.lockerId = lockerId;
+		this.idLocker = idLocker;
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
 		for (int i=0; i<numeroScompartimenti; i++) {
-			scompartimenti.put(lockerId + "-S" + (i+1), new Scompartimento(lockerId + "-S" + (i+1)));
-		}
+			scompartimenti.put(idLocker + "-S" + (i+1), new Scompartimento(idLocker + "-S" + (i+1)));
+		} //aggiunge scompartimenti alla mappa ognunco con Id univoco
 	}
-
 	
 	public String getId() {
-		return lockerId;
+		return idLocker;
 	}
+	
+	// Getter per la mappa degli scompartimenti
+    public Map<String, Scompartimento> getScompartimenti() {
+        return scompartimenti;
+    }
+    
+    //metodo per il ritiro di un pacco con un id specificato
+    public boolean ritiraPacco(String idScompartimento) {
+    	Scompartimento scompartimento = scompartimenti.get(idScompartimento);
+    	if(scompartimento.Occupato()) {
+    		scompartimento.ritiraPacco(); // ritira il pacco e si libera lo scompartimento
+    		return true;
+    	}else {
+    		return false; //lo scompartimento e' vuoto
+    	}
+    }
+    
+    
 	
 	public boolean paccoPresente() {
 		return pacco != null;

@@ -42,5 +42,10 @@ public class Scompartimento {
 	public void clearScompartimento() {
 		this.paccoInScompartimento = null; //dopo il ritiro del pacco, lo scompartimento torna vuoto
 	}
+
+	public void ritiraPacco() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

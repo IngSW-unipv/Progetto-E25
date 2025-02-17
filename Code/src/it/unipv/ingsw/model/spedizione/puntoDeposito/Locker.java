@@ -60,9 +60,15 @@ public class Locker implements IPuntoDeposito{
 	}
 	
 	@Override
-	public boolean checkDisponibilita() {
-
-		return true;
+	public String checkDisponibilita() {
+		for (Map.Entry<String, Scompartimento> entry : scompartimenti.entrySet()) {
+			Scompartimento idScompartimento= entry.getValue();
+			if(idScompartimento.Occupato()==false) {
+				System.out.printf("Uno scompartimento è libero");
+				return idLocker;
+			}	
+		}
+		return null;
 	}
 	
 }

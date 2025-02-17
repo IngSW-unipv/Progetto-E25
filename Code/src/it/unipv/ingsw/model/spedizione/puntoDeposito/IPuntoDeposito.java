@@ -9,7 +9,7 @@ public interface IPuntoDeposito {
 	
 	public void checkQR();
 	
-	public boolean checkDisponibilita();
+	public String checkDisponibilita();
 	
 	
 }

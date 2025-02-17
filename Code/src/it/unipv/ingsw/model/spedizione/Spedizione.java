@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 //per utilizzare package shippable
 import it.unipv.ingsw.model.spedizione.shippable.*;
 import it.unipv.ingsw.model.utenze.*;
+import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
 
 public class Spedizione {
 
@@ -15,13 +16,11 @@ public class Spedizione {
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-	
 	public void AvvioSpedizione() {
-		
 		InputStreamReader in=new InputStreamReader(System.in);
 		BufferedReader keyboard=new BufferedReader(in);
 		
+		Locker locker;
 		Pacco pacco_spedire= new Pacco();
 		Destinatario destinatario_pacco;
 		boolean controllo=false;
@@ -55,9 +54,10 @@ public class Spedizione {
 		System.out.printf("Si vuole aggiungere una copertura assicurativa?"); //devo aggiungere tipo le possibili coperture??
 		
 		//devo usare il getPosizione del locker per capire quali ci sono??
-		System.out.printf("Controllo disponibilità nel locker scelto"); //??
-		/*locker.checkDisponibilita();
-			pagamento.effettuaPagamento;  
+		System.out.printf("Controllo disponibilità nel locker scelto");
+			String IDlocker_scelto=locker.checkDisponibilita(); //??
+			
+			/*pagamento.effettuaPagamento;  
 			codice_spedizione= qrCode.generaQRcodice();
 			
 			//TRAFERIMENTO DATI SUL DATABASE

@@ -14,15 +14,16 @@ public class Utente extends ASuperUser implements Subject{
 	private LocalDate dataNascita;
 	private Blob fotoDocumento;
 	private boolean statoProfilo;
-	protected String formatoNome = "^[A-Za-zàèéìòóùçÁÉÍÓÚÑñ ]{1,100}$"; // Consente lettere, accenti e spazi
-	protected String formatoMail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,}$";
-	protected String formatoPassword = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,32}$"; //Contenga almeno una lettera minuscola ([a-z]), almeno una lettera maiuscola ([A-Z]), almeno un numero (\\d), almeno un carattere speciale ([!@#$%^&*]), lunghezza compresa tra 8 e 32 caratteri
-	protected String formatoData = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"; //formato YYYY-MM-GG 
-	protected String formatoNumero = "^\\+\\d{1,3}\\s?\\d{1,4}[\\s-]?\\d{1,4}[\\s-]?\\d{1,4}$";
-	protected String formatoIndirizzo = "^[A-Za-z0-9\\s,.-]+\\s\\d{1,5}\\s[A-Za-z\\s]+$";
+	//map di admin
+	private String formatoNome = "^[A-Za-zàèéìòóùçÁÉÍÓÚÑñ ]{1,100}$"; // Consente lettere, accenti e spazi
+	private String formatoMail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,}$"; //formato nomemail@example.com
+	private String formatoPassword = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,32}$"; //Contenga almeno una lettera minuscola, maiuscola, un numero, un carattere speciale e una lunghezza compresa tra 8 e 32 caratteri
+	private String formatoData = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"; //formato YYYY-MM-GG 
+	private String formatoNumero = "^\\+\\d{1,3}\\s?\\d{1,4}[\\s-]?\\d{1,4}[\\s-]?\\d{1,4}$";
+	private String formatoIndirizzo = "^[A-Za-z0-9\\s,.-]+\\s\\d{1,5}\\s[A-Za-z\\s]+$";
 	
 	//costruttore
-	protected Utente(String mail, String password,String nome, String cognome,String numeroTelefono, String indirizzoCivico, LocalDate dataNascita, Blob fotoDocumento) {
+	public Utente(String mail, String password,String nome, String cognome,String numeroTelefono, String indirizzoCivico, LocalDate dataNascita, Blob fotoDocumento) {
 		super(mail,password);
 		this.nome = nome;
 		this.cognome = cognome;
@@ -33,8 +34,11 @@ public class Utente extends ASuperUser implements Subject{
 		this.statoProfilo = false;
 	}
 	
-	//getter
+	public Utente() {
+	}
 	
+	//getter
+
 	public String getNome() {
 		return nome;
 	}
@@ -115,6 +119,7 @@ public class Utente extends ASuperUser implements Subject{
             System.out.println("Tutti i campi sono obbligatori.");
             return null;
         }
+
         if(!nome.matches(formatoNome) || !cognome.matches(formatoNome) || !mail.matches(formatoMail) || !password.matches(formatoPassword) || !data.matches(formatoData) || !numeroTelefono.matches(formatoNumero) || !indirizzoCivico.matches(formatoIndirizzo) || !isPngImage(fotoDocumento)) { 
         	System.out.println("Uno dei campi non rispetta le regole");
         	return null;
@@ -130,12 +135,45 @@ public class Utente extends ASuperUser implements Subject{
 		return true;
 	}
 
-	//metodi da implementare
-	public void modificaProfilo() {}
-	//public void cancellaAccount() {}
+	
+	public Utente modificaProfilo(String mail,String password,String nome, String cognome, String numeroTelefono, String indirizzoCivico, String data, Blob fotoDocumento) { 
+		Utente utenteInAttesa = new Utente(); //parametri passati: null,ferri,34637738,null,...
+		if(mail != null && mail.matches(formatoMail) && !super.getMail().equals(mail)) 
+			utenteInAttesa.setMail(mail);
+		if(password != null && password.matches(formatoPassword) && !super.getPassword().equals(password)) 
+			utenteInAttesa.setPassword(password);
+		if(nome != null && nome.matches(formatoNome) && !this.nome.equals(nome)) 
+			utenteInAttesa.setNome(nome);
+		if(cognome != null && cognome.matches(formatoNome) && !this.cognome.equals(cognome)) 
+			utenteInAttesa.setCognome(cognome);
+		if(numeroTelefono != null && numeroTelefono.matches(formatoNumero) && !this.numeroTelefono.equals(numeroTelefono)) 
+			utenteInAttesa.setNumeroTelefono(numeroTelefono);
+		if(indirizzoCivico != null && indirizzoCivico.matches(formatoIndirizzo) && !this.indirizzoCivico.equals(indirizzoCivico)) 
+			utenteInAttesa.setIndirizzoCivico(indirizzoCivico);
+		if(data != null && data.matches(formatoData) && !this.dataNascita.equals(data)) { 
+			LocalDate dataNascita = LocalDate.parse(data);
+			utenteInAttesa.setDataNascita(dataNascita);
+		}
+		try {
+			if(fotoDocumento != null && isPngImage(fotoDocumento) && !this.fotoDocumento.equals(fotoDocumento))  
+				utenteInAttesa.setFotoDocumento(fotoDocumento);
+		} catch (SQLException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//notify()
+		return utenteInAttesa; //utente fittizio con modifiche
+	}
+	
+	public void cancellaAccount() {
+		
+	}
+	
+	
+	
 	public void addObserver() {}
 	public boolean removeObserver(){return true;}
-	public void notify_() {}
+	public void notifyObservers() {}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -146,14 +184,10 @@ public class Utente extends ASuperUser implements Subject{
 		if (getClass() != obj.getClass())
 			return false;
 		Utente profilo = (Utente) obj;
-		return Objects.equals(cognome, profilo.cognome) && Objects.equals(dataNascita, profilo.dataNascita)
-				&& Objects.equals(fotoDocumento, profilo.fotoDocumento)
-				&& Objects.equals(numeroTelefono, profilo.numeroTelefono) && Objects.equals(indirizzoCivico, profilo.indirizzoCivico) && Objects.equals(nome, profilo.nome)
-				&& statoProfilo == profilo.statoProfilo;
+		return Objects.equals(cognome, profilo.cognome) && Objects.equals(dataNascita, profilo.dataNascita) && Objects.equals(fotoDocumento, profilo.fotoDocumento) && Objects.equals(numeroTelefono, profilo.numeroTelefono) && Objects.equals(indirizzoCivico, profilo.indirizzoCivico) && Objects.equals(nome, profilo.nome) && statoProfilo == profilo.statoProfilo;
 	}
 	@Override
 	public String toString() {
-		return "Utente- Nome:" + nome + ", Cognome:" + cognome + ", Numero di telefono:" +numeroTelefono+ ", Indirizzo civico:" + indirizzoCivico
-				+ ", dataNascita=" + dataNascita;
+		return "Utente- Mail:" +super.getMail()+ ", Password:"+super.getPassword()+", Nome:" + nome + ", Cognome:" + cognome + ", Numero di telefono:" +numeroTelefono+ ", Indirizzo civico:" + indirizzoCivico+ ", dataNascita=" + dataNascita;
 	}
 }

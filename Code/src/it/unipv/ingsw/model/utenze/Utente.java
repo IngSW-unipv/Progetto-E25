@@ -22,7 +22,7 @@ public class Utente extends ASuperUser implements Subject{
 	protected String formatoIndirizzo = "^[A-Za-z0-9\\s,.-]+\\s\\d{1,5}\\s[A-Za-z\\s]+$";
 	
 	//costruttore
-	protected Utente(String mail, String password,String nome, String cognome,String numeroTelefono, String indirizzoCivico, LocalDate dataNascita, Blob fotoDocumento) {
+	public Utente(String mail, String password,String nome, String cognome,String numeroTelefono, String indirizzoCivico, LocalDate dataNascita, Blob fotoDocumento) {
 		super(mail,password);
 		this.nome = nome;
 		this.cognome = cognome;
@@ -32,6 +32,12 @@ public class Utente extends ASuperUser implements Subject{
 		this.fotoDocumento = fotoDocumento;
 		this.statoProfilo = false;
 	}
+	
+	//utente non registrato
+	public Utente(String mail) {
+		super(mail);
+	}
+	
 	
 	//getter
 	

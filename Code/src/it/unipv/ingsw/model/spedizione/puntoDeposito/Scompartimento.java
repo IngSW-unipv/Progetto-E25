@@ -1,51 +1,45 @@
 package it.unipv.ingsw.model.spedizione.puntoDeposito;
 
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
+import it.unipv.ingsw.model.spedizione.shippable.Size;
 
 public class Scompartimento {
 	
-	private Pacco paccoInScompartimento;
-
+	private int IDscompartimento;
+	private Size dimensione;
+	private boolean occupato;
 	
-	public void put(int i, Scompartimento scompartimento) {
-		
+	
+	public Scompartimento(int IDscompartimento, Size dimensione) {
+		this.IDscompartimento = IDscompartimento;
+		this.dimensione = dimensione;
+		this.occupato = false;
 	}
-	
-	public void getSize() {
-		
+
+	public Size getSize() {
+		return dimensione;
 	}
 	
 	public void Open() {
-		
-	}
-	
-	public Scompartimento(String string) {
-		this.paccoInScompartimento = null; // inizialmente vuoto
-	}
-	
-	public boolean Occupato() {
-		if(paccoInScompartimento != null) { //controlla se lo scompartimento non e' vuoto
-			return true; // lo scompartimento occupato da un pacco non ritirato 
-		} else {
-			return false; //lo scompartimento e' vuoto
-		}
-	}
-	
-	public Pacco getPacco() {
-		return paccoInScompartimento;
-	}
-	
-	public void setPacco(Pacco paccoInScompartimento) {
-		this.paccoInScompartimento = paccoInScompartimento;
-	}
-	
-	public void clearScompartimento() {
-		this.paccoInScompartimento = null; //dopo il ritiro del pacco, lo scompartimento torna vuoto
+		//metodo che simula l'apertura dello scompartimento
 	}
 
-	public void ritiraPacco() {
-		// TODO Auto-generated method stub
-		
+	
+	public int getIDscompartimento() {
+		return IDscompartimento;
 	}
+
+	public void setIDscompartimento(int iDscompartimento) {
+		IDscompartimento = iDscompartimento;
+	}
+
+	public boolean isOccupato() {
+		return occupato;
+	}
+
+	public void setOccupato(boolean occupato) {
+		this.occupato = occupato;
+	}
+
 	
 }

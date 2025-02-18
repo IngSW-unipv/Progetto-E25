@@ -1,15 +1,16 @@
 package it.unipv.ingsw.model.spedizione.puntoDeposito;
 
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
 
 public interface IPuntoDeposito {
 
-	public void getPosizione();
+	public Point2D getPosizione();
 	
-	public void checkQR();
+	public boolean checkQR();
 	
-	public String checkDisponibilita();
+	public boolean checkDisponibilita();
 	
 	
 }

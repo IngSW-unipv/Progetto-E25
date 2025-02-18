@@ -13,78 +13,38 @@ import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
 public class Spedizione {
 	
 	private Mittente mittente;
-	private Carrier carrier;
+	private Carrier carrier; //non sono sicuro
 	private Destinatario destinatario; 
-	private Pacco pacco;
+	private IShippable shippable;
 	private int assicurazione; //non sono sicuro
-	private Locker lockerFinale;
+	private IPuntoDeposito destinazione;
 	
 	
-	public Spedizione(Mittente mittente, Carrier carrier, Destinatario destinatario, Pacco pacco, int assicurazione, Locker lockerFinale) {
+	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito destinazione) {
 		this.mittente = mittente;
-		this.carrier = carrier;
 		this.destinatario = destinatario;
-		this.pacco = pacco;
+		this.shippable = shippable;
 		this.assicurazione = assicurazione;
-		this.lockerFinale = lockerFinale;
+		this.destinazione = destinazione;
+	}
+	
+	public void setPacco(IShippable shippable) {
+		this.shippable = shippable;
 	}
 
 
-	public void AvvioSpedizione() {
-		InputStreamReader in=new InputStreamReader(System.in);
-		BufferedReader keyboard=new BufferedReader(in);
-
-		Locker locker;
-		Pacco pacco_spedire= new Pacco();
-		Destinatario destinatario_pacco;
-		boolean controllo=false;
-		String email_destinatario=null;
-
-//richiesta inserimento dati dall'utente
-		System.out.printf("Inserire dettagli pacco"); 
-		String dimensione_pacco=pacco_spedire.setSize();  //non sono sicura di usare gli emun
-		int peso_pacco=pacco_spedire.setWeight();
-
-		while(controllo==false) { //permetto all'utente di avere piu possibilità di inserire i dati se sbagliati
-			try { //non sono sicura che siano questi i dati da inserire 
-				System.out.printf("Inserire nome del destinatario");
-				destinatario_pacco.setNome(keyboard.readLine());
-				
-				System.out.printf("Inserire cognome del destinatario");
-				destinatario_pacco.setCognome(keyboard.readLine());	
-				
-				System.out.printf("Inserire email del destinatario");
-				email_destinatario=keyboard.readLine();    
-				
-				controllo= true;
-			}catch(IOException e){
-				System.out.printf("Errore inserimento dati destinatario");
-				controllo= false;
-			}
-			
-		}
-
+	public void avvioSpedizione(Utente utente, Locker lockerIniziale, ASuperUser destinatario) {
 		
-		System.out.printf("Si vuole aggiungere una copertura assicurativa?"); //devo aggiungere tipo le possibili coperture??
+		if(shippable==null) System.out.println("registra il pacco");
 		
-		//devo usare il getPosizione del locker per capire quali ci sono??
-		System.out.printf("Controllo disponibilità nel locker scelto");
-			String IDlocker_scelto=locker.checkDisponibilita(); //??
-			
-			/*pagamento.effettuaPagamento;  
-			codice_spedizione= qrCode.generaQRcodice();
-			
-			//TRAFERIMENTO DATI SUL DATABASE
-			//nota: dopo il salvataggio, devo pulire i campi
-		*/
-		
+		//far partire il pagamento ...
 	}
 	
 	
 	public void presaInCarico(Utente utente) {
 		
-		int size = pacco.getSize();
-		double weight = pacco.getWeight();
+		Size size = shippable.getSize();
+		double weight = shippable.getWeight();
 		
 		//calcolo 
 		

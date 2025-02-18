@@ -4,9 +4,14 @@ public abstract class ASuperUser {
 	private String mail,password;
 	private static boolean utenteLoggato;
 	
-	protected ASuperUser(String mail,String password) {
+	public ASuperUser(String mail,String password) {
 		this.mail=mail;
 		this.password=password;
+		this.utenteLoggato=false;
+	}
+	
+	public ASuperUser(String mail) {
+		this.mail=mail;
 		this.utenteLoggato=false;
 	}
 	

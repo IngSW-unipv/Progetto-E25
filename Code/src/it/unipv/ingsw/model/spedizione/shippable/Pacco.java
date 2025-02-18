@@ -3,6 +3,7 @@ package it.unipv.ingsw.model.spedizione.shippable;
 import java.io.BufferedReader; 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.UUID;
 
 import it.unipv.ingsw.model.spedizione.shippable.DimensioneShippable;
 
@@ -10,20 +11,36 @@ public class Pacco implements IShippable{
 	
 	private int weight;
 	private int size;
-	private String id;
+	private String idPacco;
 	private boolean paccoRitirato; // indica se il pacco e stato ritirato o meno
+	private String codiceQR;
+	private String destinatario;
+	private String mittente;
+	private String stato; //stato atuale del pacco
 	private DimensioneShippable DIMENSIONE;
 	
 	public Pacco() {
 		// TODO Auto-generated constructor stub
 		size=0;
 		weight=0;
-		this.id = id;
+		this.idPacco = idPacco;
 		this.paccoRitirato = paccoRitirato;
+		this.codiceQR = UUID.randomUUID().toString();
+		this.mittente = mittente;
+		this.destinatario = destinatario;
+		this.stato = "-"; //lo stato iniziale del pacco è in "transito" o "pronto per la consegna"?
+	}					 // facciamo stato del pacco o solo stato della spedizione?
+	
+	public String getCodiceQR() {
+		return codiceQR;
+	}
+	
+	public String getDestinatario() {
+		return destinatario;
 	}
 	
 	public String getId() {
-		return id;
+		return idPacco;
 	}
 	
 	public boolean paccoRitirato() {

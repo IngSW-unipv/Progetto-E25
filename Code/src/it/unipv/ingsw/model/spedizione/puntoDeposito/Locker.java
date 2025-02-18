@@ -17,7 +17,7 @@ public class Locker implements IPuntoDeposito{
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
 		for (int i=0; i<numeroScompartimenti; i++) {
 			scompartimenti.put(idLocker + "-S" + (i+1), new Scompartimento(idLocker + "-S" + (i+1)));
-		} //aggiunge scompartimenti alla mappa ognunco con Id univoco
+		} //aggiunge scompartimenti alla mappa ognuno con Id univoco
 	}
 	
 	public String getId() {

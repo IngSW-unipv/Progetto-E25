@@ -18,11 +18,11 @@ public class Locker implements IPuntoDeposito{
 	}
 	
 	public void aggiungiScompartimento(Scompartimento scompartimento) {
-		//aggiunta scompartimento nella mappa
+		scompartimenti.put(scompartimento.getIDscompartimento(), scompartimento);
 	}
 	
 	public void rimuoviScompartimento(Scompartimento scompartimento) {
-		//rimozione scompartimento nella mappa
+		scompartimenti.remove(scompartimento.getIDscompartimento());
 	}
     
 

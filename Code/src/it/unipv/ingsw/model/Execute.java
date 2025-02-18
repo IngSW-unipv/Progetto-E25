@@ -2,6 +2,7 @@ package it.unipv.ingsw.model;
 
 import it.unipv.ingsw.model.spedizione.*;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
+import it.unipv.ingsw.model.spedizione.puntoDeposito.Scompartimento;
 import it.unipv.ingsw.model.spedizione.shippable.IShippable;
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
 import it.unipv.ingsw.model.spedizione.shippable.Size;

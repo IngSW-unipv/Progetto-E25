@@ -122,6 +122,10 @@ public class Utente extends ASuperUser implements Subject{
     }
 	
 	public Utente registrazione(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico, String data, Blob fotoDocumento) throws SQLException, IOException {
+		if(super.isLoggedIn()){	
+			System.out.println("Utente già registrato. Effettua l'accesso!");
+			return null;
+		}	
 		if (nome == null || cognome == null || mail == null || password == null || dataNascita == null || numeroTelefono == null || indirizzoCivico == null || fotoDocumento == null) {
             System.out.println("Tutti i campi sono obbligatori.");
             return null;
@@ -134,16 +138,12 @@ public class Utente extends ASuperUser implements Subject{
         LocalDate dataNascita = LocalDate.parse(data);
         Utente nuovo_utente = new Utente(mail, password, nome, cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
         System.out.println("Registrazione completata con successo!");
+        //query per salvare i dati nel DB
         return nuovo_utente;
     }   
-    
-	public boolean deleteFotoDocumento(Blob fotoDocumento) {
-		this.fotoDocumento = null;
-		return true;
-	}
-
 	
 	public Utente modificaProfilo(String mail,String password,String nome, String cognome, String numeroTelefono, String indirizzoCivico, String data, Blob fotoDocumento) { 
+		if(!super.isLoggedIn() || !statoProfilo) {
 		Utente utenteInAttesa = new Utente(); //parametri passati: null,ferri,34637738,null,...
 		if(mail != null && mail.matches(formatoMail) && !super.getMail().equals(mail)) 
 			utenteInAttesa.setMail(mail);
@@ -170,10 +170,24 @@ public class Utente extends ASuperUser implements Subject{
 		}
 		//notify()
 		return utenteInAttesa; //utente fittizio con modifiche
+		}
+		else
+			return null;
 	}
 	
 	public void cancellaAccount() {
-		
+		if(super.isLoggedIn() && statoProfilo) {
+			super.setMail(null);
+			super.setPassword(null);
+			nome=null;
+			cognome=null;
+			numeroTelefono=null;
+			indirizzoCivico=null;
+			dataNascita=null;
+			fotoDocumento=null;
+			//query che cancella utente da DB
+		}	
+		//Non posso fare questo metodo se non ho un profilo attivo
 	}
 	
 	

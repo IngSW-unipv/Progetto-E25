@@ -35,9 +35,9 @@ public class Execute {
 		
 		
 	//	s.avvioSpedizione(u, lf, dest);
-		lf.aggiungiScompartimento(0, sc);
-		lf.aggiungiScompartimento(1, sc2);
-		lf.aggiungiScompartimento(2, sc3);
+		lf.aggiungiScompartimento(sc);
+		lf.aggiungiScompartimento(sc2);
+		lf.aggiungiScompartimento(sc3);
 		
 		s.setPacco(p1);
 		s.avvioSpedizione(u, lf, dest);

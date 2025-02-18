@@ -6,6 +6,7 @@ import java.awt.geom.Point2D;
 
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
+import it.unipv.ingsw.model.spedizione.shippable.IShippable;
 
 public class Locker implements IPuntoDeposito{
 	
@@ -40,11 +41,21 @@ public class Locker implements IPuntoDeposito{
 	}
 	
 	@Override
-	public boolean checkDisponibilita() {
-		
-		// da implementare ...
-		
-		return true;
+	public int checkDisponibilita(IShippable daSpedire) {
+		//no soluzione migliore
+				int id_salvare=0;
+				for(Integer c: scompartimenti.keySet()) {
+					if(scompartimenti.get(c).isOccupato()==false && scompartimenti.get(c).getSize()== daSpedire.getSize()) {
+					//	scompartimenti.get(c).setOccupato(true);
+						System.out.printf("Scompartimento libero "+ c+"\n");
+						id_salvare=c;
+					}
+				}
+				
+				
+				return scompartimenti.get(id_salvare).getIDscompartimento();
 	}
+
+		
 	
 }

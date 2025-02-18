@@ -15,7 +15,6 @@ public abstract class ASuperUser {
 		this.utenteLoggato=false;
 	}
 	
-    public boolean login(String mail, String password) {
 	public ASuperUser() {
 	}
 	

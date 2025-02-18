@@ -1,8 +1,7 @@
 package it.unipv.ingsw.model.spedizione.puntoDeposito;
 
 import java.awt.geom.Point2D;
-import java.util.HashMap;
-import java.util.Map;
+import it.unipv.ingsw.model.spedizione.shippable.*;
 
 public interface IPuntoDeposito {
 
@@ -10,7 +9,7 @@ public interface IPuntoDeposito {
 	
 	public boolean checkQR();
 	
-	public boolean checkDisponibilita();
+	public int checkDisponibilita(IShippable daSpedire); //cambiato in intero per recuperare id scompartimento 
 	
 	
 }

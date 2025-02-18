@@ -1,6 +1,7 @@
 package it.unipv.ingsw.model;
 
 import it.unipv.ingsw.model.spedizione.*;
+
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Scompartimento;
 import it.unipv.ingsw.model.spedizione.shippable.IShippable;
@@ -8,6 +9,7 @@ import it.unipv.ingsw.model.spedizione.shippable.Pacco;
 import it.unipv.ingsw.model.spedizione.shippable.Size;
 import it.unipv.ingsw.model.utenze.Admin;
 import it.unipv.ingsw.model.utenze.Utente;
+import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
 
 public class Execute {
 	
@@ -20,14 +22,24 @@ public class Execute {
 		Spedizione s = new Spedizione(null, null, null, 0, null);
 		IShippable p1 = new Pacco(Size.S,1.2);
 		Locker lf = new Locker(null);
+		Scompartimento sc= new Scompartimento(15, Size.M);
+		sc.setOccupato(false);
+		Scompartimento sc2= new Scompartimento(16, Size.S);
+		sc2.setOccupato(false);
+		Scompartimento sc3= new Scompartimento(17, Size.S);
+		sc3.setOccupato(false);
 		
 		Utente dest = new Utente("utente2@mail.com");
 		
 		Utente u = new Utente("utente1@mail.com", null, null, null, null, null, null, null);
 		
-		s.avvioSpedizione(u, lf, dest);
-		s.setPacco(p1);
 		
+	//	s.avvioSpedizione(u, lf, dest);
+		lf.aggiungiScompartimento(0, sc);
+		lf.aggiungiScompartimento(1, sc2);
+		lf.aggiungiScompartimento(2, sc3);
+		
+		s.setPacco(p1);
 		s.avvioSpedizione(u, lf, dest);
 	}
 }

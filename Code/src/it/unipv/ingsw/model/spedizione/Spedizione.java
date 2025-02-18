@@ -37,7 +37,15 @@ public class Spedizione {
 		
 		if(shippable==null) System.out.println("registra il pacco");
 		
-		//far partire il pagamento ...
+		int id_locker_libero=lockerIniziale.checkDisponibilita(shippable);
+		System.out.print(id_locker_libero);
+		
+				
+				//far partire il pagamento ...
+				
+				//genera QR
+		
+		System.out.printf("Finito avvioSpedizione");
 	}
 	
 	

@@ -3,6 +3,6 @@ package it.unipv.ingsw.model.spedizione.shippable;
 public interface IShippable {
 	
 	public int getSize();
-	public int getWeight();
+	public double getWeight();
 
 }

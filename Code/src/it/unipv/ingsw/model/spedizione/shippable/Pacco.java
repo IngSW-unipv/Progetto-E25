@@ -8,14 +8,13 @@ import it.unipv.ingsw.model.spedizione.shippable.DimensioneShippable;
 
 public class Pacco implements IShippable{
 	
-	private int weight;
+	private double weight;
 	private int size;
 	private String id;
 	private boolean paccoRitirato; // indica se il pacco e stato ritirato o meno
 	private DimensioneShippable DIMENSIONE;
 	
 	public Pacco() {
-		// TODO Auto-generated constructor stub
 		size=0;
 		weight=0;
 		this.id = id;
@@ -40,7 +39,7 @@ public class Pacco implements IShippable{
 	}
 	
 	@Override
-	public int getWeight() { 
+	public double getWeight() { 
 		return weight;
 	}
 	

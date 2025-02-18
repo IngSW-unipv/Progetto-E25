@@ -11,15 +11,29 @@ import it.unipv.ingsw.model.utenze.*;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
 
 public class Spedizione {
-
-	public Spedizione() {
-		// TODO Auto-generated constructor stub
-	}
 	
+	private Mittente mittente;
+	private Carrier carrier;
+	private Destinatario destinatario; 
+	private Pacco pacco;
+	private int assicurazione; //non sono sicuro
+	private Locker lockerFinale;
+	
+	
+	public Spedizione(Mittente mittente, Carrier carrier, Destinatario destinatario, Pacco pacco, int assicurazione, Locker lockerFinale) {
+		this.mittente = mittente;
+		this.carrier = carrier;
+		this.destinatario = destinatario;
+		this.pacco = pacco;
+		this.assicurazione = assicurazione;
+		this.lockerFinale = lockerFinale;
+	}
+
+
 	public void AvvioSpedizione() {
 		InputStreamReader in=new InputStreamReader(System.in);
 		BufferedReader keyboard=new BufferedReader(in);
-		
+
 		Locker locker;
 		Pacco pacco_spedire= new Pacco();
 		Destinatario destinatario_pacco;
@@ -63,6 +77,18 @@ public class Spedizione {
 			//TRAFERIMENTO DATI SUL DATABASE
 			//nota: dopo il salvataggio, devo pulire i campi
 		*/
+		
+	}
+	
+	
+	public void presaInCarico(Utente utente) {
+		
+		int size = pacco.getSize();
+		double weight = pacco.getWeight();
+		
+		//calcolo 
+		
+		this.carrier = (Carrier) utente;
 		
 	}
 

@@ -17,7 +17,9 @@ public class Spedizione {
 	private Destinatario destinatario; 
 	private IShippable shippable;
 	private int assicurazione; //non sono sicuro
-	private IPuntoDeposito destinazione;
+//	private IPuntoDeposito destinazione;
+//	private IPuntoDeposito partenza;
+	private Itinerario itinerario;
 	
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito destinazione) {
@@ -25,13 +27,21 @@ public class Spedizione {
 		this.destinatario = destinatario;
 		this.shippable = shippable;
 		this.assicurazione = assicurazione;
-		this.destinazione = destinazione;
+		//this.destinazione = destinazione;
+		this.itinerario.setFine(destinazione.getPosizione());
 	}
 	
 	public void setPacco(IShippable shippable) {
 		this.shippable = shippable;
 	}
+	
+	public Itinerario getItinerario() {
+		return itinerario;
+	}
 
+	public void setItinerario(Itinerario itinerario) {
+		this.itinerario = itinerario;
+	}
 
 	public void avvioSpedizione(Utente utente, Locker lockerIniziale, ASuperUser destinatario) {
 		
@@ -49,12 +59,13 @@ public class Spedizione {
 	}
 	
 	
-	public void presaInCarico(Utente utente) {
+	
+	public void presaInCarico(Utente utente, Itinerario tratta) {
 		
 		Size size = shippable.getSize();
 		double weight = shippable.getWeight();
 		
-		//calcolo 
+		//faccio verificare dall'itinerario della spedizione se essa contiene l'itinerario della tratta del carrier
 		
 		this.carrier = (Carrier) utente;
 		

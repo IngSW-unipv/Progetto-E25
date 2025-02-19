@@ -15,18 +15,29 @@ public class Locker implements IPuntoDeposito{
 	
 	private Point2D posizione;
 	private Map<Integer, Scompartimento> scompartimenti; // ogni scompartimento e' identificato da un unico Key
+	private int IDscompartimento;
+	private int IDlocker;
 	
-	public Locker(Point2D posizione) {
+	public Locker(Point2D posizione, int Idlocker) {
 		this.posizione = posizione;
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
+		this.IDscompartimento = IDscompartimento;
+		this.IDlocker = IDlocker;
 	}
 	
-	public void aggiungiScompartimento(Scompartimento scompartimento) {
-		scompartimenti.put(scompartimento.getIDscompartimento(), scompartimento);
+	public void aggiungiScompartimento(int IDscompartimento, Scompartimento scompartimento) {
+		scompartimenti.put(IDscompartimento, scompartimento);
 	}
 	
-	public void rimuoviScompartimento(Scompartimento scompartimento) {
-		scompartimenti.remove(scompartimento.getIDscompartimento(), scompartimento);
+	public boolean rimuoviScompartimento(int IDscompartimento) {
+		if(scompartimenti.containsKey(IDscompartimento)) {
+			scompartimenti.remove(IDscompartimento); //rimuove lo scomp dalla mappa togliendo il suo ID
+			System.out.println("Scompartimento con ID " +IDscompartimento+ "rimosso.");
+			return true;
+		} else {
+			System.out.println("Scompartimento con ID " +IDscompartimento+ "non esiste.");
+			return false;
+		}
 	}
 
 	@Override
@@ -34,17 +45,38 @@ public class Locker implements IPuntoDeposito{
 		return posizione;
 	}
 	
+	//getter per IDlocker
+	public int getIDlocker() {
+		return IDlocker;
+	}
+	
+//	ottiene uno scompartimento dalla HashMap usando il proprio ID
+	public Scompartimento getScompartimento(Integer IDscompartimento) {
+		return scompartimenti.get(IDscompartimento);
+	}
+	
+	public int getIDscompartimento() {
+		return IDscompartimento;
+	}
+	
 	@Override
-	//bisogna specificare il locker di partenza o finale???? ci ho pensato ma non so come farlo	
+	//metodo che funziona sia per il carrier che per il destinatario
 	public boolean checkQR(QRcode codice, Spedizione spedizione) {
-//		verifica se il codice corrisponde alla spedizione
+//		verifica se il codice corrisponde al codice della spedizione
 		if(spedizione.getCodice().equals(codice)) {
-//			controlla che il pacco non sia stato già consegnato, si può anche togliere
-			if("In Viaggio".equals(spedizione.getStatoSpedizione())) {
-				return true; //il codice è valido per il ritiro o la consegna
-			}
+			Integer IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
+			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
+			/*if(scompartimento != null) {
+				scompartimento.Open();
+				return true;
+			} else {
+				System.out.println("Scompartimento Non Esiste.");
+			}*/ //parte non necessaria???
+			
+		} else {
+			System.out.println("Codice Non Valido");
 		}
-		return false; //codice non valido
+		return false; 
 	}
 	
 	@Override

@@ -32,6 +32,11 @@ public class Spedizione {
 		this.assicurazione = assicurazione;
 		//this.destinazione = destinazione;
 		this.itinerario.setFine(destinazione.getPosizione());
+<<<<<<< HEAD
+=======
+		this.codice=codice; // codice della spedizione
+		this.statoSpedizione=statoSpedizione;
+>>>>>>> 38b0de3c6104e5ad433dc35d07380b691c68c6cc
 	}
 	
 	public Blob getCodice() {
@@ -49,7 +54,7 @@ public class Spedizione {
 	public void setStatoSpedizione(String statoSpedizione) {
 		this.statoSpedizione = statoSpedizione;
 	}
-
+	
 	public Itinerario getItinerario() {
 		return itinerario;
 	}

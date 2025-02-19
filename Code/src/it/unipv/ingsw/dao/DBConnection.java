@@ -13,21 +13,25 @@ public class DBConnection {
 	private static final String PROPERTYDBURL = "DBURL";
 	private static final String PROPERTYNAME = "db_usn"; 
 	private static final String PROPERTYPSW = "db_psw"; 
+	private static final String PROPERTYSCHEMA = "schema"; 
 	private static String username;
 	private static String password;
 	private static String dbDriver;
 	private static String dbURL;
+	private static String schema;
 	private static DBConnection conn;
 	
 	private static void init() {
 		Properties p = new Properties(System.getProperties());
 		try {
 			p.load(new FileInputStream("Code/src/it/unipv/ingsw/resources/database"));
+			p.load(new FileInputStream("src/it/unipv/ingsw/resources/database.properties")); 
 			
 			username=p.getProperty(PROPERTYNAME);
 			password=p.getProperty(PROPERTYPSW);
 			dbDriver =p.getProperty(PROPERTYDBDRIVER);
 			dbURL =p.getProperty(PROPERTYDBURL);
+			schema = p.getProperty(PROPERTYSCHEMA);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -39,6 +43,10 @@ public class DBConnection {
 		init();
 		System.out.println(dbURL);
 	
+	public static Connection startConnection(Connection conn)
+	{
+		init();
+		System.out.println(dbURL);
 		
 		
 		if ( isOpen(conn) )

@@ -32,8 +32,6 @@ public class Spedizione {
 		this.assicurazione = assicurazione;
 		//this.destinazione = destinazione;
 		this.itinerario.setFine(destinazione.getPosizione());
-		this.codice=codice;
-		this.statoSpedizione=statoSpedizione;
 	}
 	
 	public Blob getCodice() {

@@ -34,6 +34,7 @@ public class Locker implements IPuntoDeposito{
 		return posizione;
 	}
 	
+	@Override
 	//bisogna specificare il locker di partenza o finale???? ci ho pensato ma non so come farlo	
 	public boolean checkQR(QRcode codice, Spedizione spedizione) {
 //		verifica se il codice corrisponde alla spedizione

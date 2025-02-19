@@ -4,6 +4,7 @@ package it.unipv.ingsw.model.spedizione;
 import java.io.BufferedReader; 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Blob;
 
 //per utilizzare package shippable
 import it.unipv.ingsw.model.spedizione.shippable.*;
@@ -20,6 +21,8 @@ public class Spedizione {
 //	private IPuntoDeposito destinazione;
 //	private IPuntoDeposito partenza;
 	private Itinerario itinerario;
+	private Blob codice;
+	private String statoSpedizione;
 	
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito destinazione) {
@@ -29,12 +32,26 @@ public class Spedizione {
 		this.assicurazione = assicurazione;
 		//this.destinazione = destinazione;
 		this.itinerario.setFine(destinazione.getPosizione());
+		this.codice=codice;
+		this.statoSpedizione=statoSpedizione;
+	}
+	
+	public Blob getCodice() {
+		return codice;
 	}
 	
 	public void setPacco(IShippable shippable) {
 		this.shippable = shippable;
 	}
 	
+	public String getStatoSpedizione() {
+		return statoSpedizione;
+	}
+
+	public void setStatoSpedizione(String statoSpedizione) {
+		this.statoSpedizione = statoSpedizione;
+	}
+
 	public Itinerario getItinerario() {
 		return itinerario;
 	}

@@ -10,20 +10,19 @@ import java.util.Objects;
 import it.unipv.ingsw.model.Subject;
 
 public class Utente extends ASuperUser implements Subject{
-	private String nome,cognome,numeroTelefono,indirizzoCivico;
-	private LocalDate dataNascita;
+	private String nome,cognome,numeroTelefono,indirizzoCivico,dataNascita;
 	private Blob fotoDocumento;
+	private Saldo saldo;
 	private boolean statoProfilo;
 	//map di admin
 	private String formatoNome = "^[A-Za-zàèéìòóùçÁÉÍÓÚÑñ ]{1,100}$"; // Consente lettere, accenti e spazi
 	private String formatoMail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,}$"; //formato nomemail@example.com
-	private String formatoPassword = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,32}$"; //Contenga almeno una lettera minuscola, maiuscola, un numero, un carattere speciale e una lunghezza compresa tra 8 e 32 caratteri
-	private String formatoData = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"; //formato YYYY-MM-GG 
+	private String formatoPassword = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,32}$"; //Contenga almeno una lettera minuscola, maiuscola, un numero, un carattere speciale e una lunghezza compresa tra 8 e 32 caratteri 
 	private String formatoNumero = "^\\+\\d{1,3}\\s?\\d{1,4}[\\s-]?\\d{1,4}[\\s-]?\\d{1,4}$";
 	private String formatoIndirizzo = "^[A-Za-z0-9\\s,.-]+\\s\\d{1,5}\\s[A-Za-z\\s]+$";
 	
 	//costruttore
-	public Utente(String mail, String password,String nome, String cognome,String numeroTelefono, String indirizzoCivico, LocalDate dataNascita, Blob fotoDocumento) {
+	public Utente(String mail, String password,String nome, String cognome, String dataNascita,String numeroTelefono, String indirizzoCivico, Blob fotoDocumento) {
 		super(mail,password);
 		this.nome = nome;
 		this.cognome = cognome;
@@ -32,6 +31,7 @@ public class Utente extends ASuperUser implements Subject{
 		this.dataNascita = dataNascita;
 		this.fotoDocumento = fotoDocumento;
 		this.statoProfilo = false;
+		this.saldo= new Saldo(0.0,0);
 	}
 	
 	//utente non registrato
@@ -62,7 +62,7 @@ public class Utente extends ASuperUser implements Subject{
 		return indirizzoCivico;
 	}
 
-	public LocalDate getDataNascita() {
+	public String getDataNascita() {
 		return dataNascita;
 	}
 
@@ -74,8 +74,16 @@ public class Utente extends ASuperUser implements Subject{
 		return statoProfilo;
 	}
 	
-	//setter
+	public Saldo getSaldo() {
+		return saldo;
+	}
 	
+	//setter
+
+	public void setSaldo(Saldo saldo) {
+		this.saldo = saldo;
+	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -92,7 +100,7 @@ public class Utente extends ASuperUser implements Subject{
 		this.indirizzoCivico = indirizzoCivico;
 	}
 
-	public void setDataNascita(LocalDate dataNascita) {
+	public void setDataNascita(String dataNascita) {
 		this.dataNascita = dataNascita;
 	}
 
@@ -121,7 +129,7 @@ public class Utente extends ASuperUser implements Subject{
         return true; //PNG
     }
 	
-	public Utente registrazione(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico, String data, Blob fotoDocumento) throws SQLException, IOException {
+	public Utente registrazione(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, Blob fotoDocumento) throws SQLException, IOException {
 		if(super.isLoggedIn()){	
 			System.out.println("Utente già registrato. Effettua l'accesso!");
 			return null;
@@ -131,19 +139,18 @@ public class Utente extends ASuperUser implements Subject{
             return null;
         }
 
-        if(!nome.matches(formatoNome) || !cognome.matches(formatoNome) || !mail.matches(formatoMail) || !password.matches(formatoPassword) || !data.matches(formatoData) || !numeroTelefono.matches(formatoNumero) || !indirizzoCivico.matches(formatoIndirizzo) || !isPngImage(fotoDocumento)) { 
+        if(!nome.matches(formatoNome) || !cognome.matches(formatoNome) || !mail.matches(formatoMail) || !password.matches(formatoPassword) || !numeroTelefono.matches(formatoNumero) || !indirizzoCivico.matches(formatoIndirizzo) || !isPngImage(fotoDocumento)) { 
         	System.out.println("Uno dei campi non rispetta le regole");
         	return null;
 		}	
-        LocalDate dataNascita = LocalDate.parse(data);
-        Utente nuovo_utente = new Utente(mail, password, nome, cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
+        Utente nuovo_utente = new Utente(mail, password, nome, cognome, dataNascita, indirizzoCivico, numeroTelefono, fotoDocumento);
         System.out.println("Registrazione completata con successo!");
         //query per salvare i dati nel DB
         //query in cui si salvano i dati nel DB
         return nuovo_utente;
     }   
 	
-	public Utente modificaProfilo(String mail,String password,String nome, String cognome, String numeroTelefono, String indirizzoCivico, String data, Blob fotoDocumento) { 
+	public Utente modificaProfilo(String mail,String password,String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, Blob fotoDocumento) { 
 		if(!super.isLoggedIn() || !statoProfilo) {
 		Utente utenteInAttesa = new Utente(); //parametri passati: null,ferri,34637738,null,...
 		if(mail != null && mail.matches(formatoMail) && !super.getMail().equals(mail)) 
@@ -158,8 +165,7 @@ public class Utente extends ASuperUser implements Subject{
 			utenteInAttesa.setNumeroTelefono(numeroTelefono);
 		if(indirizzoCivico != null && indirizzoCivico.matches(formatoIndirizzo) && !this.indirizzoCivico.equals(indirizzoCivico)) 
 			utenteInAttesa.setIndirizzoCivico(indirizzoCivico);
-		if(data != null && data.matches(formatoData) && !this.dataNascita.equals(data)) { 
-			LocalDate dataNascita = LocalDate.parse(data);
+		if(dataNascita != null && !this.dataNascita.equals(dataNascita)) { 
 			utenteInAttesa.setDataNascita(dataNascita);
 		}
 		try {

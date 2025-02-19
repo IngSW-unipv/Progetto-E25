@@ -24,7 +24,6 @@ public class DBConnection {
 	private static void init() {
 		Properties p = new Properties(System.getProperties());
 		try {
-			p.load(new FileInputStream("Code/src/it/unipv/ingsw/resources/database"));
 			p.load(new FileInputStream("src/it/unipv/ingsw/resources/database.properties")); 
 			
 			username=p.getProperty(PROPERTYNAME);
@@ -37,11 +36,6 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 	}
-
-	public static Connection startConnection(Connection conn, String schema)
-	{
-		init();
-		System.out.println(dbURL);
 	
 	public static Connection startConnection(Connection conn)
 	{

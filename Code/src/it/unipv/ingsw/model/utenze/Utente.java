@@ -139,6 +139,7 @@ public class Utente extends ASuperUser implements Subject{
         Utente nuovo_utente = new Utente(mail, password, nome, cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
         System.out.println("Registrazione completata con successo!");
         //query per salvare i dati nel DB
+        //query in cui si salvano i dati nel DB
         return nuovo_utente;
     }   
 	
@@ -188,6 +189,15 @@ public class Utente extends ASuperUser implements Subject{
 			//query che cancella utente da DB
 		}	
 		//Non posso fare questo metodo se non ho un profilo attivo
+		super.setMail(null);
+		super.setPassword(null);
+		nome=null;
+		cognome=null;
+		numeroTelefono=null;
+		indirizzoCivico=null;
+		dataNascita=null;
+		fotoDocumento=null;
+		//query che cancella utente da DB
 	}
 	
 	

@@ -10,6 +10,7 @@ public class Admin extends ASuperUser implements Observer{
 	
 	//metodi da implementare
 	public boolean validaAccount() {return true;}
+	//public boolean validaAccount(Utente u1,Utente uAttesa1) {return true;}
 	public boolean disattivaAccount() {return true;}
 	public void update() {}
 	

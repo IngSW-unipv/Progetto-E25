@@ -18,7 +18,7 @@ public class Execute {
 		Utente u2=new Utente();
 		Admin a1= new Admin("mail","psw");
 		Utente uAttesa1=u1.modificaProfilo("CarloRossi@gmail.com",null,"Carli","Rosso!","345237623856",null,null,null);
-		
+		//a1.validaAccount(Utente u1,Utente uAttesa1);
 		Spedizione s = new Spedizione(null, null, null, 0, null);
 		IShippable p1 = new Pacco(Size.S,1.2);
 		Locker lf = new Locker(null);

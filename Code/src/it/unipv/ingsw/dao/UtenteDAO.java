@@ -25,7 +25,7 @@ public class UtenteDAO implements IUtenteDAO {
 	//Registrazione 
 	public boolean inserimentoUtente(Utente u) {
 
-		conn = DBConnection.startConnection(conn, schema);
+		conn = DBConnection.startConnection(conn);
 		PreparedStatement st1,st2;
 
 		boolean esito = true;
@@ -63,7 +63,7 @@ public class UtenteDAO implements IUtenteDAO {
 	}
 	
 	public boolean aggiornamentoUtente(Utente u) {
-	    conn = DBConnection.startConnection(conn, schema);
+	    conn = DBConnection.startConnection(conn);
 	    PreparedStatement st1, st2;
 	    boolean esito = true;
 
@@ -107,12 +107,12 @@ public class UtenteDAO implements IUtenteDAO {
 
 	    return esito;
 	}
-	
+
 	@Override
     public ArrayList<Utente> selectAll() {
-        ArrayList<Utente> result = new ArrayList<>();
+        ArrayList<Utente> result = new ArrayList<Utente>();
 
-        conn = DBConnection.startConnection(conn,schema);
+        conn = DBConnection.startConnection(conn);
         Statement st1;
         ResultSet rs1;
         Utente d;

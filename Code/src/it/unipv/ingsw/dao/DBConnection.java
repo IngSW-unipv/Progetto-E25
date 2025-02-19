@@ -13,10 +13,12 @@ public class DBConnection {
 	private static final String PROPERTYDBURL = "DBURL";
 	private static final String PROPERTYNAME = "db_usn"; 
 	private static final String PROPERTYPSW = "db_psw"; 
+	private static final String PROPERTYSCHEMA = "schema"; 
 	private static String username;
 	private static String password;
 	private static String dbDriver;
 	private static String dbURL;
+	private static String schema;
 	private static DBConnection conn;
 	
 	private static void init() {
@@ -28,13 +30,14 @@ public class DBConnection {
 			password=p.getProperty(PROPERTYPSW);
 			dbDriver =p.getProperty(PROPERTYDBDRIVER);
 			dbURL =p.getProperty(PROPERTYDBURL);
+			schema = p.getProperty(PROPERTYSCHEMA);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static Connection startConnection(Connection conn, String schema)
+	public static Connection startConnection(Connection conn)
 	{
 		init();
 		System.out.println(dbURL);

@@ -150,6 +150,7 @@ public class UtenteDAO implements IUtenteDAO {
 		ArrayList<Utente> result1 = u.selectAll();
 		for (Utente u2 : result1)
             System.out.println(u2.toString());
+		//commento
 		
 	}
 }

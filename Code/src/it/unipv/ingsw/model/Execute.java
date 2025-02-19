@@ -21,7 +21,7 @@ public class Execute {
 		//a1.validaAccount(Utente u1,Utente uAttesa1);
 		Spedizione s = new Spedizione(null, null, null, 0, null);
 		IShippable p1 = new Pacco(Size.S,1.2);
-		Locker lf = new Locker(null);
+		Locker lf = new Locker(null, 3);
 		Scompartimento sc= new Scompartimento(15, Size.M);
 		sc.setOccupato(false);
 		Scompartimento sc2= new Scompartimento(16, Size.S);
@@ -41,6 +41,23 @@ public class Execute {
 		
 		s.setPacco(p1);
 		s.avvioSpedizione(u, lf, dest);
+		
+//		checkQR()
+		Locker locker1 = new Locker(null, 1);
+		Locker locker2 = new Locker(null, 2);
+		//aggiunta scompartimenti
+		Scompartimento sc4 = new Scompartimento(20, Size.M);
+		Scompartimento sc5 = new Scompartimento(15, Size.S);
+		//aggiunta scomp al locker
+		locker1.aggiungiScompartimento(1, sc4);
+		locker1.aggiungiScompartimento(2, sc5);
+		//apri scompartimento
+		locker1.getScompartimento(1).Open();
+		System.out.println("Apertura dello scompartimento con ID 1 nel locker 1:");
+		locker1.getScompartimento(2).Open();
+		System.out.println("Apertura dello scompartimento con ID 2 nel locker 1:");
+		
+		
 		
 	}
 }

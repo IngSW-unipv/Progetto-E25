@@ -24,7 +24,6 @@ public class Scompartimento {
 		//metodo che simula l'apertura dello scompartimento
 	}
 
-	
 	public int getIDscompartimento() {
 		return IDscompartimento;
 	}

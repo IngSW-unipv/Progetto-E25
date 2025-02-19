@@ -21,7 +21,7 @@ public class UtenteDAO implements IUtenteDAO {
 		super();
 		this.schema = "ShipUp";
 	}
-	
+
 	//Registrazione 
 	public boolean inserimentoUtente(Utente u) {
 
@@ -31,7 +31,7 @@ public class UtenteDAO implements IUtenteDAO {
 		boolean esito = true;
 
 		try {
-			String query = "INSERT INTO `ShipUp`.`utente` (`email`, `nome`, `cognome`, `dataNascita`, `numeroTelefono`, `indirizzoCivico`,`fotoDocumento`, `statoProfilo`)"
+			String query = "INSERT INTO `utente` (`email`, `nome`, `cognome`, `dataNascita`, `numeroTelefono`, `indirizzoCivico`,`fotoDocumento`, `statoProfilo`)"
 					+ " VALUES(?,?,?,?,?,?,?,?)";
 			st1 = conn.prepareStatement(query);
 
@@ -43,7 +43,7 @@ public class UtenteDAO implements IUtenteDAO {
 			st1.setObject(6, u.getDataNascita());
 			st1.setObject(7, u.getFotoDocumento());
 			st1.setObject(8, u.isStatoProfilo());
-			st1.executeUpdate();
+			st1.executeUpdate(query);
 			
 			String query1 = "INSERT INTO `ShipUp`.`superUser` (`email`, `password`)"
 					+ " VALUES(?,?)";
@@ -51,6 +51,7 @@ public class UtenteDAO implements IUtenteDAO {
 
 			st2.setString(1, u.getMail());
 			st2.setString(2, u.getPassword());
+			st1.executeUpdate(query1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			esito = false;

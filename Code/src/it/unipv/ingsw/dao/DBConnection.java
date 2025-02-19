@@ -1,65 +1,56 @@
 package it.unipv.ingsw.dao;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+
 public class DBConnection {
-    private static Connection connection;
-    private static String username;
+	
+	private static final String PROPERTYDBDRIVER = "DBDRIVER";
+	private static final String PROPERTYDBURL = "DBURL";
+	private static final String PROPERTYNAME = "db_usn"; 
+	private static final String PROPERTYPSW = "db_psw"; 
+	private static String username;
 	private static String password;
 	private static String dbDriver;
 	private static String dbURL;
+	private static DBConnection conn;
+	
+	private static void init() {
+		Properties p = new Properties(System.getProperties());
+		try {
+			p.load(new FileInputStream("src/it/unipv/ingsw/resources/database.properties")); 
+			
+			username=p.getProperty(PROPERTYNAME);
+			password=p.getProperty(PROPERTYPSW);
+			dbDriver =p.getProperty(PROPERTYDBDRIVER);
+			dbURL =p.getProperty(PROPERTYDBURL);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    private static void init() {
-        try {
-            Properties properties = new Properties();
-            InputStream input = DBConnection.class.getClassLoader().getResourceAsStream("database.properties");
-
-            if (input == null) {
-                throw new FileNotFoundException("File database.properties non trovato!");
-            }
-
-            properties.load(input);
-
-            dbDriver = properties.getProperty("db.driver");
-            dbURL = properties.getProperty("db.url");
-            username = properties.getProperty("db.username");
-            password = properties.getProperty("db.password");
-
-            // Carica il driver JDBC
-            Class.forName(dbDriver);
-
-            // Crea la connessione
-            connection = DriverManager.getConnection(dbURL, username, password);
-            System.out.println("Connessione al database avvenuta con successo!");
-
-        } catch (IOException | SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Errore durante la connessione al database", e);
-        }
-    }
-
-    public static Connection getConnection() {
-        return connection;
-    }
-    
-    public static Connection startConnection(Connection conn, String schema)
+	public static Connection startConnection(Connection conn, String schema)
 	{
-		init();			
+		init();
+		System.out.println(dbURL);
+		
 		
 		if ( isOpen(conn) )
 			closeConnection(conn);
 	
 		try 
-		{				
+		{
+			
 			dbURL=String.format(dbURL,schema); 
+		//	System.out.println(dbURL);
 			Class.forName(dbDriver);
-			conn = DriverManager.getConnection(dbURL, username, password);
+			
+			conn = DriverManager.getConnection(dbURL, username, password);// Apertura connessione
 		}
 		catch (Exception e) 
 		{
@@ -95,5 +86,4 @@ public class DBConnection {
 		}
 		return conn;
 	}
-
 }

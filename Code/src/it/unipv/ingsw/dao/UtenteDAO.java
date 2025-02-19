@@ -93,7 +93,8 @@ public class UtenteDAO implements IUtenteDAO {
 	            st2.setString(6, u.getIndirizzoCivico());
 	            st2.setObject(7, u.getFotoDocumento()); // Se è un oggetto, altrimenti usa setString o altro metodo
 	            st2.setBoolean(8, u.isStatoProfilo());  // Assumendo che sia un booleano
-	            st2.setInt(9, rs.getInt("id"));  // Imposta l'ID dell'utente per l'UPDATE
+	            st2.setInt(9, rs.getInt("id"));
+	            
 
 	            st2.executeUpdate();
 	        }
@@ -110,27 +111,29 @@ public class UtenteDAO implements IUtenteDAO {
 
 	@Override
     public ArrayList<Utente> selectAll() {
-        ArrayList<Utente> result = new ArrayList<Utente>();
+        ArrayList<Utente> result = new ArrayList<>();
 
         conn = DBConnection.startConnection(conn);
-        Statement st1;
+        Statement st1,st2;
         ResultSet rs1;
-        Utente d;
+        Utente u;
 
         try {
             st1 = conn.createStatement();
-            String query = "SELECT * from UTENTE";
+            String query = "SELECT * FROM SUPERUSER NATURAL JOIN UTENTE";
             rs1 = st1.executeQuery(query);
 
             while (rs1.next()) {
 
-                 d = new Utente(rs1.getString(1));
+                 u = new Utente(rs1.getString(1),rs1.getString(2),rs1.getString(4),rs1.getString(5),rs1.getString(6),rs1.getString(7),rs1.getString(8),rs1.getBlob(9));
 
-                 result.add(d);
+                 result.add(u);
             }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
 
         DBConnection.closeConnection(conn);
         return result;
@@ -138,10 +141,15 @@ public class UtenteDAO implements IUtenteDAO {
 	
 	public static void main(String[] args) {
 		UtenteDAO u=new UtenteDAO();
-		Utente u1=new Utente();
 		ArrayList<Utente> result = u.selectAll();
 		for (Utente u2 : result)
             System.out.println(u2.toString());
-		//System.out.println(u.aggiornamentoUtente(u1));
+		//String mail, String password,String nome, String cognome, String dataNascita,String numeroTelefono, String indirizzoCivico, Blob fotoDocumento
+		Utente u1=new Utente("user1@example.com","newPsw","newNome", "newCognome", "newDataNascita", "newTelefono", "newIndirizzo",result.get(0).getFotoDocumento());
+		System.out.println(u.aggiornamentoUtente(u1));
+		ArrayList<Utente> result1 = u.selectAll();
+		for (Utente u2 : result1)
+            System.out.println(u2.toString());
+		
 	}
 }

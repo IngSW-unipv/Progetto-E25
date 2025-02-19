@@ -32,7 +32,7 @@ public class Spedizione {
 		this.assicurazione = assicurazione;
 		//this.destinazione = destinazione;
 		this.itinerario.setFine(destinazione.getPosizione());
-		this.codice=codice;
+		this.codice=codice; // codice della spedizione
 		this.statoSpedizione=statoSpedizione;
 	}
 	
@@ -51,7 +51,7 @@ public class Spedizione {
 	public void setStatoSpedizione(String statoSpedizione) {
 		this.statoSpedizione = statoSpedizione;
 	}
-
+	
 	public Itinerario getItinerario() {
 		return itinerario;
 	}

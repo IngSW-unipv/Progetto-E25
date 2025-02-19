@@ -1,2 +1,2 @@
 /bin/
-src/it/unipv/ingsw/resources/database.properties
+src/it/unipv/ingsw/dao/mysql-connector-j-9.2.0.jar

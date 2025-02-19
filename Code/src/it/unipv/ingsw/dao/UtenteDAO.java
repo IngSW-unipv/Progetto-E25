@@ -106,4 +106,41 @@ public class UtenteDAO implements IUtenteDAO {
 
 	    return esito;
 	}
+	
+	@Override
+    public ArrayList<Utente> selectAll() {
+        ArrayList<Utente> result = new ArrayList<>();
+
+        conn = DBConnection.startConnection(conn,schema);
+        Statement st1;
+        ResultSet rs1;
+        Utente d;
+
+        try {
+            st1 = conn.createStatement();
+            String query = "SELECT * from UTENTE";
+            rs1 = st1.executeQuery(query);
+
+            while (rs1.next()) {
+
+                 d = new Utente(rs1.getString(1));
+
+                 result.add(d);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DBConnection.closeConnection(conn);
+        return result;
+    }
+	
+	public static void main(String[] args) {
+		UtenteDAO u=new UtenteDAO();
+		Utente u1=new Utente();
+		ArrayList<Utente> result = u.selectAll();
+		for (Utente u2 : result)
+            System.out.println(u2.toString());
+		//System.out.println(u.aggiornamentoUtente(u1));
+	}
 }

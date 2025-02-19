@@ -1,2 +1,2 @@
 /bin/
-lib\mysql-connector-java-8.0.19.jar"
+src/it/unipv/ingsw/resources/database.properties

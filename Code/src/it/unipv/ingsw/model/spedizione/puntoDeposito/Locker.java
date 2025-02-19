@@ -3,8 +3,11 @@ package it.unipv.ingsw.model.spedizione.puntoDeposito;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.geom.Point2D;
+import java.sql.Blob;
 
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
+import it.unipv.ingsw.model.spedizione.QRcode;
+import it.unipv.ingsw.model.spedizione.Spedizione;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
 import it.unipv.ingsw.model.spedizione.shippable.IShippable;
 
@@ -23,9 +26,8 @@ public class Locker implements IPuntoDeposito{
 	}
 	
 	public void rimuoviScompartimento(Scompartimento scompartimento) {
-		scompartimenti.remove(scompartimento.getIDscompartimento());
+		scompartimenti.remove(scompartimento.getIDscompartimento(), scompartimento);
 	}
-    
 
 	@Override
 	public Point2D getPosizione() {
@@ -33,11 +35,16 @@ public class Locker implements IPuntoDeposito{
 	}
 	
 	@Override
-	public boolean checkQR() {
-		
-		// da implementare ...
-		
-		return true;
+	//bisogna specificare il locker di partenza o finale???? ci ho pensato ma non so come farlo	
+	public boolean checkQR(QRcode codice, Spedizione spedizione) {
+//		verifica se il codice corrisponde alla spedizione
+		if(spedizione.getCodice().equals(codice)) {
+//			controlla che il pacco non sia stato già consegnato, si può anche togliere
+			if("In Viaggio".equals(spedizione.getStatoSpedizione())) {
+				return true; //il codice è valido per il ritiro o la consegna
+			}
+		}
+		return false; //codice non valido
 	}
 	
 	@Override
@@ -56,6 +63,5 @@ public class Locker implements IPuntoDeposito{
 				return scompartimenti.get(id_salvare).getIDscompartimento();
 	}
 
-		
 	
 }

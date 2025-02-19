@@ -9,4 +9,8 @@ public class Destinatario extends EndUser {
 		super(mail, password, nome, cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
 	}
 
+	public void update() {
+		
+	}
+	
 }

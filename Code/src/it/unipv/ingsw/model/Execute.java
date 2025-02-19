@@ -41,5 +41,6 @@ public class Execute {
 		
 		s.setPacco(p1);
 		s.avvioSpedizione(u, lf, dest);
+		
 	}
 }

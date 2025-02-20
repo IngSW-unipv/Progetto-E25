@@ -42,7 +42,7 @@ public class UtenteDAO implements IUtenteDAO {
 			st1.setString(5, u.getIndirizzoCivico());
 			st1.setObject(6, u.getDataNascita());
 			st1.setObject(7, u.getFotoDocumento());
-			st1.setObject(8, u.isStatoProfilo());
+			st1.setObject(8, u.getStatoProfilo());
 			st1.executeUpdate(query);
 			
 			String query1 = "INSERT INTO `ShipUp`.`superUser` (`email`, `password`)"
@@ -92,7 +92,7 @@ public class UtenteDAO implements IUtenteDAO {
 	            st2.setString(5, u.getNumeroTelefono());
 	            st2.setString(6, u.getIndirizzoCivico());
 	            st2.setObject(7, u.getFotoDocumento()); // Se è un oggetto, altrimenti usa setString o altro metodo
-	            st2.setBoolean(8, u.isStatoProfilo());  // Assumendo che sia un booleano
+	            st2.setBoolean(8, u.getStatoProfilo());  // Assumendo che sia un booleano
 	            st2.setInt(9, rs.getInt("id"));
 	            
 

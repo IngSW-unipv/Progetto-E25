@@ -70,7 +70,7 @@ public class Utente extends ASuperUser implements Subject{
 		return fotoDocumento;
 	}
 
-	public boolean isStatoProfilo() {
+	public boolean getStatoProfilo() {
 		return statoProfilo;
 	}
 	

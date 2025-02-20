@@ -18,7 +18,6 @@ public class UtenteDAO implements IUtenteDAO {
 	private Connection conn;
 
 	public UtenteDAO() {
-		super();
 		this.schema = "ShipUp";
 	}
 

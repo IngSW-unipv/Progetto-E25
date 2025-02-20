@@ -1,7 +1,18 @@
 package it.unipv.ingsw.model.transazioni;
 
-public class PagamentoEsternoAdapter implements IPagamento {
+import it.unipv.ingsw.exceptions.PaymentException;
 
-	public void effettuaPagamento(double amount) {}
+public class PagamentoEsternoAdapter implements IPagamento {
+	private PagamentoCarta pagamentoCarta;
+	
+	
+	public PagamentoEsternoAdapter(PagamentoCarta pagamentoCarta) {
+		this.pagamentoCarta = pagamentoCarta;
+	}
+
+	@Override
+	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{
+		pagamentoCarta.pagaCarta(amount, puntiApp);
+	}
 }
 

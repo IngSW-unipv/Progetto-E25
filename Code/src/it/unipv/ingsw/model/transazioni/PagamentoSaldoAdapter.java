@@ -1,5 +1,16 @@
 package it.unipv.ingsw.model.transazioni;
 
-public class PagamentoSaldoAdapter {
+import it.unipv.ingsw.exceptions.PaymentException;
 
+public class PagamentoSaldoAdapter implements IPagamento{
+	private PagamentoSaldo pagamentoSaldo;
+
+	public PagamentoSaldoAdapter(PagamentoSaldo ps) {
+		this.pagamentoSaldo = ps;
+	}
+	
+	@Override
+	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{
+		pagamentoSaldo.effettuaPagamentoConSaldo(amount, puntiApp);
+	}
 }

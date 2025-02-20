@@ -61,17 +61,30 @@ public class Locker implements IPuntoDeposito{
 	
 	@Override
 	//metodo che funziona sia per il carrier che per il destinatario
-	public boolean checkQR(QRcode codice, Spedizione spedizione) {
+	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro) {
 //		verifica se il codice corrisponde al codice della spedizione
 		if(spedizione.getCodice().equals(codice)) {
 			Integer IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
 			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
+			scompartimento.Open();
+			//Aggiornare lo stato della spedizione
+			//pacco ritirato dal destinatario
+			if(isRitiro) {
+				spedizione.setStatoSpedizione("Consegnato");
+				System.out.println("Il pacco è stato ritirato.\nStato aggiornato a 'Consegna'.");
+			} else {
+				//pacco depositato dal carrier
+				spedizione.setStatoSpedizione("In attesa.");
+				System.out.println("Il pacco è stato depositato nel locker ed è in attesa per il ritiro. \nStato aggiornato a 'In attesa'.");
+			}
+			return true; //codice valido
+			
 			/*if(scompartimento != null) {
 				scompartimento.Open();
 				return true;
 			} else {
 				System.out.println("Scompartimento Non Esiste.");
-			}*/ //parte non necessaria???
+			}*/ //porzione non necessaria???
 			
 		} else {
 			System.out.println("Codice Non Valido");

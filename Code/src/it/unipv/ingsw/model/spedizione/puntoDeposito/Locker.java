@@ -56,6 +56,7 @@ public class Locker implements IPuntoDeposito{
 	}
 	
 	public int getIDscompartimento() {
+		//logica da implementare
 		return IDscompartimento;
 	}
 	
@@ -78,19 +79,12 @@ public class Locker implements IPuntoDeposito{
 				System.out.println("Il pacco è stato depositato nel locker ed è in attesa per il ritiro. \nStato aggiornato a 'In attesa'.");
 			}
 			return true; //codice valido
-			
-			/*if(scompartimento != null) {
-				scompartimento.Open();
-				return true;
-			} else {
-				System.out.println("Scompartimento Non Esiste.");
-			}*/ //porzione non necessaria???
-			
 		} else {
 			System.out.println("Codice Non Valido");
 		}
 		return false; 
 	}
+	
 	
 	@Override
 	public int checkDisponibilita(IShippable daSpedire) {
@@ -99,7 +93,7 @@ public class Locker implements IPuntoDeposito{
 				for(Integer c: scompartimenti.keySet()) {
 					if(scompartimenti.get(c).isOccupato()==false && scompartimenti.get(c).getSize()== daSpedire.getSize()) {
 					//	scompartimenti.get(c).setOccupato(true);
-						System.out.printf("Scompartimento libero "+ c+"\n");
+					//	System.out.printf("Scompartimento libero "+ c+"\n");
 						id_salvare=c;
 					}
 				}

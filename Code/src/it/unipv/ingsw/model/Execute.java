@@ -1,15 +1,10 @@
 package it.unipv.ingsw.model;
 
 import it.unipv.ingsw.model.spedizione.*;
-
-import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
-import it.unipv.ingsw.model.spedizione.puntoDeposito.Scompartimento;
-import it.unipv.ingsw.model.spedizione.shippable.IShippable;
-import it.unipv.ingsw.model.spedizione.shippable.Pacco;
-import it.unipv.ingsw.model.spedizione.shippable.Size;
-import it.unipv.ingsw.model.utenze.Admin;
-import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
+import it.unipv.ingsw.model.spedizione.shippable.*;
+import it.unipv.ingsw.model.utenze.*;
+import java.awt.geom.Point2D;
 
 public class Execute {
 	
@@ -19,7 +14,11 @@ public class Execute {
 		Admin a1= new Admin("mail","psw");
 		Utente uAttesa1=u1.modificaProfilo("CarloRossi@gmail.com",null,"Carli","Rosso!","345237623856",null,null,null);
 		//a1.validaAccount(Utente u1,Utente uAttesa1);
-		Spedizione s = new Spedizione(null, null, null, 0, null);
+		
+		Point2D punto= new Point2D.Double(10,10);
+		IPuntoDeposito p= new Locker(punto,15);
+		
+		Spedizione s = new Spedizione(null, null, null, 0, p); 
 		IShippable p1 = new Pacco(Size.S,1.2);
 		Locker lf = new Locker(null, 3);
 		Scompartimento sc= new Scompartimento(15, Size.M);
@@ -30,15 +29,15 @@ public class Execute {
 		sc3.setOccupato(false);
 		
 		Utente dest = new Utente("utente2@mail.com");
-		
 		Utente u = new Utente("utente1@mail.com", null, null, null, null, null, null, null);
 		
 		
-	//	s.avvioSpedizione(u, lf, dest);
-		lf.aggiungiScompartimento(sc);
-		lf.aggiungiScompartimento(sc2);
-		lf.aggiungiScompartimento(sc3);
+	//prova aggiunta scompartimenti
+		lf.aggiungiScompartimento(15,sc);
+		lf.aggiungiScompartimento(16,sc2);
+		lf.aggiungiScompartimento(17,sc3);
 		
+	//prova avvio spedizione
 		s.setPacco(p1);
 		s.avvioSpedizione(u, lf, dest);
 		

@@ -5,11 +5,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 
 //per utilizzare package shippable
 import it.unipv.ingsw.model.spedizione.shippable.*;
 import it.unipv.ingsw.model.utenze.*;
+import it.unipv.ingsw.model.Observer;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
+
+import it.unipv.ingsw.model.transazioni.*;
 
 public class Spedizione {
 	
@@ -18,12 +23,12 @@ public class Spedizione {
 	private Destinatario destinatario; 
 	private IShippable shippable;
 	private int assicurazione; //non sono sicuro
-//	private IPuntoDeposito destinazione;
+	private IPuntoDeposito destinazione;
 //	private IPuntoDeposito partenza;
 	private Itinerario itinerario;
 	private Blob codice;
 	private String statoSpedizione;
-	
+	List <Observer> observers = new ArrayList<>();
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito destinazione) {
 		this.mittente = mittente;
@@ -33,8 +38,9 @@ public class Spedizione {
 		//this.destinazione = destinazione;
 		this.itinerario.setFine(destinazione.getPosizione());
 
+//		this.itinerario.setFine(destinazione.getPosizione());  //segna un problema in esecuzione
 	}
-	
+		
 	public Blob getCodice() {
 		return codice;
 	}
@@ -47,10 +53,29 @@ public class Spedizione {
 		return statoSpedizione;
 	}
 
-	public void setStatoSpedizione(String statoSpedizione) {
-		this.statoSpedizione = statoSpedizione;
+	//aggiungi observer
+	public void addObserver(Observer observer) {
+		observers.add(observer);
 	}
 	
+	//remove observer
+	public void removeObserver(Observer observer) {
+		observers.remove(observer);
+	}
+	
+	public void setStatoSpedizione(String statoSpedizione) {
+		this.statoSpedizione = statoSpedizione;
+		//notifica gli Observers ad ogni aggiornamento
+		notifyObservers();
+	}
+	
+	//notify observers
+	public void notifyObservers() {
+		for (Observer observer : observers) {
+			observer.update(this); //faccio riferimento alla spedizione
+		}
+	}
+
 	public Itinerario getItinerario() {
 		return itinerario;
 	}
@@ -59,19 +84,17 @@ public class Spedizione {
 		this.itinerario = itinerario;
 	}
 
-	public void avvioSpedizione(Utente utente, Locker lockerIniziale, ASuperUser destinatario) {
+	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario) { 
 		
 		if(shippable==null) System.out.println("registra il pacco");
 		
-		int id_locker_libero=lockerIniziale.checkDisponibilita(shippable);
-		System.out.print(id_locker_libero);
+		punto_deposito_partenza.checkDisponibilita(shippable); 
 		
+		//far partire il pagamento pagamento.effettuaPagamento();
 				
-				//far partire il pagamento ...
-				
-				//genera QR
+		//genera QR
 		
-		System.out.printf("Finito avvioSpedizione");
+		System.out.printf("Finito avvioSpedizione\n");
 	}
 	
 	

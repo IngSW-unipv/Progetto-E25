@@ -56,6 +56,7 @@ public class Locker implements IPuntoDeposito{
 	}
 	
 	public int getIDscompartimento() {
+		//logica da implementare
 		return IDscompartimento;
 	}
 	
@@ -78,14 +79,6 @@ public class Locker implements IPuntoDeposito{
 				System.out.println("Il pacco è stato depositato nel locker ed è in attesa per il ritiro. \nStato aggiornato a 'In attesa'.");
 			}
 			return true; //codice valido
-			
-			/*if(scompartimento != null) {
-				scompartimento.Open();
-				return true;
-			} else {
-				System.out.println("Scompartimento Non Esiste.");
-			}*/ //porzione non necessaria???
-			
 		} else {
 			System.out.println("Codice Non Valido");
 		}

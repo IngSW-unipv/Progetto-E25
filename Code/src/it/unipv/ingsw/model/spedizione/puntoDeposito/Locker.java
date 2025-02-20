@@ -2,10 +2,10 @@ package it.unipv.ingsw.model.spedizione.puntoDeposito;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.awt.geom.Point2D;
 import java.sql.Blob;
 
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
+import it.unipv.ingsw.model.spedizione.Coordinate;
 import it.unipv.ingsw.model.spedizione.QRcode;
 import it.unipv.ingsw.model.spedizione.Spedizione;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
@@ -13,12 +13,12 @@ import it.unipv.ingsw.model.spedizione.shippable.IShippable;
 
 public class Locker implements IPuntoDeposito{
 	
-	private Point2D posizione;
+	private Coordinate posizione;
 	private Map<Integer, Scompartimento> scompartimenti; // ogni scompartimento e' identificato da un unico Key
 	private int IDscompartimento;
 	private int IDlocker;
 	
-	public Locker(Point2D posizione, int Idlocker) {
+	public Locker(Coordinate posizione, int Idlocker) {
 		this.posizione = posizione;
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
 		this.IDscompartimento = IDscompartimento;
@@ -41,7 +41,7 @@ public class Locker implements IPuntoDeposito{
 	}
 
 	@Override
-	public Point2D getPosizione() {
+	public Coordinate getPosizione() {
 		return posizione;
 	}
 	

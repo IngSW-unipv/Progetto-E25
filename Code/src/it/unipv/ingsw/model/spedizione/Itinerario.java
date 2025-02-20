@@ -1,39 +1,69 @@
 package it.unipv.ingsw.model.spedizione;
 
-import java.awt.geom.Point2D;
 
 public class Itinerario {
 	
-	private Point2D inizio;
-	private Point2D fine;
+	private Coordinate inizio;
+	private Coordinate fine;
+	private static final double TOLLERANZA = 5000;
 	
-	public Itinerario(Point2D inizio, Point2D fine) {
+	public Itinerario(Coordinate inizio, Coordinate fine) {
 		this.inizio = inizio;
 		this.fine = fine;
 	}
 
-	public Point2D getInizio() {
+	public Coordinate getInizio() {
 		return inizio;
 	}
 
-	public void setInizio(Point2D inizio) {
+	public void setInizio(Coordinate inizio) {
 		this.inizio = inizio;
 	}
 
-	public Point2D getFine() {
+	public Coordinate getFine() {
 		return fine;
 	}
 
-	public void setFine(Point2D fine) {
+	public void setFine(Coordinate fine) {
 		this.fine = fine;
 	}
 	
+	public double lunghezza() {
+		
+		return inizio.distanza(fine);
+	}
 	
+	//verifico se questo itinerario contiene un altro itinerario (considerando la tolleranza)
 	public boolean contiene(Itinerario altro) {
 		
-		//verifico se questo itinerario contiene l'itinerario passato in altro 
+		//caso 1: l'itinerario del pacco è completamente contenuto nell'itinerario del carrier
+		System.out.println(altro.getInizio().distanza(inizio, fine));	
+		System.out.println(altro.getFine().distanza(inizio, fine));		
+		
+		
+		//caso2: l'itinerario del pacco è parzialmente contenuto nell'itinerario del carrier
+		
 		
 		return true;
+	}
+	
+	
+	
+	
+	
+	public static void main(String[] args) {
+		Coordinate a = new Coordinate(1,1);
+		Coordinate b = new Coordinate(5,1);
+		Coordinate c = new Coordinate(2,2);
+		Coordinate d = new Coordinate(7,2);
+		Coordinate e = new Coordinate(2,1);
+		Coordinate f = new Coordinate(4,1);
+		
+		Itinerario i1 = new Itinerario(a,b); //itinerario carrier
+		Itinerario i2 = new Itinerario(c,d); //itinerario pacco
+		
+		i1.contiene(i2);
+		
 	}
 	
 }

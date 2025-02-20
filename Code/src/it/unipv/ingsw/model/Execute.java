@@ -34,11 +34,12 @@ public class Execute {
 		Utente u = new Utente("utente1@mail.com", null, null, null, null, null, null, null);
 		
 		
-	//	s.avvioSpedizione(u, lf, dest);
-		lf.aggiungiScompartimento(sc);
-		lf.aggiungiScompartimento(sc2);
-		lf.aggiungiScompartimento(sc3);
+	//prova aggiunta scompartimenti
+		lf.aggiungiScompartimento(15,sc);
+		lf.aggiungiScompartimento(16,sc2);
+		lf.aggiungiScompartimento(17,sc3);
 		
+	//prova avvio spedizione
 		s.setPacco(p1);
 		s.avvioSpedizione(u, lf, dest);
 		

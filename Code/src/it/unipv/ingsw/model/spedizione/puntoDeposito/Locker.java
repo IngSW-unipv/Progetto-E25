@@ -85,6 +85,7 @@ public class Locker implements IPuntoDeposito{
 		return false; 
 	}
 	
+	
 	@Override
 	public int checkDisponibilita(IShippable daSpedire) {
 		//no soluzione migliore

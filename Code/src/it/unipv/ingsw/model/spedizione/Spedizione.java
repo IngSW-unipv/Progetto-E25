@@ -23,7 +23,7 @@ public class Spedizione {
 	private Destinatario destinatario; 
 	private IShippable shippable;
 	private int assicurazione; //non sono sicuro
-//	private IPuntoDeposito destinazione;
+	private IPuntoDeposito destinazione;
 //	private IPuntoDeposito partenza;
 	private Itinerario itinerario;
 	private Blob codice;
@@ -35,8 +35,8 @@ public class Spedizione {
 		this.destinatario = destinatario;
 		this.shippable = shippable;
 		this.assicurazione = assicurazione;
-		//this.destinazione = destinazione;
-		this.itinerario.setFine(destinazione.getPosizione());
+		this.destinazione = destinazione;
+//		this.itinerario.setFine(destinazione.getPosizione());  //segna un problema in esecuzione
 		this.codice=codice; // codice della spedizione
 		this.statoSpedizione=statoSpedizione;
 	}
@@ -94,7 +94,7 @@ public class Spedizione {
 				
 		//genera QR
 		
-		System.out.printf("Finito avvioSpedizione");
+		System.out.printf("Finito avvioSpedizione\n");
 	}
 	
 	

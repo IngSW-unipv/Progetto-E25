@@ -93,7 +93,7 @@ public class Locker implements IPuntoDeposito{
 				for(Integer c: scompartimenti.keySet()) {
 					if(scompartimenti.get(c).isOccupato()==false && scompartimenti.get(c).getSize()== daSpedire.getSize()) {
 					//	scompartimenti.get(c).setOccupato(true);
-						System.out.printf("Scompartimento libero "+ c+"\n");
+					//	System.out.printf("Scompartimento libero "+ c+"\n");
 						id_salvare=c;
 					}
 				}

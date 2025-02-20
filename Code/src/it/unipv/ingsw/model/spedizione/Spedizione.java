@@ -14,6 +14,8 @@ import it.unipv.ingsw.model.utenze.*;
 import it.unipv.ingsw.model.Observer;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
 
+import it.unipv.ingsw.model.transazioni.*;
+
 public class Spedizione {
 	
 	private Mittente mittente;
@@ -82,17 +84,15 @@ public class Spedizione {
 		this.itinerario = itinerario;
 	}
 
-	public void avvioSpedizione(Utente utente, Locker lockerIniziale, ASuperUser destinatario) {
+	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario) { 
 		
 		if(shippable==null) System.out.println("registra il pacco");
 		
-		int id_locker_libero=lockerIniziale.checkDisponibilita(shippable);
-		System.out.print(id_locker_libero);
+		punto_deposito_partenza.checkDisponibilita(shippable); 
 		
+		//far partire il pagamento pagamento.effettuaPagamento();
 				
-				//far partire il pagamento ...
-				
-				//genera QR
+		//genera QR
 		
 		System.out.printf("Finito avvioSpedizione");
 	}

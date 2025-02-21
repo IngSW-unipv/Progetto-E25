@@ -35,6 +35,8 @@ public class Spedizione {
 	List <Observer> observers = new ArrayList<>();
 	private Date dataDeposito;
 	
+	QRcode codiceQR= new QRcode();
+	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito destinazione) {
 		this.mittente = mittente;
 		this.destinatario = destinatario;
@@ -105,7 +107,7 @@ public class Spedizione {
 		
 		//far partire il pagamento pagamento.effettuaPagamento();
 				
-		//genera QR
+		//codiceQR.generaQRcode(, );
 		
 		System.out.printf("Finito avvioSpedizione\n");
 	}

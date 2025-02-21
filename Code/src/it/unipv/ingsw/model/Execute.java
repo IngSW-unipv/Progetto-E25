@@ -56,7 +56,8 @@ public class Execute {
 		locker1.getScompartimento(2).Open();
 		System.out.println("Apertura dello scompartimento con ID 2 nel locker 1:");
 		
-		
+		QRcode code= new QRcode();
+		code.generaQRcode(10, 15);
 		
 	}
 }

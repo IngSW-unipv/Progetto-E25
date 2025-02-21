@@ -35,8 +35,8 @@ public class Spedizione {
 		this.destinatario = destinatario;
 		this.shippable = shippable;
 		this.assicurazione = assicurazione;
-		//this.destinazione = destinazione;
-		this.itinerario.setFine(destinazione.getPosizione());
+		this.destinazione = destinazione;
+	//	this.itinerario.setFine(destinazione.getPosizione());
 
 //		this.itinerario.setFine(destinazione.getPosizione());  //segna un problema in esecuzione
 	}

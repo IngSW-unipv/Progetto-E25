@@ -15,17 +15,17 @@ public class Execute {
 		Utente uAttesa1=u1.modificaProfilo("CarloRossi@gmail.com",null,"Carli","Rosso!","345237623856",null,null,null);
 		//a1.validaAccount(Utente u1,Utente uAttesa1);
 		
-		Point2D punto= new Point2D.Double(10,10);
+		Coordinate punto= new Coordinate(10,10);
 		IPuntoDeposito p= new Locker(punto,15);
 		
 		Spedizione s = new Spedizione(null, null, null, 0, p); 
 		IShippable p1 = new Pacco(Size.S,1.2);
 		Locker lf = new Locker(null, 3);
-		Scompartimento sc= new Scompartimento(15, Size.M);
+		Scompartimento sc= new Scompartimento(15, Size.S);
 		sc.setOccupato(false);
-		Scompartimento sc2= new Scompartimento(16, Size.S);
+		Scompartimento sc2= new Scompartimento(16, Size.XL);
 		sc2.setOccupato(false);
-		Scompartimento sc3= new Scompartimento(17, Size.S);
+		Scompartimento sc3= new Scompartimento(17, Size.L);
 		sc3.setOccupato(false);
 		
 		Utente dest = new Utente("utente2@mail.com");

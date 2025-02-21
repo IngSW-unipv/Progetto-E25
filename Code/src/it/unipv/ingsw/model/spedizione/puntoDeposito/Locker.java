@@ -87,19 +87,26 @@ public class Locker implements IPuntoDeposito{
 	
 	
 	@Override
-	public int checkDisponibilita(IShippable daSpedire) {
-		//no soluzione migliore
+	public boolean checkDisponibilita(IShippable daSpedire) {
 				int id_salvare=0;
+				boolean controllo=false;
 				for(Integer c: scompartimenti.keySet()) {
 					if(scompartimenti.get(c).isOccupato()==false && scompartimenti.get(c).getSize()== daSpedire.getSize()) {
-					//	scompartimenti.get(c).setOccupato(true);
 					//	System.out.printf("Scompartimento libero "+ c+"\n");
 						id_salvare=c;
+						controllo=true;
 					}
 				}
 				
+				if(controllo==false) return false; //controllo se c'è disponibilità
 				
-				return scompartimenti.get(id_salvare).getIDscompartimento();
+				scompartimenti.get(id_salvare).setOccupato(true);
+				if(scompartimenti.get(id_salvare).isOccupato()==true) {
+					System.out.printf("Scompartimento prenotato \n");
+					return true;
+				}else {
+					return false;
+				}
 	}
 
 	

@@ -12,7 +12,7 @@ public interface IPuntoDeposito {
 	
 	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro);
 	
-	public int checkDisponibilita(IShippable daSpedire); //cambiato in intero per recuperare id scompartimento 
+	public boolean checkDisponibilita(IShippable daSpedire); 
 	
 	
 }

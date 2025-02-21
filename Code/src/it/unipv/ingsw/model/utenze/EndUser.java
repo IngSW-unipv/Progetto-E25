@@ -17,7 +17,6 @@ public class EndUser extends Utente implements Observer{
 	}
 	
 	
-	//metodi da implementare
 	public void update(Spedizione spedizione) {
 		System.out.println("Aggiornamento spedizione" + spedizione.getCodice() + ": " + spedizione.getStatoSpedizione());
 		if (isLoggedIn()) {

@@ -57,6 +57,7 @@ public abstract class ASuperUser {
         return utenteLoggato;
     }
     
+    // metodo che simula l'invio della mail
     public void inviaMail(Spedizione spedizione) {
 		System.out.println("Invio mail a: " + getMail() + "con lo stato della spedizione: " + spedizione.getStatoSpedizione());
 	}

@@ -4,8 +4,8 @@ import java.sql.Blob;
 
 public class QRcode {
 	
-	private Blob id_qr;
-	private boolean stato_qr=false;
+	private String codice; 
+	private boolean statoqr=false;
 	
 	public QRcode() {
 
@@ -13,15 +13,15 @@ public class QRcode {
 	
 	public void generaQRcode() { 
 		//generazione qr
-		stato_qr=true;
+		statoqr=true;
 	}
 	
-	public Blob getQRcode() {
-		return id_qr;
+	public String getQRcode() {
+		return codice;
 	}
 	
 	public void disabilitaQRcode() {
-		stato_qr=false;
+		statoqr=false;
 	}
 
 }

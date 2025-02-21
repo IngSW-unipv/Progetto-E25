@@ -1,5 +1,7 @@
 package it.unipv.ingsw.model.utenze;
 
+import it.unipv.ingsw.model.spedizione.Spedizione;
+
 public abstract class ASuperUser {
 	private String mail,password;
 	private static boolean utenteLoggato;
@@ -54,4 +56,8 @@ public abstract class ASuperUser {
     public boolean isLoggedIn() {
         return utenteLoggato;
     }
+    
+    public void inviaMail(Spedizione spedizione) {
+		System.out.println("Invio mail a: " + getMail() + "con lo stato della spedizione: " + spedizione.getStatoSpedizione());
+	}
 }

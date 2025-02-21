@@ -18,7 +18,6 @@ public class EndUser extends Utente implements Observer{
 	
 	
 	//metodi da implementare
-	@Override
 	public void update(Spedizione spedizione) {
 		System.out.println("Aggiornamento spedizione" + spedizione.getCodice() + ": " + spedizione.getStatoSpedizione());
 		if (isLoggedIn()) {
@@ -27,11 +26,4 @@ public class EndUser extends Utente implements Observer{
 		//fuori del blocco if perché in ogni caso si invia la mial
 		inviaMail(spedizione);
 	}
-
-
-	//serve per simulare l'invio della mail
-	public void inviaMail(Spedizione spedizione) {
-		System.out.println("Invio mail a: " + getMail() + "con lo stato della spedizione: " + spedizione.getStatoSpedizione());
-	}
-
 }

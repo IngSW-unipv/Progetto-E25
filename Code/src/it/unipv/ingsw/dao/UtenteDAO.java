@@ -123,9 +123,8 @@ public class UtenteDAO implements IUtenteDAO {
             rs1 = st1.executeQuery(query);
 
             while (rs1.next()) {
-
                  u = new Utente(rs1.getString(1),rs1.getString(2),rs1.getString(4),rs1.getString(5),rs1.getString(6),rs1.getString(7),rs1.getString(8),rs1.getBlob(9));
-
+               
                  result.add(u);
             }
             

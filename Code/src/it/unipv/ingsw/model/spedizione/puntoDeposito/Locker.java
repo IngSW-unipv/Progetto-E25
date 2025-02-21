@@ -1,7 +1,9 @@
 package it.unipv.ingsw.model.spedizione.puntoDeposito;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.sql.Blob;
 
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
@@ -68,6 +70,27 @@ public class Locker implements IPuntoDeposito{
 			Integer IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
 			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
 			scompartimento.Open();
+			
+			try {
+				//controlla se sono passati più di 3gg dal deposito
+				Date dataDeposito = spedizione.getDataDeposito();
+				long diffInMillies = Math.abs(new Date().getTime() - dataDeposito.getTime());
+				long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+				
+				if(diffInDays > 3 && !isRitiro) {
+					//pacco reconsegnato al mittente
+					spedizione.setStatoSpedizione("Pacco riconsengato al mittente.");
+					System.out.println("Il pacco non è stato ritirato in tempo. Stato aggiornato a 'Riconsegnato al mittente'.");
+					spedizione.notifyObservers();
+				}
+				return false;
+			} catch (Exception e) {
+				//per esempio dataDeposito è 0. il calcolo è gestito da una libreria di java
+				System.out.println("Errore nel calcolo del tempo di deposito: " + e.getMessage());
+				System.out.println("Il pacco non è stato depositato entro 3gg. \nStato aggiornato a 'Pacco smarrito'."); // il corriere non ha depositato il pacco entro 3gg <= dataDeposito = 0
+				spedizione.setStatoSpedizione("Pacco Smarrito");
+			}
+			
 			//Aggiornare lo stato della spedizione
 			//pacco ritirato dal destinatario
 			if(isRitiro) {

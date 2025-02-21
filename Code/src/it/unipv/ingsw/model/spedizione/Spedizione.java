@@ -8,6 +8,10 @@ import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
+//per controllare data di deposito
+import java.util.Date;
+import javax.xml.crypto.Data;
+
 //per utilizzare package shippable
 import it.unipv.ingsw.model.spedizione.shippable.*;
 import it.unipv.ingsw.model.utenze.*;
@@ -29,6 +33,7 @@ public class Spedizione {
 	private Blob codice;
 	private String statoSpedizione;
 	List <Observer> observers = new ArrayList<>();
+	private Date dataDeposito;
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito destinazione) {
 		this.mittente = mittente;
@@ -43,6 +48,14 @@ public class Spedizione {
 		
 	public Blob getCodice() {
 		return codice;
+	}
+	
+	public Date getDataDeposito() {
+		return dataDeposito;
+	}
+	
+	public void setDataDeposito(Date data) {
+		this.dataDeposito = data;
 	}
 	
 	public void setPacco(IShippable shippable) {

@@ -5,10 +5,10 @@ import it.unipv.ingsw.model.Singleton;
 import it.unipv.ingsw.model.utenze.Mittente;
 import it.unipv.ingsw.model.utenze.Saldo;
 
-public class PagamentoPuntiApp { //ADAPTER DI PTAPP E SALDO
-	
-		public void effettuaPagamentoConPuntiApp(double amount,int puntiApp) throws PaymentException{
-			//pagamento con puntiApp utilizzando classe Saldo e Utente
+public class PagamentoPuntiApp implements IPagamento{ //aggiunto implements IPagamento per far funzionare composite, dovrei far capire che lo sta già implementando senza fare implements
+		
+		//pagamento con puntiApp
+		public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{ 
 			int temp;
 			Saldo sal;
 			Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
@@ -18,9 +18,9 @@ public class PagamentoPuntiApp { //ADAPTER DI PTAPP E SALDO
 			else {
 				temp=m.getSaldo().getPuntiApp();
 				temp=temp-puntiApp;
-				sal=new Saldo(0,temp);
+				
+				sal=new Saldo(m.getSaldo().getDenaro(),temp); 
 				m.setSaldo(sal);
-				//m.setSaldo(m.getSaldo().getDenaro()-amount);
 			}
 		}
 }

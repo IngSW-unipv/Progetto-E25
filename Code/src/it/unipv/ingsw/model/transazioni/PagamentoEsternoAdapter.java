@@ -12,7 +12,8 @@ public class PagamentoEsternoAdapter implements IPagamento {
 
 	@Override
 	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{
-		pagamentoCarta.pagaCarta(amount, puntiApp);
+		pagamentoCarta.pagaCarta(amount);
+		
 	}
 }
 

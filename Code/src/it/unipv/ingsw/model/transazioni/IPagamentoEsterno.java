@@ -4,7 +4,7 @@ import it.unipv.ingsw.exceptions.PaymentException;
 
 public interface IPagamentoEsterno {
 
-	public void pagaCarta(double amount,int puntiCarta) throws PaymentException;
+	public void pagaCarta(double amount) throws PaymentException;
 	
-	public void trasferisciSaldo(); //da implementare
+	public boolean trasferisciSaldo() throws PaymentException; //da implementare
 }

@@ -1,3 +1,6 @@
 carta.adapter.class.name=it.unipv.ingsw.model.transazioni.PagamentoEsternoAdapter
 saldo.adapter.class.name=it.unipv.ingsw.model.transazioni.PagamentoSaldoAdapter
 punti.adapter.class.name=it.unipv.ingsw.model.transazioni.PagamentoPuntiAppAdapter
+punti_carta.adapter.class.name=it.unipv.ingsw.model.transazioni.CompositePuntiCartaAdapter
+punti_saldo.adapter.class.name=it.unipv.ingsw.model.transazioni.CompositePuntiSaldoAdapter
+saldo_carta.adapter.class.name=it.unipv.ingsw.model.transazioni.CompositeSaldoCartaAdapter

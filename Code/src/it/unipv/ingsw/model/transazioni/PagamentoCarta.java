@@ -3,11 +3,16 @@ package it.unipv.ingsw.model.transazioni;
 import it.unipv.ingsw.exceptions.PaymentException;
 
 public class PagamentoCarta implements IPagamentoEsterno{
-	
-	public void pagaCarta(double amount,int puntiApp) throws PaymentException{
-		//FARE o LOGICA ESTERNA?
+	private double amount; 
+	private int puntiApp;  
+
+	@Override
+	public void pagaCarta(double amount) throws PaymentException{
+		 //FARE o LOGICA ESTERNA?
 	}
 	
-	public void trasferisciSaldo() {}
-		
-}
+	public boolean trasferisciSaldo() throws PaymentException {
+		Pagamento pp= new Pagamento(PagamentoStrategyFactory.getPagamentoEsternoAdapter(new PagamentoCarta()));
+        return pp.provaPagamento(amount,puntiApp);
+	}
+}	

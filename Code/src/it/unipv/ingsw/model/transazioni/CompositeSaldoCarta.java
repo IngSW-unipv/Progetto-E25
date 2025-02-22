@@ -5,23 +5,30 @@ import it.unipv.ingsw.model.Singleton;
 import it.unipv.ingsw.model.utenze.Mittente;
 import it.unipv.ingsw.model.utenze.Saldo;
 
-public class CompositeSaldoCarta extends CompositePagamenti {
+public class CompositeSaldoCarta extends CompositePagamentiStrategy {
 	private PagamentoSaldo pagaConSaldo;
+	private PagamentoCarta pagaConCarta;
 	
-	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{
-		//pagamento con saldo+carta
-		//carta esterno
-		double temp,rimanenteCarta;
-		//PagamentoCarta pagaConCarta;
+	public CompositeSaldoCarta() {
+		super.addStrategy(new PagamentoSaldo()); //pagamento saldo deve implementare IPagamento
+		super.addStrategy(new PagamentoCarta()); //pagamento carta deve implementare IPagamentoEsterno che a sua volta implementa IPagamento
+	}
+	
+	//pagamento con saldo e carta
+	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{ 
+		double temp=amount;
+		Saldo sal;
 		
 		Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
-		if(m.getSaldo().getDenaro()<amount) {
-			rimanenteCarta=amount-m.getSaldo().getDenaro();
-			//metodo pagaConCarta.effettuaPagamento(rimanenteCarta);
+		temp-=m.getSaldo().getDenaro(); //utilizzo una variabile temp per vedere se ho saldo sufficiente per pagare
+		if(temp<=0) { //Posso pagare con saldo, non c'è bisogno di carta!
+			pagaConSaldo.effettuaPagamento(amount, puntiApp); 
 		}
 		else {
-			//ho abbastanza denaro: pagamento solo con saldo
-			pagaConSaldo.effettuaPagamentoConSaldo(amount, 0);
+			//non ho abbastanza denaro sul saldo: pagamento con carta sottraendo il saldo--> composite
+			pagaConCarta.pagaCarta(amount-m.getSaldo().getDenaro()); //tot-saldo (o temp che è >0)
+			sal=new Saldo(0,m.getSaldo().getPuntiApp()); //ho utilizzato tutto il saldo
+			m.setSaldo(sal);
 		}
-	}
+	}		
 }

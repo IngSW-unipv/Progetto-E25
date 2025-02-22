@@ -11,6 +11,6 @@ public class PagamentoPuntiAppAdapter implements IPagamento{
 	
 	@Override
 	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{
-		pagamentoPuntiApp.effettuaPagamentoConPuntiApp(amount, puntiApp);
+		pagamentoPuntiApp.effettuaPagamento(amount, puntiApp);
 	}
 }

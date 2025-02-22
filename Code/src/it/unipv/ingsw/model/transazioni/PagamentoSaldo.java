@@ -5,9 +5,9 @@ import it.unipv.ingsw.model.Singleton;
 import it.unipv.ingsw.model.utenze.Mittente;
 import it.unipv.ingsw.model.utenze.Saldo;
 
-public class PagamentoSaldo{
+public class PagamentoSaldo implements IPagamento{ //aggiunto implements IPagamento per far funzionare composite
 
-	public void effettuaPagamentoConSaldo(double amount,int puntiApp) throws PaymentException{
+	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{
 		//pagamento con saldo utilizzando classe Saldo e Mittente
 		double temp;
 		Saldo sal;
@@ -18,9 +18,8 @@ public class PagamentoSaldo{
 		else {
 			temp=m.getSaldo().getDenaro();
 			temp=temp-amount;
-			sal=new Saldo(temp,0);
+			sal=new Saldo(temp,m.getSaldo().getPuntiApp());
 			m.setSaldo(sal);
-			//m.setSaldo(m.getSaldo().getDenaro()-amount);
 		}
 	}
 }

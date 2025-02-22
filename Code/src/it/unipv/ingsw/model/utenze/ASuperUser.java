@@ -61,4 +61,6 @@ public abstract class ASuperUser {
     public void inviaMail(Spedizione spedizione) {
 		System.out.println("Invio mail a: " + getMail() + "con lo stato della spedizione: " + spedizione.getStatoSpedizione());
 	} //****da capire dove metterlo****
+    
+ 
 }

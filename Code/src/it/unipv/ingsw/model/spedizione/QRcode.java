@@ -11,12 +11,12 @@ public class QRcode {
 
 	}
 	
-	public void generaQRcode(int primoID, int secondoID) { 
+	public void generaQRcode() { 
 		String theAlphaNumericS;
 	    StringBuilder builder;
-	    int j=7;
+	    final int j=7;
 	    
-	    theAlphaNumericS="ABCDEFGHIJKLMNOPQRSTUVWXYZ"+primoID+secondoID;
+	    theAlphaNumericS="ABCDEFGHIJKLMNOPQRSTUVWXYZ"+"012345678";
 	    builder= new StringBuilder(7);
 	    
 	    for(int i=0;i<j;i++) {
@@ -38,5 +38,6 @@ public class QRcode {
 	public void disabilitaQRcode() {
 		statoqr=false;
 	}
+	
 
 }

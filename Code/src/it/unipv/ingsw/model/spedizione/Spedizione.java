@@ -34,6 +34,7 @@ public class Spedizione {
 	private String statoSpedizione;
 	List <Observer> observers = new ArrayList<>();
 	private Date dataDeposito;
+	private Date dataInizioSpedizione;
 	
 	QRcode codiceQR= new QRcode();
 	
@@ -101,18 +102,23 @@ public class Spedizione {
 
 	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario) { 
 		
-		if(shippable==null) System.out.println("registra il pacco");
+		if(shippable==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
 		
 		punto_deposito_partenza.checkDisponibilita(shippable); 
 		
-		//far partire il pagamento pagamento.effettuaPagamento();
-				
-		//codiceQR.generaQRcode(, );
-		
+		codiceQR.generaQRcode();
+			
+		/* if(pagamento.effettuaPagamento()=true)
+		 * 		codiceQR.generaQRcode();
+		 */
+		statoSpedizione="In attesa di consegna pacco in locker";
+		Date data_inizio=new Date();
+		dataInizioSpedizione=data_inizio; //setto la data di inizio spedizione
+		this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
 		System.out.printf("Finito avvioSpedizione\n");
+		
 	}
-	
-	
+
 	
 	public void presaInCarico(Utente utente, Itinerario tratta) {
 		

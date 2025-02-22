@@ -125,7 +125,7 @@ public class Locker implements IPuntoDeposito{
 				
 				scompartimenti.get(id_salvare).setOccupato(true);
 				if(scompartimenti.get(id_salvare).isOccupato()==true) {
-					System.out.printf("Scompartimento prenotato \n");
+					//System.out.printf("Scompartimento prenotato \n");
 					return true;
 				}else {
 					return false;

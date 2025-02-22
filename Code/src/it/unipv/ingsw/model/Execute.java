@@ -1,5 +1,6 @@
 package it.unipv.ingsw.model;
 
+import java.util.Date;
 import it.unipv.ingsw.model.spedizione.*;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
 import it.unipv.ingsw.model.spedizione.shippable.*;
@@ -57,7 +58,7 @@ public class Execute {
 		System.out.println("Apertura dello scompartimento con ID 2 nel locker 1:");
 		
 		QRcode code= new QRcode();
-		code.generaQRcode(10, 15);
+		code.generaQRcode();
 		
 	}
 }

@@ -7,5 +7,7 @@ public interface IPagamentoEsterno {
 
 	public void pagaCarta(double amount) throws PaymentException;
 	
-	public boolean trasferisciSaldo(double amount) throws TransferException; //da implementare
+	public boolean effettuaBonifico(double bonifico) throws TransferException; 
+
+	public boolean trasferisciSaldo(double saldo) throws TransferException;
 }

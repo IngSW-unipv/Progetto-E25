@@ -7,8 +7,8 @@ import it.unipv.ingsw.model.utenze.Saldo;
 
 public class PagamentoSaldo implements IPagamento{ //aggiunto implements IPagamento per far funzionare composite
 
+	//pagamento con saldo
 	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{
-		//pagamento con saldo utilizzando classe Saldo e Mittente
 		double temp;
 		Saldo sal;
 		Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();

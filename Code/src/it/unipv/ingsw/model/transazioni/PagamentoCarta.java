@@ -5,13 +5,17 @@ import it.unipv.ingsw.exceptions.TransferException;
 
 public class PagamentoCarta implements IPagamentoEsterno{ 
 
-	@Override
 	public void pagaCarta(double amount) throws PaymentException{
-		 //FARE o LOGICA ESTERNA?
+		 //LOGICA ESTERNA
+	}
+
+	public boolean effettuaBonifico(double bonifico) throws TransferException {
+		//LOGICA ESTERNA PER IL BONIFICO
+		return true;
 	}
 	
-	public boolean trasferisciSaldo(double amount) throws TransferException {
-		Pagamento pp= new Pagamento(PagamentoStrategyFactory.getPagamentoEsternoAdapter(new PagamentoCarta()));
-        return pp.effettuaTrasferimento(amount);
+	public boolean trasferisciSaldo(double saldo) throws TransferException {
+		//LOGICA ESTERNA PER IL TRASFERIMENTO DEL SALDO
+		return true;
 	}
 }	

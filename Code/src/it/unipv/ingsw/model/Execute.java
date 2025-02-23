@@ -55,7 +55,7 @@ public class Execute {
 		s2.confermaAvvioSpedizione(lf,q);
 		
 		
-/*		
+		
 //		checkQR()
 		Locker locker1 = new Locker(null, 1, s);
 		Locker locker2 = new Locker(null, 2, s);
@@ -69,7 +69,7 @@ public class Execute {
 		locker1.getScompartimento(1).Open();
 		System.out.println("Apertura dello scompartimento con ID 1 nel locker 1:");
 		locker1.getScompartimento(2).Open();
-		System.out.println("Apertura dello scompartimento con ID 2 nel locker 1:");*/
+		System.out.println("Apertura dello scompartimento con ID 2 nel locker 1:");
 		
 	}
 }

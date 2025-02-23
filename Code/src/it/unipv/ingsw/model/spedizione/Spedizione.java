@@ -30,15 +30,17 @@ public class Spedizione {
 	private IPuntoDeposito destinazione;
 //	private IPuntoDeposito partenza;
 	private Itinerario itinerario;
-	private Blob codice;
+	private String codice;
 	private String statoSpedizione;
 	List <Observer> observers = new ArrayList<>();
-	private Date dataDeposito;
+	List <Locker> lockers = new ArrayList<>(); //lista dei locker associati alla spedizione
+	
+	
 	private Date dataInizioSpedizione;
 	
 	QRcode codiceQR= new QRcode();
 	
-	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito destinazione) {
+	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito destinazione, List<Locker>lockers) {
 		this.mittente = mittente;
 		this.destinatario = destinatario;
 		this.shippable = shippable;
@@ -49,17 +51,10 @@ public class Spedizione {
 //		this.itinerario.setFine(destinazione.getPosizione());  //segna un problema in esecuzione
 	}
 		
-	public Blob getCodice() {
+	public String getCodice() {
 		return codice;
 	}
 	
-	public Date getDataDeposito() {
-		return dataDeposito;
-	}
-	
-	public void setDataDeposito(Date data) {
-		this.dataDeposito = data;
-	}
 	
 	public void setPacco(IShippable shippable) {
 		this.shippable = shippable;
@@ -67,6 +62,30 @@ public class Spedizione {
 	
 	public String getStatoSpedizione() {
 		return statoSpedizione;
+	}
+	
+	//aggiunge locker alla spedizione
+	public void aggiungiLocker(Locker locker) {
+		lockers.add(locker);
+	}
+	
+	//metodo per ottenere l'ultimo deposito
+	public Date getUltimoDeposito() {
+		if (lockers.isEmpty()) {
+			return null; //nessun locker
+		}
+		
+		//ottiene la data di deposito più recente 
+		Date ultimoDeposito = null;
+		for (Locker locker : lockers) {
+			Date dataDeposito = locker.getDataDeposito();
+			if (dataDeposito != null) {
+				if (ultimoDeposito == null || dataDeposito.after(ultimoDeposito))  {
+					ultimoDeposito = dataDeposito;
+				}
+			}
+		}
+		return ultimoDeposito;
 	}
 
 	//aggiungi observer

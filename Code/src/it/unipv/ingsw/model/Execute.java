@@ -1,5 +1,6 @@
 package it.unipv.ingsw.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import it.unipv.ingsw.model.spedizione.*;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
@@ -17,11 +18,13 @@ public class Execute {
 		//a1.validaAccount(Utente u1,Utente uAttesa1);
 		
 		Coordinate punto= new Coordinate(10,10);
-		IPuntoDeposito p= new Locker(punto,15);
+		IPuntoDeposito p= new Locker(punto,15, null);
 		
-		Spedizione s = new Spedizione(null, null, null, 0, p); 
+		ArrayList<Locker>lockers = new ArrayList<>();
+		
+		Spedizione s = new Spedizione(null, null, null, 0, p, lockers); 
 		IShippable p1 = new Pacco(Size.S,1.2);
-		Locker lf = new Locker(null, 3);
+		Locker lf = new Locker(null, 3, s);
 		Scompartimento sc= new Scompartimento(15, Size.S);
 		sc.setOccupato(false);
 		Scompartimento sc2= new Scompartimento(16, Size.XL);
@@ -43,8 +46,8 @@ public class Execute {
 		s.avvioSpedizione(u, lf, dest);
 		
 //		checkQR()
-		Locker locker1 = new Locker(null, 1);
-		Locker locker2 = new Locker(null, 2);
+		Locker locker1 = new Locker(null, 1, s);
+		Locker locker2 = new Locker(null, 2, s);
 		//aggiunta scompartimenti
 		Scompartimento sc4 = new Scompartimento(20, Size.M);
 		Scompartimento sc5 = new Scompartimento(15, Size.S);

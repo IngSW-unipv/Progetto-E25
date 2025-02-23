@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.xml.crypto.Data;
+
 import java.sql.Blob;
 
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
@@ -19,12 +22,16 @@ public class Locker implements IPuntoDeposito{
 	private Map<Integer, Scompartimento> scompartimenti; // ogni scompartimento e' identificato da un unico Key
 	private int IDscompartimento;
 	private int IDlocker;
+	private Date dataDeposito;
+	private Spedizione spedizione;
 	
-	public Locker(Coordinate posizione, int Idlocker) {
+	public Locker(Coordinate posizione, int Idlocker, Spedizione spedizione) {
 		this.posizione = posizione;
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
 		this.IDscompartimento = IDscompartimento;
 		this.IDlocker = IDlocker;
+		this.dataDeposito = null; //inizialmente nessuna data di deposito
+		this.spedizione = spedizione;
 	}
 	
 	public void aggiungiScompartimento(int IDscompartimento, Scompartimento scompartimento) {
@@ -62,6 +69,14 @@ public class Locker implements IPuntoDeposito{
 		return IDscompartimento;
 	}
 	
+	public void registraDeposito(Date data) {
+		this.dataDeposito = data;
+	}
+	
+	public Date getDataDeposito() {
+		return this.dataDeposito;
+	}
+	
 	@Override
 	//metodo che funziona sia per il carrier che per il destinatario
 	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro) {
@@ -70,18 +85,22 @@ public class Locker implements IPuntoDeposito{
 			Integer IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
 			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
 			scompartimento.Open();
+			this.registraDeposito(new Date()); // se il codice è valido registra la data di deposito
 			
 			try {
-				//controlla se sono passati più di 3gg dal deposito
-				Date dataDeposito = spedizione.getDataDeposito();
-				long diffInMillies = Math.abs(new Date().getTime() - dataDeposito.getTime());
-				long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-				
-				if(diffInDays > 3 && !isRitiro) {
+				//verifica quanti gg sono passati dal deposito
+				Date dataDeposito = this.getDataDeposito();
+				if (dataDeposito != null) {
+					long diffInMillies = Math.abs(new Date().getTime() - dataDeposito.getTime());
+					long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+					
+					//controlla se sono passati più di 3gg dal deposito
+					if(diffInDays > 3 && !isRitiro) {
 					//pacco reconsegnato al mittente
 					spedizione.setStatoSpedizione("Pacco riconsengato al mittente.");
 					System.out.println("Il pacco non è stato ritirato in tempo. Stato aggiornato a 'Riconsegnato al mittente'.");
 					spedizione.notifyObservers();
+					}
 				}
 				return false;
 			} catch (Exception e) {

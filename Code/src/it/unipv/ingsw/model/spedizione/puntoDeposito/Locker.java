@@ -26,7 +26,7 @@ public class Locker implements IPuntoDeposito{
 	private Date dataDeposito;
 	private Spedizione spedizione;
 	
-	public Locker(Coordinate posizione, int Idlocker, Spedizione spedizione) {
+	public Locker(Coordinate posizione, int Idlocker, Spedizione spedizione, Date dataDeposito) {
 		this.posizione = posizione;
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
 		this.IDscompartimento = IDscompartimento;

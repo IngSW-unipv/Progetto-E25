@@ -124,22 +124,32 @@ public class Spedizione {
 		if(shippable==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
 		
 		codice_mittente.generaQRcode();
-		punto_deposito_partenza.checkDisponibilita(shippable, codice_mittente.getQRcode());
+		boolean controllo_disponibilita=punto_deposito_partenza.checkDisponibilita(shippable, codice_mittente.getQRcode());
 		
-		// if(pagamento.effettuaPagamento()=true)
-		// forse modifico lo stato qr dopo il pagamento
-		
-		statoSpedizione="In attesa di consegna pacco in locker";
-		Date data_inizio=new Date();
-		dataInizioSpedizione=data_inizio; //setto la data di inizio spedizione
-	//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
-		System.out.printf("Finito avvioSpedizione\n");
-		
+		if(controllo_disponibilita==false) {
+			System.out.printf("Nel locker scelto non c'è disponibilità\n");
+		}else {
+			// if(pagamento.effettuaPagamento()=true)
+			// forse modifico lo stato qr dopo il pagamento
+			
+			statoSpedizione="In attesa di consegna pacco in locker";
+			Date data_inizio=new Date();
+			dataInizioSpedizione=data_inizio; //setto la data di inizio spedizione
+		//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
+			System.out.printf("Finito avvioSpedizione\n");
+		}
+
 	}
 	
 	public void confermaAvvioSpedizione(IPuntoDeposito punto_deposito_partenza, QRcode codice) {
-		punto_deposito_partenza.checkQRsecondo(codice.getQRcode());
-		System.out.printf("La spedizione è considerata iniziata\n");
+		boolean controllo_QRcode=punto_deposito_partenza.checkQRsecondo(codice.getQRcode());
+		
+		if(controllo_QRcode==false) {
+			System.out.printf("La spedizione non è avviata\n");
+		}else {
+			System.out.printf("La spedizione è considerata iniziata\n");
+		}
+		
 	}
 
 	

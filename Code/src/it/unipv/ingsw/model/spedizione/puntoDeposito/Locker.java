@@ -143,6 +143,7 @@ public class Locker implements IPuntoDeposito{
 	@Override
 	public boolean checkQRsecondo(String codice) {
 		int id_salvare=0;
+		boolean controllo=false;
 		for(Map.Entry<String, Integer> c: mappaQRcode.entrySet()){ //visualizziamo le coppie chiave valore della mappa
 			//System.out.printf("Aiuto funziona"+ c.getKey()+"\n");
 			if(c.getKey()==codice) {
@@ -152,12 +153,16 @@ public class Locker implements IPuntoDeposito{
 		
 		for(Integer c: scompartimenti.keySet()) {
 			if(id_salvare==scompartimenti.get(c).getIDscompartimento()) {
+				controllo=true;
+				//System.out.println("Ho trovato lo scompartimento");
 				scompartimenti.get(c).Open();
+			}else {
+				controllo=false;
+				//System.out.println("codice sbagliato");
 			}
-				
 		}
-		System.out.printf("codice QR valido\n");
-		return false;
+		
+		return controllo;	
 	}
 	
 	
@@ -167,22 +172,25 @@ public class Locker implements IPuntoDeposito{
 				boolean controllo=false;
 				for(Integer c: scompartimenti.keySet()) {
 					if(scompartimenti.get(c).isOccupato()==false && scompartimenti.get(c).getSize()== daSpedire.getSize()) {
-					//	System.out.printf("Scompartimento libero "+ c+"\n");
+						System.out.printf("Scompartimento libero "+ c+"\n");
 						id_salvare=c;
 						controllo=true;
 					}
 				}
 				
-				if(controllo==false) return false; //controllo se c'è disponibilità
-				
-				scompartimenti.get(id_salvare).setOccupato(true);
-				mappaQRcode.put(codice,id_salvare);	//carico nella mapppa QR lo scompartimento relativo
-				if(scompartimenti.get(id_salvare).isOccupato()==true) {
-					//System.out.printf("Scompartimento prenotato \n");
-					return true;
+				if(controllo==false) {
+					return false; 
 				}else {
-					return false;
+					scompartimenti.get(id_salvare).setOccupato(true);
+					mappaQRcode.put(codice,id_salvare);	//carico nella mapppa QR lo scompartimento relativo
+					if(scompartimenti.get(id_salvare).isOccupato()==true) {
+						//System.out.printf("Scompartimento prenotato \n");
+						return true;
+					}else {
+						return false;
+					}
 				}
+				
 	}
 
 	

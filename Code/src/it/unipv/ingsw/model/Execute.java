@@ -18,13 +18,15 @@ public class Execute {
 		//a1.validaAccount(Utente u1,Utente uAttesa1);
 		
 		Coordinate punto= new Coordinate(10,10);
-		IPuntoDeposito p= new Locker(punto,15, null);
+		IPuntoDeposito p= new Locker(punto,15, null, null);
 		
 		ArrayList<Locker>lockers = new ArrayList<>();
 		
 		Spedizione s = new Spedizione(null, null, null, 0, p, lockers); 
-		IShippable p1 = new Pacco(Size.S,1.2);
-		Locker lf = new Locker(null, 3, s);
+		Spedizione s2 = new Spedizione(null, null, null, 0, p, lockers); 
+		IShippable p1 = new Pacco(Size.L,1.2);
+		IShippable p2 = new Pacco(Size.XL,1.2);
+		Locker lf = new Locker(null, 3, s, null);
 		Scompartimento sc= new Scompartimento(15, Size.S);
 		sc.setOccupato(false);
 		Scompartimento sc2= new Scompartimento(16, Size.XL);
@@ -41,11 +43,19 @@ public class Execute {
 		lf.aggiungiScompartimento(16,sc2);
 		lf.aggiungiScompartimento(17,sc3);
 		
+		QRcode q=new QRcode();
+		q.generaQRcode();
 	//prova avvio spedizione
 		s.setPacco(p1);
 		s.avvioSpedizione(u, lf, dest);
 		s.confermaAvvioSpedizione(lf,s.getCodice());
 		
+		s2.setPacco(p2);
+		s2.avvioSpedizione(u, lf, dest);
+		s2.confermaAvvioSpedizione(lf,q);
+		
+		
+/*		
 //		checkQR()
 		Locker locker1 = new Locker(null, 1, s);
 		Locker locker2 = new Locker(null, 2, s);
@@ -59,7 +69,7 @@ public class Execute {
 		locker1.getScompartimento(1).Open();
 		System.out.println("Apertura dello scompartimento con ID 1 nel locker 1:");
 		locker1.getScompartimento(2).Open();
-		System.out.println("Apertura dello scompartimento con ID 2 nel locker 1:");
+		System.out.println("Apertura dello scompartimento con ID 2 nel locker 1:");*/
 		
 	}
 }

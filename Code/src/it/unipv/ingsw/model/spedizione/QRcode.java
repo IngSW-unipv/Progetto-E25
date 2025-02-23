@@ -25,10 +25,8 @@ public class QRcode {
 	    }
 	    
 	    codice=builder.toString();
-		
-	    // codice=""+primoID+secondoID;
-		System.out.printf("Codice Qr generato: "+codice+ "\n");
-		statoqr=true;
+		//System.out.printf("Codice Qr generato: "+codice+ "\n");
+		statoqr=true;  
 	}
 	
 	public String getQRcode() {

@@ -12,7 +12,7 @@ public interface IPuntoDeposito {
 	
 	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro);
 	
-	public boolean checkDisponibilita(IShippable daSpedire); 
+	public boolean checkDisponibilita(IShippable daSpedire, String codice); 
 	
 	
 }

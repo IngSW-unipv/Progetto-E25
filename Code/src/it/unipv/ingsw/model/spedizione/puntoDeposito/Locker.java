@@ -20,6 +20,7 @@ public class Locker implements IPuntoDeposito{
 	
 	private Coordinate posizione;
 	private Map<Integer, Scompartimento> scompartimenti; // ogni scompartimento e' identificato da un unico Key
+	private Map<String, Integer> mappaQRcode= new HashMap<>(); //mappa dei Qr che il locker si aspetta di ricevere
 	private int IDscompartimento;
 	private int IDlocker;
 	private Date dataDeposito;
@@ -129,8 +130,8 @@ public class Locker implements IPuntoDeposito{
 	
 	
 	@Override
-	public boolean checkDisponibilita(IShippable daSpedire) {
-				int id_salvare=0;
+	public boolean checkDisponibilita(IShippable daSpedire, String codice) {
+				Integer id_salvare=0;
 				boolean controllo=false;
 				for(Integer c: scompartimenti.keySet()) {
 					if(scompartimenti.get(c).isOccupato()==false && scompartimenti.get(c).getSize()== daSpedire.getSize()) {
@@ -143,6 +144,7 @@ public class Locker implements IPuntoDeposito{
 				if(controllo==false) return false; //controllo se c'è disponibilità
 				
 				scompartimenti.get(id_salvare).setOccupato(true);
+				mappaQRcode.put(codice,id_salvare);	//carico nella mapppa QR lo scompartimento relativo
 				if(scompartimenti.get(id_salvare).isOccupato()==true) {
 					//System.out.printf("Scompartimento prenotato \n");
 					return true;

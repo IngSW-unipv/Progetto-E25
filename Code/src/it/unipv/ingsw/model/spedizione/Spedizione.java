@@ -30,7 +30,7 @@ public class Spedizione {
 	private IPuntoDeposito destinazione;
 //	private IPuntoDeposito partenza;
 	private Itinerario itinerario;
-	private String codice;
+	private String codice; //???
 	private String statoSpedizione;
 	List <Observer> observers = new ArrayList<>();
 	List <Locker> lockers = new ArrayList<>(); //lista dei locker associati alla spedizione
@@ -50,7 +50,7 @@ public class Spedizione {
 
 //		this.itinerario.setFine(destinazione.getPosizione());  //segna un problema in esecuzione
 	}
-		
+	
 	public String getCodice() {
 		return codice;
 	}
@@ -123,13 +123,11 @@ public class Spedizione {
 		
 		if(shippable==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
 		
-		punto_deposito_partenza.checkDisponibilita(shippable); 
+		codiceQR.generaQRcode(); //generazione del qr, ma viene considerato disabilitato
+		punto_deposito_partenza.checkDisponibilita(shippable, codiceQR.getQRcode());
+		// if(pagamento.effettuaPagamento()=true)
+		// forse modifico lo stato qr dopo il pagamento
 		
-		codiceQR.generaQRcode();
-			
-		/* if(pagamento.effettuaPagamento()=true)
-		 * 		codiceQR.generaQRcode();
-		 */
 		statoSpedizione="In attesa di consegna pacco in locker";
 		Date data_inizio=new Date();
 		dataInizioSpedizione=data_inizio; //setto la data di inizio spedizione

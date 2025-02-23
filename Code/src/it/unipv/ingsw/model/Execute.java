@@ -44,6 +44,7 @@ public class Execute {
 	//prova avvio spedizione
 		s.setPacco(p1);
 		s.avvioSpedizione(u, lf, dest);
+		s.confermaAvvioSpedizione(lf,s.getCodice());
 		
 //		checkQR()
 		Locker locker1 = new Locker(null, 1, s);
@@ -59,9 +60,6 @@ public class Execute {
 		System.out.println("Apertura dello scompartimento con ID 1 nel locker 1:");
 		locker1.getScompartimento(2).Open();
 		System.out.println("Apertura dello scompartimento con ID 2 nel locker 1:");
-		
-		QRcode code= new QRcode();
-		code.generaQRcode();
 		
 	}
 }

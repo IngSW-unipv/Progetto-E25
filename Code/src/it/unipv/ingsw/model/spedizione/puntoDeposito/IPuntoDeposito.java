@@ -10,7 +10,9 @@ public interface IPuntoDeposito {
 
 	public Coordinate getPosizione();
 	
-	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro);
+	//public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro);
+	
+	public boolean checkQRsecondo(String codice);
 	
 	public boolean checkDisponibilita(IShippable daSpedire, String codice); 
 	

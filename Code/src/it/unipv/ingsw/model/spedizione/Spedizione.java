@@ -38,7 +38,7 @@ public class Spedizione {
 	
 	private Date dataInizioSpedizione;
 	
-	QRcode codiceQR= new QRcode();
+	QRcode codice_mittente=new QRcode();//codice mittente
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito destinazione, List<Locker>lockers) {
 		this.mittente = mittente;
@@ -51,8 +51,8 @@ public class Spedizione {
 //		this.itinerario.setFine(destinazione.getPosizione());  //segna un problema in esecuzione
 	}
 	
-	public String getCodice() {
-		return codice;
+	public QRcode getCodice() {
+		return codice_mittente;
 	}
 	
 	
@@ -123,17 +123,23 @@ public class Spedizione {
 		
 		if(shippable==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
 		
-		codiceQR.generaQRcode(); //generazione del qr, ma viene considerato disabilitato
-		punto_deposito_partenza.checkDisponibilita(shippable, codiceQR.getQRcode());
+		codice_mittente.generaQRcode();
+		punto_deposito_partenza.checkDisponibilita(shippable, codice_mittente.getQRcode());
+		
 		// if(pagamento.effettuaPagamento()=true)
 		// forse modifico lo stato qr dopo il pagamento
 		
 		statoSpedizione="In attesa di consegna pacco in locker";
 		Date data_inizio=new Date();
 		dataInizioSpedizione=data_inizio; //setto la data di inizio spedizione
-		this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
+	//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
 		System.out.printf("Finito avvioSpedizione\n");
 		
+	}
+	
+	public void confermaAvvioSpedizione(IPuntoDeposito punto_deposito_partenza, QRcode codice) {
+		punto_deposito_partenza.checkQRsecondo(codice.getQRcode());
+		System.out.printf("La spedizione è considerata iniziata\n");
 	}
 
 	

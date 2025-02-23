@@ -78,7 +78,7 @@ public class Locker implements IPuntoDeposito{
 		return this.dataDeposito;
 	}
 	
-	@Override
+
 	//metodo che funziona sia per il carrier che per il destinatario
 	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro) {
 //		verifica se il codice corrisponde al codice della spedizione
@@ -126,6 +126,26 @@ public class Locker implements IPuntoDeposito{
 			System.out.println("Codice Non Valido");
 		}
 		return false; 
+	}
+	
+	@Override
+	public boolean checkQRsecondo(String codice) {
+		int id_salvare=0;
+		for(Map.Entry<String, Integer> c: mappaQRcode.entrySet()){ //visualizziamo le coppie chiave valore della mappa
+			//System.out.printf("Aiuto funziona"+ c.getKey()+"\n");
+			if(c.getKey()==codice) {
+				id_salvare=c.getValue();
+			}
+		}
+		
+		for(Integer c: scompartimenti.keySet()) {
+			if(id_salvare==scompartimenti.get(c).getIDscompartimento()) {
+				scompartimenti.get(c).Open();
+			}
+				
+		}
+		System.out.printf("codice QR valido\n");
+		return false;
 	}
 	
 	

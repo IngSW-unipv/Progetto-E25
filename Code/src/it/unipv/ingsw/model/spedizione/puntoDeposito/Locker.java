@@ -81,8 +81,21 @@ public class Locker implements IPuntoDeposito{
 
 	//metodo che funziona sia per il carrier che per il destinatario
 	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro) {
-//		verifica se il codice corrisponde al codice della spedizione
-		if(spedizione.getCodice().equals(codice)) {
+		
+		//recupera il codice dalla classe QRcode
+		String codiceQR = codice.getQRcode();
+		
+		//verifica se il codice esiste nella mappa dei QR che il locker aspetta
+		if(!mappaQRcode.containsKey(codiceQR)) {
+			System.out.println("Codice QR non valido.");
+			return false;
+		}
+		
+		Integer spedizioneAssociata = mappaQRcode.get(codiceQR);
+		if(!spedizioneAssociata.equals(spedizione)) {
+			System.out.println("Il codiceQR non corrisponde alla spedizione");
+			return false;
+		}
 			Integer IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
 			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
 			scompartimento.Open();
@@ -121,11 +134,10 @@ public class Locker implements IPuntoDeposito{
 				spedizione.setStatoSpedizione("In attesa.");
 				System.out.println("Il pacco è stato depositato nel locker ed è in attesa per il ritiro. \nStato aggiornato a 'In attesa'.");
 			}
-			return true; //codice valido
-		} else {
-			System.out.println("Codice Non Valido");
-		}
-		return false; 
+			
+//			da capire quando rimuovere il codice usato dalla mappa 
+			
+			return true; //codice valido 
 	}
 	
 	@Override

@@ -10,9 +10,9 @@ public class Pagamento {
     	this.metodoPagamento=metodoPagamento;
     }
 
-    public boolean iniziaPagamento(double amount,int puntiApp) throws PaymentException{
+    public boolean provaPagamento(double amount,int puntiApp) throws PaymentException{
     	boolean result=false;
-    	if(amount<=0||metodoPagamento==null||puntiApp<=0) {
+    	if(amount<0 || puntiApp<0|| metodoPagamento==null) {
     		throw new PaymentException();
     	}
     	else {
@@ -20,5 +20,5 @@ public class Pagamento {
         	result=true;
     	}
         return result;
-    }
+    } 
 }

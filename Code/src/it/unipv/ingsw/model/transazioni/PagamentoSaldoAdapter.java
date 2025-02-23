@@ -11,6 +11,6 @@ public class PagamentoSaldoAdapter implements IPagamento{
 	
 	@Override
 	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{
-		pagamentoSaldo.effettuaPagamentoConSaldo(amount, puntiApp);
+		pagamentoSaldo.effettuaPagamento(amount, puntiApp);
 	}
 }

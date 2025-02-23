@@ -1,3 +1,0 @@
-carta.adapter.class.name=it.unipv.ingsw.model.transazioni.PagamentoEsternoAdapter
-saldo.adapter.class.name=it.unipv.ingsw.model.transazioni.PagamentoSaldoAdapter
-punti.adapter.class.name=it.unipv.ingsw.model.transazioni.PagamentoPuntiAppAdapter

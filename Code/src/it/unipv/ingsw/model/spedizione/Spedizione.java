@@ -35,13 +35,17 @@ public class Spedizione {
 	private Itinerario itinerarioCorrente; //itinerario che fornisco al carrier (FORSE NON VA QUI)
 	
 	private Blob codice;
+	private String codice; //???
 	private String statoSpedizione;
 	List <Observer> observers = new ArrayList<>();
-	private Date dataDeposito;
+	List <Locker> lockers = new ArrayList<>(); //lista dei locker associati alla spedizione
 	
-	QRcode codiceQR= new QRcode();
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito a, IPuntoDeposito b, MatchingService m) { 
+	private Date dataInizioSpedizione;
+	
+	QRcode codice_mittente=new QRcode();//codice mittente
+	
 		this.mittente = mittente;
 		this.destinatario = destinatario;
 		this.shippable = shippable;
@@ -57,18 +61,11 @@ public class Spedizione {
 	
 		
 	}
-		
-	public Blob getCodice() {
-		return codice;
+	
+	public QRcode getCodice() {
+		return codice_mittente;
 	}
 	
-	public Date getDataDeposito() {
-		return dataDeposito;
-	}
-	
-	public void setDataDeposito(Date data) {
-		this.dataDeposito = data;
-	}
 	
 	public void setPacco(IShippable shippable) {
 		this.shippable = shippable;
@@ -76,6 +73,30 @@ public class Spedizione {
 	
 	public String getStatoSpedizione() {
 		return statoSpedizione;
+	}
+	
+	//aggiunge locker alla spedizione
+	public void aggiungiLocker(Locker locker) {
+		lockers.add(locker);
+	}
+	
+	//metodo per ottenere l'ultimo deposito
+	public Date getUltimoDeposito() {
+		if (lockers.isEmpty()) {
+			return null; //nessun locker
+		}
+		
+		//ottiene la data di deposito più recente 
+		Date ultimoDeposito = null;
+		for (Locker locker : lockers) {
+			Date dataDeposito = locker.getDataDeposito();
+			if (dataDeposito != null) {
+				if (ultimoDeposito == null || dataDeposito.after(ultimoDeposito))  {
+					ultimoDeposito = dataDeposito;
+				}
+			}
+		}
+		return ultimoDeposito;
 	}
 
 	//aggiungi observer
@@ -135,18 +156,37 @@ public class Spedizione {
 
 	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario) { 
 		
-		if(shippable==null) System.out.println("registra il pacco");
+		if(shippable==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
 		
-		punto_deposito_partenza.checkDisponibilita(shippable); 
+		codice_mittente.generaQRcode();
+		boolean controllo_disponibilita=punto_deposito_partenza.checkDisponibilita(shippable, codice_mittente.getQRcode());
 		
-		//far partire il pagamento pagamento.effettuaPagamento();
-				
-		//codiceQR.generaQRcode(, );
-		
-		System.out.printf("Finito avvioSpedizione\n");
+		if(controllo_disponibilita==false) {
+			System.out.printf("Nel locker scelto non c'è disponibilità\n");
+		}else {
+			// if(pagamento.effettuaPagamento()=true)
+			// forse modifico lo stato qr dopo il pagamento
+			
+			statoSpedizione="In attesa di consegna pacco in locker";
+			Date data_inizio=new Date();
+			dataInizioSpedizione=data_inizio; //setto la data di inizio spedizione
+		//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
+			System.out.printf("Finito avvioSpedizione\n");
+		}
+
 	}
 	
-	
+	public void confermaAvvioSpedizione(IPuntoDeposito punto_deposito_partenza, QRcode codice) {
+		boolean controllo_QRcode=punto_deposito_partenza.checkQRsecondo(codice.getQRcode());
+		
+		if(controllo_QRcode==false) {
+			System.out.printf("La spedizione non è avviata\n");
+		}else {
+			System.out.printf("La spedizione è considerata iniziata\n");
+		}
+		
+	}
+
 	
 	public void presaInCarico(Utente utente, Itinerario tratta) {
 		

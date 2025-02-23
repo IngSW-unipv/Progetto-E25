@@ -5,7 +5,7 @@ public class Itinerario {
 	
 	private Coordinate inizio;
 	private Coordinate fine;
-	private static final double TOLLERANZA = 5000;
+	private static final double TOLLERANZA = 3;
 	
 	public Itinerario(Coordinate inizio, Coordinate fine) {
 		this.inizio = inizio;
@@ -36,15 +36,27 @@ public class Itinerario {
 	//verifico se questo itinerario contiene un altro itinerario (considerando la tolleranza)
 	public boolean contiene(Itinerario altro) {
 		
-		//caso 1: l'itinerario del pacco è completamente contenuto nell'itinerario del carrier
-		System.out.println(altro.getInizio().distanza(inizio, fine));	
-		System.out.println(altro.getFine().distanza(inizio, fine));		
+//		System.out.println(altro.getInizio().distanza(inizio, fine));	
+//		System.out.println(altro.getFine().distanza(inizio, fine));	
+		
+		if(altro.getInizio().distanza(inizio, fine)<TOLLERANZA) {
+			
+			//caso 1: l'itinerario del pacco è completamente contenuto nell'itinerario del carrier
+			if(altro.getFine().distanza(inizio, fine)<TOLLERANZA) {
+//				System.out.println("itinerario del pacco completamente contenuto nell'itinerario del carrier");
+				
+			}
+			else {
+				//caso2: l'itinerario del pacco è parzialmente contenuto nell'itinerario del carrier
+//				System.out.println("itinerario del pacco parzialmente contenuto nell'itinerario del carrier");
+			}
+			
+			return true;
+		}
 		
 		
-		//caso2: l'itinerario del pacco è parzialmente contenuto nell'itinerario del carrier
+		return false;
 		
-		
-		return true;
 	}
 	
 	

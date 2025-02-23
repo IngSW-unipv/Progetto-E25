@@ -29,7 +29,11 @@ public class Spedizione {
 	private int assicurazione; //non sono sicuro
 	private IPuntoDeposito destinazione;
 //	private IPuntoDeposito partenza;
-	private Itinerario itinerario;
+	
+	private MatchingService matchingService;
+	private List <Itinerario> itinerarioMancante; //i sottoitinerari che mancano fino alla fine della spedizione 
+	private Itinerario itinerarioCorrente; //itinerario che fornisco al carrier (FORSE NON VA QUI)
+	
 	private Blob codice;
 	private String statoSpedizione;
 	List <Observer> observers = new ArrayList<>();
@@ -37,15 +41,21 @@ public class Spedizione {
 	
 	QRcode codiceQR= new QRcode();
 	
-	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito destinazione) {
+	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito a, IPuntoDeposito b, MatchingService m) { 
 		this.mittente = mittente;
 		this.destinatario = destinatario;
 		this.shippable = shippable;
 		this.assicurazione = assicurazione;
-		this.destinazione = destinazione;
+		this.destinazione = b;
 	//	this.itinerario.setFine(destinazione.getPosizione());
-
-//		this.itinerario.setFine(destinazione.getPosizione());  //segna un problema in esecuzione
+		
+		//matchingService = new MatchingService();
+		
+		matchingService = m;
+		
+		itinerarioMancante = matchingService.itinerarioDivider(new Itinerario(a.getPosizione(),b.getPosizione())); //da fare qui
+	
+		
 	}
 		
 	public Blob getCodice() {
@@ -84,6 +94,30 @@ public class Spedizione {
 		notifyObservers();
 	}
 	
+	public List<Itinerario> getItinerarioMancante(){
+		return itinerarioMancante;
+	}
+	
+	//forse non vanno qui:
+	public Itinerario getItinerarioCorrente() {
+		return itinerarioCorrente;
+	}
+	
+	public void setItinerarioCorrente(Itinerario itinerarioCorrente) {
+		this.itinerarioCorrente = itinerarioCorrente;
+	}
+	
+	public MatchingService getMatchingService() {
+		return matchingService;
+	}
+
+	public void setMatchingService(MatchingService matchingService) {
+		this.matchingService = matchingService;
+	}
+
+	
+	
+	
 	//notify observers
 	public void notifyObservers() {
 		for (Observer observer : observers) {
@@ -91,13 +125,13 @@ public class Spedizione {
 		}
 	}
 
-	public Itinerario getItinerario() {
-		return itinerario;
-	}
-
-	public void setItinerario(Itinerario itinerario) {
-		this.itinerario = itinerario;
-	}
+//	public Itinerario getItinerario() {
+//		return itinerario;
+//	}
+//
+//	public void setItinerario(Itinerario itinerario) {
+//		this.itinerario = itinerario;
+//	}
 
 	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario) { 
 		

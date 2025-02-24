@@ -22,11 +22,13 @@ import it.unipv.ingsw.model.transazioni.*;
 
 public class Spedizione {
 	
+	private int IDSpedizione;
 	private Mittente mittente;
 	private Carrier carrier; //non sono sicuro
 	private Destinatario destinatario; 
 	private IShippable shippable;
 	private int assicurazione; //non sono sicuro
+	private IPuntoDeposito partenza;
 	private IPuntoDeposito destinazione;
 //	private IPuntoDeposito partenza;
 	private Date dataDeposito;
@@ -52,6 +54,7 @@ public class Spedizione {
 		this.destinatario = destinatario;
 		this.shippable = shippable;
 		this.assicurazione = assicurazione;
+		this.partenza = a;
 		this.destinazione = b;
 		this.dataDeposito = null; //inizialmente nessuna data di deposito
 	//	this.itinerario.setFine(destinazione.getPosizione());
@@ -64,6 +67,18 @@ public class Spedizione {
 	
 		
 	}
+	
+	public Spedizione(int id, IShippable shippable, IPuntoDeposito a, IPuntoDeposito b) {
+		this.IDSpedizione = id;
+		this.shippable = shippable; 
+		this.partenza = a;
+		this.destinazione = b;
+		
+	}
+	
+	
+	
+	
 	
 	public QRcode getCodice() {
 		return codice_mittente;
@@ -177,8 +192,26 @@ public class Spedizione {
 	}
 
 	
-	
-	
+	public IPuntoDeposito getPartenza() {
+		return partenza;
+	}
+
+	public void setPartenza(IPuntoDeposito partenza) {
+		this.partenza = partenza;
+	}
+
+	public IPuntoDeposito getDestinazione() {
+		return destinazione;
+	}
+
+	public void setDestinazione(IPuntoDeposito destinazione) {
+		this.destinazione = destinazione;
+	}
+
+	public void setItinerarioMancante(List<Itinerario> itinerarioMancante) {
+		this.itinerarioMancante = itinerarioMancante;
+	}
+
 	//notify observers
 	public void notifyObservers() {
 		for (Observer observer : observers) {

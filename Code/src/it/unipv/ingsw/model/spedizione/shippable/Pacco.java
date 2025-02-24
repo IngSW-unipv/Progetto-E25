@@ -22,7 +22,6 @@ public class Pacco implements IShippable{
 		return weight;
 	}
 	
-	
 	public void setSize(Size size) {
 		this.size = size;
 	}
@@ -30,7 +29,7 @@ public class Pacco implements IShippable{
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
-	
+		
 	
 	
 }

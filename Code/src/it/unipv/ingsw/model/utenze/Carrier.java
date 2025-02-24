@@ -2,11 +2,44 @@ package it.unipv.ingsw.model.utenze;
 
 import java.sql.Blob;
 import java.time.LocalDate;
+import java.util.List;
+
+import it.unipv.ingsw.model.spedizione.Itinerario;
+import it.unipv.ingsw.model.spedizione.Spedizione;
 
 public class Carrier extends Utente{
+	private Itinerario itinerario; //itinerario che il carrier inserisce
+	private List<Spedizione> spedizioniAssegnate;
+	
 	//costruttore
-	public Carrier(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico,String dataNascita, Blob fotoDocumento) {
+	public Carrier(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico,String dataNascita, Blob fotoDocumento, Itinerario itinerario) {
 		super(mail, password, nome, cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
+		this.itinerario = itinerario;
 	}
+	
+	//per debug
+	public Carrier(Itinerario itinerario) {
+		this.itinerario = itinerario;
+	}
+	
+	
+	public void setItinerario(Itinerario itinerario) {
+		this.itinerario = itinerario;
+	}
+
+	public Itinerario getItinerario() {
+		return itinerario;
+	}
+	
+	public void assegnaSpedizioni(List<Spedizione> spedizioni) {
+		spedizioniAssegnate = spedizioni;
+	}
+
+	public List<Spedizione> getSpedizioniAssegnate() {
+		return spedizioniAssegnate;
+	}
+
+	
+	
 	
 }

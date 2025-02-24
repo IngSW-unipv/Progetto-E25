@@ -26,17 +26,14 @@ public class Locker implements IPuntoDeposito{
 	private Date dataDeposito;
 	private Spedizione spedizione;
 	
-	public Locker(Coordinate posizione, int Idlocker, Spedizione spedizione, Date dataDeposito) {
+	public Locker(Coordinate posizione, int Idlocker) {
 		this.posizione = posizione;
-		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
-		this.IDscompartimento = IDscompartimento;
-		this.IDlocker = IDlocker;
-		this.dataDeposito = null; //inizialmente nessuna data di deposito
-		this.spedizione = spedizione;
+		scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
+		dataDeposito = null; //inizialmente nessuna data di deposito
 	}
 	
-	public void aggiungiScompartimento(int IDscompartimento, Scompartimento scompartimento) {
-		scompartimenti.put(IDscompartimento, scompartimento);
+	public void aggiungiScompartimento(Scompartimento scompartimento) {
+		scompartimenti.put(scompartimento.getIDscompartimento(), scompartimento);
 	}
 	
 	public boolean rimuoviScompartimento(int IDscompartimento) {

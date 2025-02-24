@@ -35,16 +35,17 @@ public class Spedizione {
 	private Itinerario itinerarioCorrente; //itinerario che fornisco al carrier (FORSE NON VA QUI)
 	
 	private Blob codice;
-	private String codice; //???
+//	private String codice; //???
 	private String statoSpedizione;
 	List <Observer> observers = new ArrayList<>();
 	List <Locker> lockers = new ArrayList<>(); //lista dei locker associati alla spedizione
 	
+	private Date dataInizioSpedizione;
+	QRcode codice_mittente;
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito a, IPuntoDeposito b, MatchingService m) { 
-	private Date dataInizioSpedizione;
 	
-	QRcode codice_mittente=new QRcode();//codice mittente
+		codice_mittente=new QRcode();//codice mittente
 	
 		this.mittente = mittente;
 		this.destinatario = destinatario;
@@ -73,11 +74,6 @@ public class Spedizione {
 	
 	public String getStatoSpedizione() {
 		return statoSpedizione;
-	}
-	
-	//aggiunge locker alla spedizione
-	public void aggiungiLocker(Locker locker) {
-		lockers.add(locker);
 	}
 	
 	//metodo per ottenere l'ultimo deposito

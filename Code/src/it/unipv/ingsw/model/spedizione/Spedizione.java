@@ -86,9 +86,6 @@ public class Spedizione {
 		return statoSpedizione;
 	}
 	
-		lockers.add(locker);
-	}
-	
 	public void aggiornaStatoSpedizione(boolean isRitiro) {
 		//pacco ritirato dal destinatario
 		if (isRitiro) {

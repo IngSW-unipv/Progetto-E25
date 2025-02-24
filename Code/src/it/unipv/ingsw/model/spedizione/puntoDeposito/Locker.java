@@ -36,13 +36,13 @@ public class Locker implements IPuntoDeposito{
 		scompartimenti.put(scompartimento.getIDscompartimento(), scompartimento);
 	}
 	
-	public boolean rimuoviScompartimento(int IDscompartimento) {
-		if(scompartimenti.containsKey(IDscompartimento)) {
-			scompartimenti.remove(IDscompartimento); //rimuove lo scomp dalla mappa togliendo il suo ID
-			System.out.println("Scompartimento con ID " +IDscompartimento+ "rimosso.");
+	public boolean rimuoviScompartimento(Scompartimento scompartimento) {
+		if(scompartimenti.containsKey(scompartimento.getIDscompartimento())) {
+			scompartimenti.remove(scompartimento.getIDscompartimento()); //rimuove lo scomp dalla mappa togliendo il suo ID
+			System.out.println("Scompartimento rimosso.");
 			return true;
 		} else {
-			System.out.println("Scompartimento con ID " +IDscompartimento+ "non esiste.");
+			System.out.println("Scompartimento non esiste.");
 			return false;
 		}
 	}
@@ -58,7 +58,7 @@ public class Locker implements IPuntoDeposito{
 	}
 	
 //	ottiene uno scompartimento dalla HashMap usando il proprio ID
-	public Scompartimento getScompartimento(Integer IDscompartimento) {
+	public Scompartimento getScompartimento(Scompartimento scompartimento) {
 		return scompartimenti.get(IDscompartimento);
 	}
 	

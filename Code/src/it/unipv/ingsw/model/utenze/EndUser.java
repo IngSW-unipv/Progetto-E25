@@ -70,4 +70,10 @@ public class EndUser extends Utente implements Observer{
     public void inviaMailCarrier(Spedizione spedizione) {
     	System.out.println("Mail mandata al Carrier" + getMail() + "chiedendogli di verificare il ritardo.");
     }
+    
+    // metodo che simula l'invio della mail, mandata sia al destinatario sia al mittente
+    public void inviaMail(Spedizione spedizione) {
+		System.out.println("Invio mail a: " + getMail() + "con lo stato della spedizione: " + spedizione.getStatoSpedizione());
+	} 
+    
 }

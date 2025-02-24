@@ -20,7 +20,7 @@ public class Locker implements IPuntoDeposito{
 	private Coordinate posizione;
 	private Map<Integer, Scompartimento> scompartimenti; // ogni scompartimento e' identificato da un unico Key
 	private Map<String, Integer> mappaQRcode= new HashMap<>(); //mappa dei Qr che il locker si aspetta di ricevere
-	private int IDscompartimento;
+	private Scompartimento IDscompartimento;
 	private int IDlocker;
 	private Date dataDeposito;
 	
@@ -61,8 +61,7 @@ public class Locker implements IPuntoDeposito{
 		return scompartimenti.get(IDscompartimento);
 	}
 	
-	public int getIDscompartimento() {
-		//logica da implementare
+	public Scompartimento getIDscompartimento() {
 		return IDscompartimento;
 	}
 	
@@ -88,7 +87,7 @@ public class Locker implements IPuntoDeposito{
 			System.out.println("Il codiceQR non corrisponde alla spedizione");
 			return false;
 		}
-			Integer IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
+			Scompartimento IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
 			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
 			scompartimento.Open();
 			

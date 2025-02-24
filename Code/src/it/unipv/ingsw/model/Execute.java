@@ -1,7 +1,17 @@
 package it.unipv.ingsw.model;
 
 
+import java.util.ArrayList;
+
 import it.unipv.ingsw.controller.MainController;
+import it.unipv.ingsw.model.spedizione.Coordinate;
+import it.unipv.ingsw.model.spedizione.QRcode;
+import it.unipv.ingsw.model.spedizione.Spedizione;
+import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
+import it.unipv.ingsw.model.spedizione.puntoDeposito.Scompartimento;
+import it.unipv.ingsw.model.spedizione.shippable.Size;
+import it.unipv.ingsw.model.utenze.Admin;
+import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.view.MainView;
 
 public class Execute {

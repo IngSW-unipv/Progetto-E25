@@ -71,7 +71,7 @@ public class Locker implements IPuntoDeposito{
 	}
 	
 	//metodo che funziona sia per il carrier che per il destinatario
-	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro) {
+	/*public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isPresaInCarico) {
 		
 		//recupera il codice dalla classe QRcode
 		String codiceQR = codice.getQRcode();
@@ -95,12 +95,13 @@ public class Locker implements IPuntoDeposito{
 			
 			spedizione.verificaTempoDeposito(this.getDataDeposito(), isRitiro);
 			
-			spedizione.aggiornaStatoSpedizione(isRitiro); //chiama il metodo in Spedizione
+			spedizione.aggiornaStatoSpedizione(isRitiro, isPresaInCarico); //chiama il metodo in Spedizione
 			
-//			da capire quando rimuovere il codice usato dalla mappa 
+			mappaQRcode.remove(codiceQR); //elimina dalla mappa il codiceQR scansionato con risultato valido
+			System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
 			
 			return true; //codice valido 
-	}
+	}*/
 	
 	private Date getDataDeposito() {
 		return dataDeposito;

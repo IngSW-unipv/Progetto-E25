@@ -70,6 +70,10 @@ public class Locker implements IPuntoDeposito{
 		System.out.println("Deposito Registrato: " + data);
 	}
 	
+	private Date getDataDeposito() {
+		return dataDeposito;
+	}
+	
 	//metodo che funziona sia per il carrier che per il destinatario
 	/*public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isPresaInCarico) {
 		
@@ -102,10 +106,6 @@ public class Locker implements IPuntoDeposito{
 			
 			return true; //codice valido 
 	}*/
-	
-	private Date getDataDeposito() {
-		return dataDeposito;
-	}
 
 	@Override
 	public boolean checkQRsecondo(String codice) {
@@ -123,12 +123,9 @@ public class Locker implements IPuntoDeposito{
 				controllo=true;
 				//System.out.println("Ho trovato lo scompartimento");
 				scompartimenti.get(c).Open();
-			}else {
-				controllo=false;
-				//System.out.println("codice sbagliato");
 			}
 		}
-		
+		//System.out.printf("VAlore controllo: "+ controllo+"\n");
 		return controllo;	
 	}
 	

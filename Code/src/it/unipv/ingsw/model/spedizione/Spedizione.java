@@ -30,6 +30,8 @@ public class Spedizione {
 	private IPuntoDeposito destinazione;
 //	private IPuntoDeposito partenza;
 	private Date dataDeposito;
+	private Date dataInizioSpedizione;
+	QRcode codice; //questo è il codice Qr
 	
 	private MatchingService matchingService;
 	private List <Itinerario> itinerarioMancante; //i sottoitinerari che mancano fino alla fine della spedizione 
@@ -39,9 +41,6 @@ public class Spedizione {
 	private String statoSpedizione;
 	List <Observer> observers = new ArrayList<>();
 	List <Locker> lockers = new ArrayList<>(); //lista dei locker associati alla spedizione
-	
-	private Date dataInizioSpedizione;
-	QRcode codice; //questo è il codice Qr
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito a, IPuntoDeposito b, MatchingService m, Date dataDeposito) { 
 	
@@ -59,9 +58,7 @@ public class Spedizione {
 		
 		matchingService = m;
 		
-		itinerarioMancante = matchingService.itinerarioDivider(new Itinerario(a.getPosizione(),b.getPosizione())); //da fare qui
-	
-		
+	//	itinerarioMancante = matchingService.itinerarioDivider(new Itinerario(a.getPosizione(),b.getPosizione())); //da fare qui	
 	}
 	
 	public QRcode getCodice() {
@@ -225,6 +222,10 @@ public class Spedizione {
 			System.out.printf("La spedizione non è avviata\n");
 		}else {
 			System.out.printf("La spedizione è considerata iniziata\n");
+			statoSpedizione="Consegnato nel locker di partenza";
+			Date data_deposito=new Date();
+			dataDeposito=data_deposito;
+			System.out.printf("Data deposito: "+ dataDeposito+"\n");
 		}
 		
 	}

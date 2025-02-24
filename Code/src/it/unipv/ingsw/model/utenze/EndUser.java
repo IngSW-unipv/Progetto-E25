@@ -11,7 +11,7 @@ import it.unipv.ingsw.model.spedizione.Spedizione;
 public class EndUser extends Utente implements Observer{
 	
 	
-	private String userType; //serve per l'invio della mail esclusiva al destinatario 
+	private String userType; //serve per l'invio della mail al destinatario ed al carrier
 
 	//costruttore
 	public EndUser(String mail, String password, String nome, String cognome,String numeroTelefono, String indirizzoCivico,String dataNascita, Blob fotoDocumento) {
@@ -41,15 +41,22 @@ public class EndUser extends Utente implements Observer{
 			if ("Destinatario".equals(getUserType())) {
 				inviaMailDest(spedizione);
 			}
-			//vuol dire che il destinatario ha scansionato il QR ed ha ritirato il pacco
-			if (spedizione.getStatoSpedizione().equals("Consegnato")) {
-				System.out.println("Il pacco è stato ritirato da: " + getMail() + ".\nStato aggiornato a 'Consegnato'.");
-				notificaMittente();
+		}
+		
+		//vuol dire che il destinatario ha scansionato il QR ed ha ritirato il pacco
+		if (spedizione.getStatoSpedizione().equals("Consegnato")) {
+			System.out.println("Il pacco è stato ritirato da: " + getMail() + ".\nStato aggiornato a 'Consegnato'.");
+			notificaMittente(spedizione);
+		}
+		
+		if (spedizione.getStatoSpedizione().equals("Smarrito")) {
+			if("Carrier".equals(getUserType())) {
+				inviaMailCarrier(spedizione);
 			}
 		}
 	}
 	
-	public void notificaMittente() {
+	public void notificaMittente(Spedizione spedizione) {
 		//logica per notificare il mittente della consegna del pacco
 		System.out.println("Il pacco è stato ritirato dal destinatario");
 	}
@@ -58,4 +65,15 @@ public class EndUser extends Utente implements Observer{
     public void inviaMailDest(Spedizione spedizione) {
     	System.out.println("Mail mandata al destinatario" + getMail() + "contenente il codiceQR.");
     }
+    
+    //in caso di smarrimento del pacco
+    public void inviaMailCarrier(Spedizione spedizione) {
+    	System.out.println("Mail mandata al Carrier" + getMail() + "chiedendogli di verificare il ritardo.");
+    }
+    
+    // metodo che simula l'invio della mail, mandata sia al destinatario sia al mittente
+    public void inviaMail(Spedizione spedizione) {
+		System.out.println("Invio mail a: " + getMail() + "con lo stato della spedizione: " + spedizione.getStatoSpedizione());
+	} 
+    
 }

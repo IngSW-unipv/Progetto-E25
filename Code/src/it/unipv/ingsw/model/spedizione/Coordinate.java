@@ -2,27 +2,27 @@ package it.unipv.ingsw.model.spedizione;
 
 public class Coordinate {
 
-	private double y, x;
+	private double latitudine, longitudine;
 
-	public Coordinate(double latitudine, double longitudine) {
-		this.y = latitudine;
-		this.x = longitudine;
+	public Coordinate(double longitudine, double latitudine) {
+		this.longitudine = longitudine;
+		this.latitudine = latitudine;
 	}
 
 	public double getLatitudine() {
-		return y;
+		return latitudine;
 	}
 
 	public void setLatitudine(double latitudine) {
-		this.y = latitudine;
+		this.latitudine = latitudine;
 	}
 
 	public double getLongitudine() {
-		return x;
+		return longitudine;
 	}
 
 	public void setLongitudine(double longitudine) {
-		this.x = longitudine;
+		this.longitudine = longitudine;
 	}
 	
 	//distanza punto-punto
@@ -32,6 +32,7 @@ public class Coordinate {
 	}
 	
 	//distanza punto-segmento (segmento ab, punto this)
+	//restituisce una distanza positiva se punto dentro segmento, distanza negativa se punto fuori da segmento
 	public double distanza(Coordinate ra, Coordinate rb) {
 		double ax = ra.getLongitudine();
 		double ay = ra.getLatitudine();
@@ -64,10 +65,10 @@ public class Coordinate {
 
 	    if (t < 0) {
 	        //ho la proiezione di p fuori dal segmento dal lato di a
-	        return this.distanza(ra);
+	        return - this.distanza(ra);
 	    } else if (t > 1) {
 	        ///ho la proiezione di p fuori dal segmento dal lato di b
-	        return this.distanza(rb);
+	        return - this.distanza(rb);
 	    } else {
 	        //la proiezione di p è interna al segmento, quindi uso formula distanza punto retta
 	    	double a = by - ay;

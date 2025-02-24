@@ -114,11 +114,4 @@ public abstract class ASuperUser {
     public boolean isLoggedIn() {
         return utenteLoggato;
     }
-    
-    // metodo che simula l'invio della mail, mandata sia al destinatario sia al mittente
-    public void inviaMail(Spedizione spedizione) {
-		System.out.println("Invio mail a: " + getMail() + "con lo stato della spedizione: " + spedizione.getStatoSpedizione());
-	} //****da capire dove metterlo****
-    
- 
 }

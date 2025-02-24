@@ -7,9 +7,8 @@ import it.unipv.ingsw.view.MainView;
 public class Execute {
 	
 	public static void main(String[] args) {
-<<<<<<< Updated upstream
+
 		new MainController(new MainView());
-=======
 		Utente u1=new Utente("CarloRosso@gmail.com",null,"Carlo","Rossi","34523762386","Via De MHB",null,null);
 		Utente u2=new Utente();
 		Admin a1= new Admin("mail","psw");
@@ -57,7 +56,6 @@ public class Execute {
 		
 //		checkQR()
 
->>>>>>> Stashed changes
 		
 	}
 }

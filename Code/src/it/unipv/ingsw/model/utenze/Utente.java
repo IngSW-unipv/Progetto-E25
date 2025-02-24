@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import it.unipv.ingsw.exceptions.AccountAlreadyExistsException;
+import it.unipv.ingsw.exceptions.EmptyFieldException;
+import it.unipv.ingsw.model.Singleton;
 import it.unipv.ingsw.model.Subject;
 
 public class Utente extends ASuperUser implements Subject{
@@ -128,20 +131,20 @@ public class Utente extends ASuperUser implements Subject{
         }
         return true; //PNG
     }
-	
-	public Utente registrazione(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, Blob fotoDocumento) throws SQLException, IOException {
+
+	public Utente registrazione(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, Blob fotoDocumento) throws SQLException, IOException, AccountAlreadyExistsException, EmptyFieldException  {
+		fieldCheck();
+        boolean result = false;
+        if (Singleton.getInstance().getSuperUserDAO().getUtenteByEmail((mail)) == null) {
+        	//Singleton.getInstance().getSuperUserDAO().insertUtente();
+            result = true;
+        } else {
+            throw new AccountAlreadyExistsException();
+        }
+        //return result;
 		if(super.isLoggedIn()){	
 			System.out.println("Utente già registrato. Effettua l'accesso!");
 			return null;
-		}	
-		if (nome == null || cognome == null || mail == null || password == null || dataNascita == null || numeroTelefono == null || indirizzoCivico == null || fotoDocumento == null) {
-            System.out.println("Tutti i campi sono obbligatori.");
-            return null;
-        }
-
-        if(!nome.matches(formatoNome) || !cognome.matches(formatoNome) || !mail.matches(formatoMail) || !password.matches(formatoPassword) || !numeroTelefono.matches(formatoNumero) || !indirizzoCivico.matches(formatoIndirizzo) || !isPngImage(fotoDocumento)) { 
-        	System.out.println("Uno dei campi non rispetta le regole");
-        	return null;
 		}	
         Utente nuovo_utente = new Utente(mail, password, nome, cognome, dataNascita, indirizzoCivico, numeroTelefono, fotoDocumento);
         System.out.println("Registrazione completata con successo!");
@@ -149,6 +152,19 @@ public class Utente extends ASuperUser implements Subject{
         //query in cui si salvano i dati nel DB
         return nuovo_utente;
     }   
+	
+	private void fieldCheck() throws EmptyFieldException, SQLException, IOException {
+		if (super.getMail().isEmpty() || this.nome.isEmpty() || this.cognome.isEmpty()
+				|| String.valueOf(super.getPassword()).equals("") || this.dataNascita.isEmpty() || this.numeroTelefono.isEmpty() || this.indirizzoCivico.isEmpty() || this.fotoDocumento==null )
+		{
+			System.out.println("Tutti i campi sono obbligatori");
+			throw new EmptyFieldException();
+		}
+		if(!nome.matches(formatoNome) || !cognome.matches(formatoNome) || !super.getMail().matches(formatoMail) || !super.getPassword().matches(formatoPassword) || !numeroTelefono.matches(formatoNumero) || !indirizzoCivico.matches(formatoIndirizzo) || !isPngImage(fotoDocumento)) { 
+        	System.out.println("Uno dei campi non rispetta le regole");
+        	//THROWS
+		}	
+	}
 	
 	public Utente modificaProfilo(String mail,String password,String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, Blob fotoDocumento) { 
 		if(!super.isLoggedIn() || !statoProfilo) {

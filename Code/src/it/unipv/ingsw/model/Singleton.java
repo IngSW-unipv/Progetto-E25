@@ -1,18 +1,18 @@
 package it.unipv.ingsw.model;
 
-import it.unipv.ingsw.dao.IUtenteDAO;
-import it.unipv.ingsw.dao.UtenteDAO;
-import it.unipv.ingsw.model.utenze.Utente;
+import it.unipv.ingsw.dao.ISuperUserDAO;
+import it.unipv.ingsw.dao.SuperUserDAO;
+import it.unipv.ingsw.model.utenze.ASuperUser;
 
 public class Singleton {
 
 	private static Singleton instance = null;
-	private IUtenteDAO utenteDAO;
-	private Utente utenteLoggato;
+	private ISuperUserDAO superUserDAO;
+	private ASuperUser utenteLoggato;
 
 	// Hide the contructor
 	private Singleton() {
-		utenteDAO=new UtenteDAO();
+		superUserDAO=new SuperUserDAO();
 	}
 
 	// Allow construction only once
@@ -27,16 +27,16 @@ public class Singleton {
 	}
 	
 
-	public Utente getUtenteLoggato() {
+	public ASuperUser getUtenteLoggato() {
 		return utenteLoggato;
 	}
 
-	public void setUtenteLoggato(Utente utenteLoggato) {
+	public void setUtenteLoggato(ASuperUser utenteLoggato) {
 		this.utenteLoggato = utenteLoggato;
 	}
 	
-	public IUtenteDAO getUtenteDAO() {
-		return utenteDAO;
+	public ISuperUserDAO getSuperUserDAO() {
+		return superUserDAO;
 	}
 
 	public static void main(String[] args) {

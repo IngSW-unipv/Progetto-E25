@@ -20,7 +20,7 @@ public class Locker implements IPuntoDeposito{
 	private Coordinate posizione;
 	private Map<Integer, Scompartimento> scompartimenti; // ogni scompartimento e' identificato da un unico Key
 	private Map<String, Integer> mappaQRcode= new HashMap<>(); //mappa dei Qr che il locker si aspetta di ricevere
-	private Scompartimento IDscompartimento;
+	private int IDscompartimento;
 	private int IDlocker;
 	private Date dataDeposito;
 	
@@ -57,11 +57,11 @@ public class Locker implements IPuntoDeposito{
 	}
 	
 //	ottiene uno scompartimento dalla HashMap usando il proprio ID
-	public Scompartimento getScompartimento(Scompartimento scompartimento) {
+	public Scompartimento getScompartimento(int scompartimento) {
 		return scompartimenti.get(IDscompartimento);
 	}
 	
-	public Scompartimento getIDscompartimento() {
+	public int getIDscompartimento() {
 		return IDscompartimento;
 	}
 	
@@ -70,8 +70,12 @@ public class Locker implements IPuntoDeposito{
 		System.out.println("Deposito Registrato: " + data);
 	}
 	
+	private Date getDataDeposito() {
+		return dataDeposito;
+	}
+	
 	//metodo che funziona sia per il carrier che per il destinatario
-	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro) {
+	/*public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isPresaInCarico) {
 		
 		//recupera il codice dalla classe QRcode
 		String codiceQR = codice.getQRcode();
@@ -87,7 +91,7 @@ public class Locker implements IPuntoDeposito{
 			System.out.println("Il codiceQR non corrisponde alla spedizione");
 			return false;
 		}
-			Scompartimento IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
+			int IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
 			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
 			scompartimento.Open();
 			
@@ -95,16 +99,13 @@ public class Locker implements IPuntoDeposito{
 			
 			spedizione.verificaTempoDeposito(this.getDataDeposito(), isRitiro);
 			
-			spedizione.aggiornaStatoSpedizione(isRitiro); //chiama il metodo in Spedizione
+			spedizione.aggiornaStatoSpedizione(isRitiro, isPresaInCarico); //chiama il metodo in Spedizione
 			
-//			da capire quando rimuovere il codice usato dalla mappa 
+			mappaQRcode.remove(codiceQR); //elimina dalla mappa il codiceQR scansionato con risultato valido
+			System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
 			
 			return true; //codice valido 
-	}
-	
-	private Date getDataDeposito() {
-		return dataDeposito;
-	}
+	}*/
 
 	@Override
 	public boolean checkQRsecondo(String codice) {
@@ -122,12 +123,9 @@ public class Locker implements IPuntoDeposito{
 				controllo=true;
 				//System.out.println("Ho trovato lo scompartimento");
 				scompartimenti.get(c).Open();
-			}else {
-				controllo=false;
-				//System.out.println("codice sbagliato");
 			}
 		}
-		
+		//System.out.printf("VAlore controllo: "+ controllo+"\n");
 		return controllo;	
 	}
 	

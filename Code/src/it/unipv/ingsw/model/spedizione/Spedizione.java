@@ -32,23 +32,21 @@ public class Spedizione {
 	private IPuntoDeposito destinazione;
 //	private IPuntoDeposito partenza;
 	private Date dataDeposito;
+	private Date dataInizioSpedizione;
+	QRcode codice; //questo è il codice Qr
 	
 	private MatchingService matchingService;
 	private List <Itinerario> itinerarioMancante; //i sottoitinerari che mancano fino alla fine della spedizione 
 	private Itinerario itinerarioCorrente; //itinerario che fornisco al carrier (FORSE NON VA QUI)
 	
-	private Blob codice;
-//	private String codice; //???
+
 	private String statoSpedizione;
 	List <Observer> observers = new ArrayList<>();
 	List <Locker> lockers = new ArrayList<>(); //lista dei locker associati alla spedizione
 	
-	private Date dataInizioSpedizione;
-	QRcode codice_mittente;
+	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito a, IPuntoDeposito b, MatchingService m, Date dataDeposito) { 
 	
-	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito a, IPuntoDeposito b, MatchingService m) { 
-	
-		codice_mittente=new QRcode();//codice mittente
+		codice = new QRcode();//codice mittente
 	
 		this.mittente = mittente;
 		this.destinatario = destinatario;
@@ -63,9 +61,7 @@ public class Spedizione {
 		
 		matchingService = m;
 		
-		itinerarioMancante = matchingService.itinerarioDivider(new Itinerario(a.getPosizione(),b.getPosizione())); //da fare qui
-	
-		
+	//	itinerarioMancante = matchingService.itinerarioDivider(new Itinerario(a.getPosizione(),b.getPosizione())); //da fare qui	
 	}
 	
 	public Spedizione(int id, IShippable shippable, IPuntoDeposito a, IPuntoDeposito b) {
@@ -81,7 +77,7 @@ public class Spedizione {
 	
 	
 	public QRcode getCodice() {
-		return codice_mittente;
+		return codice;
 	}
 	
 	
@@ -101,11 +97,14 @@ public class Spedizione {
 		return statoSpedizione;
 	}
 	
-	public void aggiornaStatoSpedizione(boolean isRitiro) {
+	public void aggiornaStatoSpedizione(boolean isRitiro, boolean isPresaInCarico) {
 		//pacco ritirato dal destinatario
 		if (isRitiro) {
 			this.statoSpedizione = "Consegnato";
 			System.out.println("Il pacco è stato ritirato.\nStato aggiornato a 'Consegna'.");
+		} else if (isPresaInCarico){
+			this.statoSpedizione = "Presa In Carico";
+			System.out.println("Il pacco è stato preso in carico dal corriere.\nStato aggiornato a 'Presa In Carico'.");
 		} else {
 			//pacco depositato dal carrier
 			this.statoSpedizione = "In attesa";
@@ -231,8 +230,8 @@ public class Spedizione {
 		
 		if(shippable==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
 		
-		codice_mittente.generaQRcode();
-		boolean controllo_disponibilita=punto_deposito_partenza.checkDisponibilita(shippable, codice_mittente.getQRcode());
+		codice.generaQRcode();
+		boolean controllo_disponibilita=punto_deposito_partenza.checkDisponibilita(shippable, codice.getQRcode());
 		
 		if(controllo_disponibilita==false) {
 			System.out.printf("Nel locker scelto non c'è disponibilità\n");
@@ -256,6 +255,10 @@ public class Spedizione {
 			System.out.printf("La spedizione non è avviata\n");
 		}else {
 			System.out.printf("La spedizione è considerata iniziata\n");
+			statoSpedizione="Consegnato nel locker di partenza";
+			Date data_deposito=new Date();
+			dataDeposito=data_deposito;
+			System.out.printf("Data deposito: "+ dataDeposito+"\n");
 		}
 		
 	}

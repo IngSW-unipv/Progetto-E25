@@ -316,15 +316,4 @@ public class Spedizione {
 	}*/
 
 	
-	public void presaInCarico(Utente utente, Itinerario tratta) {
-		
-		Size size = shippable.getSize();
-		double weight = shippable.getWeight();
-		
-		//faccio verificare dall'itinerario della spedizione se essa contiene l'itinerario della tratta del carrier
-		
-		this.carrier = (Carrier) utente;
-		
-	}
-
 }

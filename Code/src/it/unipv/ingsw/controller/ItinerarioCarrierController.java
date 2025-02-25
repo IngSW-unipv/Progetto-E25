@@ -15,7 +15,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+ * Unused!!! (aspetto di essser sicuro per rimuovere)
+ */
 public class ItinerarioCarrierController {
 
     private ItinerarioCarrierView view;
@@ -42,7 +44,7 @@ public class ItinerarioCarrierController {
     
     private void handleSendButton() {
         try {
-        	
+            
         	System.out.println("ffffffffffffff");
             //prendo e converto i valori inseriti nei campi della view
             double startX = Double.parseDouble(view.getStartXField().getText());
@@ -64,10 +66,10 @@ public class ItinerarioCarrierController {
             //passo dati al modello 
             it = new Itinerario(new Coordinate(startX,startY), new Coordinate(endX,endY));
             
-           //carrier.setItinerario(it);
+            carrier.setItinerario(it);
             
-           // System.out.println(carrier.getItinerario());
-           gs.presaInCaricoSpedizione(carrier, lista);
+            System.out.println(carrier.getItinerario().toString());
+            gs.presaInCaricoSpedizione(carrier, lista);
            
         } catch (NumberFormatException ex) {
             // Se l'input non è numerico, mostra un messaggio di errore
@@ -77,6 +79,8 @@ public class ItinerarioCarrierController {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    
     
 
 }

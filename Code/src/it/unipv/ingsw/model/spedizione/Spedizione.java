@@ -299,6 +299,7 @@ public class Spedizione {
 	
 	public void confermaAvvioSpedizione(IPuntoDeposito punto_deposito_partenza, QRcode codice) {
 		boolean controllo_QRcode=punto_deposito_partenza.checkQR(codice.getQRcode);
+		boolean controllo_QRcode=punto_deposito_partenza.checkQR(codice.getQRcode());
 		
 		if(controllo_QRcode==false) {
 			System.out.printf("La spedizione non è avviata\n");

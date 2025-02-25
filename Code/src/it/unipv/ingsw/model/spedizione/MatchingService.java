@@ -219,7 +219,7 @@ public class MatchingService {
 		
 		Itinerario ic = new Itinerario(i,j);
 		
-		Spedizione s1 = new Spedizione(null, null, null, 0, l1, l2, m);
+		Spedizione s1 = new Spedizione(null, null, null, 0, l1, l2, m, null);
 		//Spedizione s2 = new Spedizione(null, null, null, 0, l4, l7, m);
 		
 		s1.setMatchingService(m);

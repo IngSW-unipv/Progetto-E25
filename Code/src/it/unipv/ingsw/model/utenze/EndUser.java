@@ -8,8 +8,7 @@ import java.util.List;
 import it.unipv.ingsw.model.Observer;
 import it.unipv.ingsw.model.spedizione.Spedizione;
 
-public class EndUser extends Utente implements Observer{
-	
+public class EndUser extends Utente implements Observer<Spedizione>{
 	
 	private String userType; //serve per l'invio della mail al destinatario ed al carrier
 

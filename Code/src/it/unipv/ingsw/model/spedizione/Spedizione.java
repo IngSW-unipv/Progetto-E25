@@ -41,7 +41,7 @@ public class Spedizione {
 	
 
 	private String statoSpedizione;
-	List <Observer> observers = new ArrayList<>();
+	List <Observer<String>> observers = new ArrayList<>();
 	List <Locker> lockers = new ArrayList<>(); //lista dei locker associati alla spedizione
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito a, IPuntoDeposito b, MatchingService m, Date dataDeposito) { 
@@ -76,9 +76,6 @@ public class Spedizione {
 	public Spedizione() {
 		
 	}
-	
-	
-	
 	
 	public QRcode getCodice() {
 		return codice;
@@ -158,12 +155,12 @@ public class Spedizione {
 	}
 
 	//aggiungi observer
-	public void addObserver(Observer<?> observer) {
+	public void addObserver(Observer<String> observer) {
 		observers.add(observer);
 	}
 	
 	//remove observer
-	public void removeObserver(Observer<?> observer) {
+	public void removeObserver(Observer<String> observer) {
 		observers.remove(observer);
 	}
 	
@@ -217,8 +214,8 @@ public class Spedizione {
 
 	//notify observers
 	public void notifyObservers() {
-		for (Observer observer : observers) {
-			observer.update(this); //faccio riferimento alla spedizione
+		for (Observer<String> observer : observers) {
+			observer.update(statoSpedizione); //faccio riferimento alla spedizione
 		}
 	}
 
@@ -253,7 +250,7 @@ public class Spedizione {
 	}
 	
 	public void confermaAvvioSpedizione(IPuntoDeposito punto_deposito_partenza, QRcode codice) {
-		boolean controllo_QRcode=punto_deposito_partenza.checkQRsecondo(codice.getQRcode());
+		boolean controllo_QRcode=punto_deposito_partenza.checkQR(codice.getQRcode());
 		
 		if(controllo_QRcode==false) {
 			System.out.printf("La spedizione non è avviata\n");

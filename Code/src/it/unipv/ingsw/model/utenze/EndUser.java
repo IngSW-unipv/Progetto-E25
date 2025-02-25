@@ -74,11 +74,5 @@ public class EndUser extends Utente implements Observer<Spedizione>{
     public void inviaMail(Spedizione spedizione) {
 		System.out.println("Invio mail a: " + getMail() + "con lo stato della spedizione: " + spedizione.getStatoSpedizione());
 	}
-
-	@Override
-	public void update(Object dato) {
-		// TODO Auto-generated method stub
-		
-	} 
     
 }

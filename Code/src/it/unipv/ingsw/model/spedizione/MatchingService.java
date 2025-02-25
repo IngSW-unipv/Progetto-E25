@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import it.unipv.ingsw.dao.LockerDAO;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
 import it.unipv.ingsw.model.spedizione.shippable.IShippable;
@@ -17,8 +18,9 @@ public class MatchingService {
 	
 	
 	public MatchingService() {
-		puntiDeposito = new ArrayList<>();
-		//dovrei prendere tutti i locker con il dao
+		//prendo tutti i locker con il dao
+		LockerDAO lockerDAO = new LockerDAO();
+		puntiDeposito = lockerDAO.selectAll();
 		
 		//dovrei prendere tutte le spedizioni disponibili con il dao
 		
@@ -70,8 +72,6 @@ public class MatchingService {
 		/*
 		 * compongo la lista dei sottoitinerari
 		 */
-		
-		
 		
 		Coordinate inizio=null;
 		for(IPuntoDeposito pto : puntiDepositoValidi) {

@@ -1,9 +1,6 @@
 package it.unipv.ingsw.view;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class AvviaSpedizioneView extends JFrame {
 
@@ -79,7 +76,7 @@ public class AvviaSpedizioneView extends JFrame {
 	    coperturaField = new JTextField();
 	    formPanel.add(coperturaField);
 	    
-	    confirmButton = new JButton("Conferma");
+	    confirmButton = new JButton("Conferma, vai al pagamento");
 	    confirmButton.setBackground(Color.YELLOW);
 	    formPanel.add(confirmButton);
 

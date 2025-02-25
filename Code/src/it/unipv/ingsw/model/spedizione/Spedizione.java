@@ -65,6 +65,11 @@ public class Spedizione {
 		
 	}
 	
+	//costruttore default
+	public Spedizione() {
+		
+	}
+	
 	public QRcode getCodice() {
 		return codice_mittente;
 	}

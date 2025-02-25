@@ -1,20 +1,23 @@
 package it.unipv.ingsw.view;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 
 public class RegistrazioneView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel registrationPanel;
-	private JTextField nameField;
-	private JTextField surnameField;
-	private JTextField emailField;
+	private JTextField nomeField;
+	private JTextField cognomeField;
+	private JTextField mailField;
 	private JTextField dataNascitaField;
 	private JTextField numeroTelefonoField;
 	private JTextField indirizzoCivicoField;
-	private JLabel fotoDocumentoField;
+	private JTextField fotoDocumentoField;
 	private JPasswordField passwordField;
+	
 	private JButton confirmButton;
 	
 	public RegistrazioneView() {
@@ -27,17 +30,17 @@ public class RegistrazioneView extends JFrame {
 		add(registrationPanel);
 		
 		registrationPanel.add(new JLabel("  Nome:"));
-		nameField = new JTextField();
-		registrationPanel.add(nameField);
+		nomeField = new JTextField();
+		registrationPanel.add(nomeField);
 	
 		registrationPanel.add(new JLabel("  Cognome:"));
-		surnameField = new JTextField();
-		registrationPanel.add(surnameField);
+		cognomeField = new JTextField();
+		registrationPanel.add(cognomeField);
 	
 
 		registrationPanel.add(new JLabel("  Mail:"));
-		emailField = new JTextField();
-		registrationPanel.add(emailField);
+		mailField = new JTextField();
+		registrationPanel.add(mailField);
 		
 		registrationPanel.add(new JLabel("  Password:"));
 		passwordField = new JPasswordField();
@@ -55,12 +58,13 @@ public class RegistrazioneView extends JFrame {
 		indirizzoCivicoField = new JTextField();
 		registrationPanel.add(indirizzoCivicoField);
 		
-		registrationPanel.add(new JLabel("  Foto di un documento(PNG):"));
-		fotoDocumentoField = new JLabel();
+		registrationPanel.add(new JLabel("  Percorso documento (PNG):"));
+		fotoDocumentoField = new JTextField();
 		registrationPanel.add(fotoDocumentoField);
+       
 
 		confirmButton = new JButton("Conferma");
-
+		confirmButton.setBackground(Color.GREEN);
 		registrationPanel.add(confirmButton);
 
 		setLocationRelativeTo(null);
@@ -72,33 +76,33 @@ public class RegistrazioneView extends JFrame {
 	}
 
 
-	public JTextField getNameField() {
-		return nameField;
+	public JTextField getNomeField() {
+		return nomeField;
 	}
 
 
-	public void setNameField(JTextField nameField) {
-		this.nameField = nameField;
+	public void setNomeField(JTextField nomeField) {
+		this.nomeField = nomeField;
 	}
 
 
-	public JTextField getSurnameField() {
-		return surnameField;
+	public JTextField getCognomeField() {
+		return cognomeField;
 	}
 
 
-	public void setSurnameField(JTextField surnameField) {
-		this.surnameField = surnameField;
+	public void setCognomeField(JTextField cognomeField) {
+		this.cognomeField = cognomeField;
 	}
 
 
-	public JTextField getEmailField() {
-		return emailField;
+	public JTextField getMailField() {
+		return mailField;
 	}
 
 
-	public void setEmailField(JTextField emailField) {
-		this.emailField = emailField;
+	public void setMailField(JTextField mailField) {
+		this.mailField = mailField;
 	}
 
 
@@ -147,12 +151,12 @@ public class RegistrazioneView extends JFrame {
 	}
 
 
-	public JLabel getFotoDocumentoField() {
+	public JTextField getFotoDocumentoField() {
 		return fotoDocumentoField;
 	}
 
 
-	public void setFotoDocumentoField(JLabel fotoDocumentoField) {
+	public void setFotoDocumentoField(JTextField fotoDocumentoField) {
 		this.fotoDocumentoField = fotoDocumentoField;
 	}
 

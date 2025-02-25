@@ -1,22 +1,18 @@
 package it.unipv.ingsw.controller;
 
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
-
-import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import it.unipv.ingsw.exceptions.*;
+import it.unipv.ingsw.model.utenze.ASuperUser;
+import it.unipv.ingsw.model.utenze.Admin;
 import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.view.MainView;
 import it.unipv.ingsw.view.RegistrazioneView;
+import it.unipv.ingsw.view.UtenteView;
 import it.unipv.ingsw.view.LoginUtenteView;
 import it.unipv.ingsw.view.LoginAdminView;
 
@@ -61,7 +57,7 @@ public class MainController {
 			private void manageAction() {
 				
 				loginAdminView = new LoginAdminView();
-				
+				okAdminButtonInit();
 			}
 		};
 		mainView.getAdminButton().addActionListener(adminListener);
@@ -73,12 +69,12 @@ public class MainController {
 				manageAction();
 			}
 			private void manageAction() {
-				Utente utente = new Utente(); //O SuperUser?
+				ASuperUser utente = new Utente(); //OK
 				try {
 					utente.loginUtente(loginUtenteView.getEmailField().getText(), String.valueOf(loginUtenteView.getPasswordField().getPassword()));
 					loginUtenteView.setVisible(false);
 					mainView.setVisible(false);
-						
+					new ProfiloUtenteController(new Utente(), new UtenteView());	//non sicuro
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(loginUtenteView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}
@@ -98,30 +94,13 @@ public class MainController {
                 }
             }
 	
-            private void manageAction() throws EmptyFieldException, AccountAlreadyExistsException, SQLException, IOException {
+            private void manageAction() throws EmptyFieldException, AccountAlreadyExistsException, SQLException, IOException, WrongFieldException {
             	SerialBlob fotoDocumento = null;
             	regView.setAlwaysOnTop(false);
             	Utente utente = new Utente();        
-            	ImageIcon imageIcon = (ImageIcon) regView.getFotoDocumentoField().getIcon();  // Supponiamo che la JLabel abbia un ImageIcon
-
-            	// Verifica che l'immagine esista
-            	if (imageIcon != null) {
-            	    Image image = imageIcon.getImage();  // Ottieni l'oggetto Image dall'ImageIcon
-            	    
-            	    // Converti l'immagine in un array di byte
-            	    try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            	        // Scrivi l'immagine come PNG (o qualsiasi altro formato) nel ByteArrayOutputStream
-            	        ImageIO.write((java.awt.image.BufferedImage) image, "png", baos);  
-            	        byte[] imageBytes = baos.toByteArray();
-            	        
-            	        // Crea un Blob dai byte dell'immagine
-            	        fotoDocumento = new javax.sql.rowset.serial.SerialBlob(imageBytes);
-            	    }
-            	}    
-                utente.registrazione(regView.getEmailField().getText(),String.valueOf(regView.getPasswordField().getPassword()),regView.getNameField().getText(),regView.getSurnameField().getText(),
-                		regView.getNumeroTelefonoField().getText(),regView.getDataNascitaField().getText(),regView.getIndirizzoCivicoField().getText(),fotoDocumento);
+                utente.registrazione(regView.getMailField().getText(),String.valueOf(regView.getPasswordField().getPassword()),regView.getNomeField().getText(),regView.getCognomeField().getText(),
+                		regView.getNumeroTelefonoField().getText(),regView.getDataNascitaField().getText(),regView.getIndirizzoCivicoField().getText(),regView.getFotoDocumentoField().getText());
                 regView.setVisible(false);
-               // JOptionPane.showMessageDialog(regView,null, "Registrazione effettuata con successo!", JOptionPane.OK_OPTION);
                 loginUtenteView = new LoginUtenteView();
                 okLoginUtenteButton();
                 loginUtenteView.setVisible(true);
@@ -130,7 +109,30 @@ public class MainController {
         regView.getConfirmButton().addActionListener(okListener);
     }
 	
-	
+	private void okAdminButtonInit() {
+    ActionListener okListener = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            try {
+                manageAction();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                JOptionPane.showMessageDialog(loginAdminView, e1.getMessage(), "Errore Admin", JOptionPane.ERROR_MESSAGE);
+            }
+        } 
+        private void manageAction() throws WrongAdminException {
+        	ASuperUser su = new Admin(); //OK
+            String idview = String.valueOf(loginAdminView.getTextId().getPassword());
+            try {
+            	su.loginAdmin(String.valueOf(loginAdminView.getTextId().getPassword()));
+            	loginAdminView.setVisible(false);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(loginAdminView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+                return; 
+            }
+        }
+    };
+    loginAdminView.getConfirmButton().addActionListener(okListener);
+}
 	
 }
 	

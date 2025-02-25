@@ -36,7 +36,7 @@ public class MainView extends JFrame {
 	    
 	    public int logOrReg() {
 	    	String[] option= { "Registrati", "Login" };
-	    	int r= JOptionPane.showOptionDialog(this, "Utente", "Login or Registrazione", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, option, option[0]);
+	    	int r= JOptionPane.showOptionDialog(this, "Utente", "Login o Registrazione", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, option, option[0]);
 	    	return r;
 	    }
 

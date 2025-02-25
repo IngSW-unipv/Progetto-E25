@@ -30,9 +30,17 @@ public class UtenteDAO implements IUtenteDAO {
 		boolean esito = true;
 
 		try {
-			String query = "INSERT INTO `utente` (`email`, `nome`, `cognome`, `dataNascita`, `numeroTelefono`, `indirizzoCivico`,`fotoDocumento`, `statoProfilo`)"
+			String query1 = "INSERT INTO `ShipUp`.`superUser` (`email`, `password`)"
+					+ " VALUES(?,?)";
+			st2 = conn.prepareStatement(query1);
+
+			st2.setString(1, u.getMail());
+			st2.setString(2, u.getPassword());
+			st2.executeUpdate(query1);
+			
+			String query2 = "INSERT INTO `utente` (`email`, `nome`, `cognome`, `dataNascita`, `numeroTelefono`, `indirizzoCivico`,`fotoDocumento`, `statoProfilo`)"
 					+ " VALUES(?,?,?,?,?,?,?,?)";
-			st1 = conn.prepareStatement(query);
+			st1 = conn.prepareStatement(query2);
 
 			st1.setString(1, u.getMail());
 			st1.setString(2, u.getNome());
@@ -42,15 +50,9 @@ public class UtenteDAO implements IUtenteDAO {
 			st1.setObject(6, u.getDataNascita());
 			st1.setObject(7, u.getFotoDocumento());
 			st1.setObject(8, u.getStatoProfilo());
-			st1.executeUpdate(query);
+			st1.executeUpdate();
 			
-			String query1 = "INSERT INTO `ShipUp`.`superUser` (`email`, `password`)"
-					+ " VALUES(?,?)";
-			st2 = conn.prepareStatement(query);
-
-			st2.setString(1, u.getMail());
-			st2.setString(2, u.getPassword());
-			st1.executeUpdate(query1);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			esito = false;
@@ -124,7 +126,7 @@ public class UtenteDAO implements IUtenteDAO {
 
             while (rs1.next()) {
             	
-                 u = new Utente(rs1.getString(1),rs1.getString(2),rs1.getString(4),rs1.getString(5),rs1.getString(6),rs1.getString(7),rs1.getString(8),rs1.getBlob(9));
+                 u = new Utente(rs1.getString(1),rs1.getString(2),rs1.getString(4),rs1.getString(5),rs1.getString(6),rs1.getString(7),rs1.getString(8),rs1.getString(9));
 
                  result.add(u);
             }

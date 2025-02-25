@@ -117,7 +117,7 @@ public class ProfiloUtenteController {
 				try {
 					// AVVIA SPEDIZIONE
 					sp.avvioSpedizione(model, null, model);
-					model.setVisible(false);
+					avviaSpedizioneView.setVisible(false);
 					view.setVisible(false);
 					//new ProfiloUtenteController(new ItinerarioCarrierView(),model);	//ritorno a schermata del profilo
 				} catch (Exception e) {

@@ -8,8 +8,7 @@ import java.util.List;
 import it.unipv.ingsw.model.Observer;
 import it.unipv.ingsw.model.spedizione.Spedizione;
 
-public class EndUser extends Utente implements Observer{
-	
+public class EndUser extends Utente implements Observer<Spedizione>{
 	
 	private String userType; //serve per l'invio della mail al destinatario ed al carrier
 
@@ -22,6 +21,9 @@ public class EndUser extends Utente implements Observer{
 	public EndUser(String mail, String password, String nome, String cognome,String numeroTelefono, String indirizzoCivico,String dataNascita, String fotoDocumento, String userType) {
 		super(mail, password, nome, cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
 		this.userType = userType;
+	}
+	
+	public EndUser() {
 	}
 	
 	public String getUserType() {
@@ -75,11 +77,5 @@ public class EndUser extends Utente implements Observer{
     public void inviaMail(Spedizione spedizione) {
 		System.out.println("Invio mail a: " + getMail() + "con lo stato della spedizione: " + spedizione.getStatoSpedizione());
 	}
-
-	@Override
-	public void update(Object dato) {
-		// TODO Auto-generated method stub
-		
-	} 
     
 }

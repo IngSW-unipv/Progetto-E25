@@ -30,7 +30,8 @@ public class Spedizione {
 	private int assicurazione; //non sono sicuro
 	private IPuntoDeposito partenza;
 	private IPuntoDeposito destinazione;
-//	private IPuntoDeposito partenza;
+	private Date dataInizio;
+	private Date dataFine;
 	private Date dataDeposito;
 	private Date dataInizioSpedizione;
 	QRcode codice; //questo è il codice Qr
@@ -41,7 +42,7 @@ public class Spedizione {
 	
 
 	private String statoSpedizione;
-	List <Observer> observers = new ArrayList<>();
+	List <Observer<String>> observers = new ArrayList<>();
 	List <Locker> lockers = new ArrayList<>(); //lista dei locker associati alla spedizione
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito a, IPuntoDeposito b, MatchingService m, Date dataDeposito) { 
@@ -77,16 +78,41 @@ public class Spedizione {
 		
 	}
 	
+	public Mittente getMittente() {
+		return mittente;
+	}
 	
+	public void setMittente(Mittente mittente) {
+		this.mittente=mittente;
+	}
+	
+	public Destinatario getDestinatario() {
+		return destinatario;
+	}
+	
+	public void setDestinatario(Destinatario destinatario) {
+		this.destinatario=destinatario;
+	}
 	
 	
 	public QRcode getCodice() {
 		return codice;
 	}
 	
-	
 	public void setPacco(IShippable shippable) {
 		this.shippable = shippable;
+	}
+	
+	public IShippable getPacco() {
+		return shippable;
+	}
+	
+	public void setAssicurazione(int assicurazione) {
+		this.assicurazione = assicurazione;
+	}
+	
+	public int getAssicurazione() {
+		return assicurazione;
 	}
 	
 	public void registraDeposito(Date data) {
@@ -100,6 +126,24 @@ public class Spedizione {
 	public String getStatoSpedizione() {
 		return statoSpedizione;
 	}
+	
+	public void setDataInizio(Date data) {
+		this.dataInizio=data;
+	}
+	
+	public Date getDataInizio() {
+		return dataInizio;
+	}
+	
+	public void setDataFine(Date data) {
+		this.dataFine=data;
+	}
+	
+	public Date getDataFine() {
+		return dataFine;
+	}
+	
+
 	
 //	public void aggiornaStatoSpedizione(boolean isRitiro, boolean isPresaInCarico) {
 //		//pacco ritirato dal destinatario
@@ -158,12 +202,12 @@ public class Spedizione {
 	}
 
 	//aggiungi observer
-	public void addObserver(Observer<?> observer) {
+	public void addObserver(Observer<String> observer) {
 		observers.add(observer);
 	}
 	
 	//remove observer
-	public void removeObserver(Observer<?> observer) {
+	public void removeObserver(Observer<String> observer) {
 		observers.remove(observer);
 	}
 	
@@ -217,8 +261,8 @@ public class Spedizione {
 
 	//notify observers
 	public void notifyObservers() {
-		for (Observer observer : observers) {
-			observer.update(this); //faccio riferimento alla spedizione
+		for (Observer<String> observer : observers) {
+			observer.update(statoSpedizione); //faccio riferimento alla spedizione
 		}
 	}
 
@@ -230,6 +274,7 @@ public class Spedizione {
 //		this.itinerario = itinerario;
 //	}
 
+	/*
 	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario) { 
 		
 		if(shippable==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
@@ -253,7 +298,8 @@ public class Spedizione {
 	}
 	
 	public void confermaAvvioSpedizione(IPuntoDeposito punto_deposito_partenza, QRcode codice) {
-		boolean controllo_QRcode=punto_deposito_partenza.checkQRsecondo(codice.getQRcode());
+		boolean controllo_QRcode=punto_deposito_partenza.checkQR(codice.getQRcode);
+		boolean controllo_QRcode=punto_deposito_partenza.checkQR(codice.getQRcode());
 		
 		if(controllo_QRcode==false) {
 			System.out.printf("La spedizione non è avviata\n");
@@ -267,5 +313,18 @@ public class Spedizione {
 		
 	}
  
+	}*/
+
+	
+	public void presaInCarico(Utente utente, Itinerario tratta) {
+		
+		Size size = shippable.getSize();
+		double weight = shippable.getWeight();
+		
+		//faccio verificare dall'itinerario della spedizione se essa contiene l'itinerario della tratta del carrier
+		
+		this.carrier = (Carrier) utente;
+		
+	}
 
 }

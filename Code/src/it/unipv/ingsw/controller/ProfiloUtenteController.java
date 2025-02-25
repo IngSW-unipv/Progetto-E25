@@ -1,5 +1,6 @@
 package it.unipv.ingsw.controller;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -10,6 +11,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
+import it.unipv.ingsw.dao.LockerDAO;
 import it.unipv.ingsw.dao.UtenteDAO;
 import it.unipv.ingsw.exceptions.PaymentException;
 import it.unipv.ingsw.model.spedizione.Coordinate;
@@ -17,6 +19,8 @@ import it.unipv.ingsw.model.spedizione.GestoreSpedizioni;
 import it.unipv.ingsw.model.spedizione.Itinerario;
 import it.unipv.ingsw.model.spedizione.MatchingService;
 import it.unipv.ingsw.model.spedizione.Spedizione;
+import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
+import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
 import it.unipv.ingsw.model.transazioni.IPagamento;
 import it.unipv.ingsw.model.transazioni.Pagamento;
 import it.unipv.ingsw.model.transazioni.PagamentoCarta;
@@ -24,6 +28,7 @@ import it.unipv.ingsw.model.transazioni.PagamentoSaldo;
 import it.unipv.ingsw.model.transazioni.PagamentoStrategyFactory;
 import it.unipv.ingsw.model.utenze.ASuperUser;
 import it.unipv.ingsw.model.utenze.Carrier;
+import it.unipv.ingsw.model.utenze.Destinatario;
 import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.view.AvviaSpedizioneView;
 import it.unipv.ingsw.view.CarrierView;
@@ -45,6 +50,7 @@ public class ProfiloUtenteController {
 	private ItinerarioCarrierView itinerarioCarrierView;
 	private UtenteDAO utenteDAO;
     private Itinerario it;
+	private LockerDAO lockerDAO;
 	
 	public ProfiloUtenteController(Utente model, UtenteView view) {
 		this.model=model;
@@ -117,15 +123,33 @@ public class ProfiloUtenteController {
 				manageAction();
 			}
 			private void manageAction() {
-				Spedizione sp = new Spedizione(); //OK
+				String mailDest = avviaSpedizioneView.getMailDestField().getText();
+	            double lockerInizioX = Double.parseDouble(avviaSpedizioneView.getLockerInizioXField().getText());
+	            double lockerInizioY = Double.parseDouble(avviaSpedizioneView.getLockerInizioYField().getText());
+	            double lockerDestinazioneX = Double.parseDouble(avviaSpedizioneView.getLockerDestinazioneXField().getText());
+	            double lockerDestinazioneY = Double.parseDouble(avviaSpedizioneView.getLockerDestinazioneYField().getText());
+	            Toolkit dimPacco = avviaSpedizioneView.getDimPaccoField().getToolkit(); //menù a tendina
+	            String pesoPacco = avviaSpedizioneView.getPesoPaccoField().getText();
+	            String copertura = avviaSpedizioneView.getCoperturaField().getText();
+				
+	            MatchingService ms=new MatchingService();
+				GestoreSpedizioni gs = new GestoreSpedizioni(ms);
+				Spedizione s=new Spedizione(); //fittizia, sbagliato
+				Destinatario d=new Destinatario(mailDest); 
+				Coordinate ci=new Coordinate(lockerInizioX,lockerInizioY);
+				Coordinate cf=new Coordinate(lockerDestinazioneX,lockerDestinazioneY);
+				IPuntoDeposito ipi,ipf;
+				ipi=lockerDAO.selectPuntoDeposito(ci);
+				ipf=lockerDAO.selectPuntoDeposito(cf);
 				try {
 					// AVVIA SPEDIZIONE
-					sp.avvioSpedizione(model, null, model);
-					model.setVisible(false);
+					gs.avvioSpedizione(model, ipi, d, s); //avvioSpedizione da modificare
+					System.out.println("ieee");
+					avviaSpedizioneView.setVisible(false);
 					view.setVisible(false);
-					//new ProfiloUtenteController(new Utente(), new UtenteView());	//ritorno a schermata del profilo
+					new ProfiloUtenteController(model, new UtenteView());	//ritorno a schermata del profilo
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(model, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+					//JOptionPane.showMessageDialog(model, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 			
 			}

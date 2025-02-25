@@ -31,7 +31,12 @@ public class Locker implements IPuntoDeposito{
 		dataDeposito = null; //inizialmente nessuna data di deposito
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
 	}
-	
+	public Locker(Coordinate posizione) {
+		this.posizione = posizione;
+		scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
+		dataDeposito = null; //inizialmente nessuna data di deposito
+		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
+	}
 	public void aggiungiScompartimento(Scompartimento scompartimento) {
 		scompartimenti.put(scompartimento.getIDscompartimento(), scompartimento);
 	}
@@ -91,23 +96,26 @@ public class Locker implements IPuntoDeposito{
 		if(!spedizioneAssociata.equals(spedizione)) {
 			System.out.println("Il codiceQR non corrisponde alla spedizione");
 			return false;
-		}
+		}		
+			return true; //codice valido 
+	}
+	
+	public void apriScompartimento(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isMittenteDeposita) {
+		if (checkQR(codice, spedizione, isRitiro, isMittenteDeposita) == true) {
+			
 			int IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
 			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
 			scompartimento.Open();
 			
-			this.registraDeposito(new Date()); // se il codice è valido registra la data di deposito
+			this.registraDeposito(new Date());
 			
-			//Istanza GestoreSpedizione e chiama i metodi per verificare il deposito e aggiornare lo stato
-			GestoreSpedizioni gestore = new GestoreSpedizioni(null);
-			gestore.verificaTempoDeposito(spedizione, this.getDataDeposito(), isRitiro);
-			
-			gestore.aggiornaStatoSpedizione(spedizione, isRitiro, isMittenteDeposita); //chiama il metodo in gestore
-			
-			mappaQRcode.remove(codiceQR); //elimina dalla mappa il codiceQR scansionato con risultato valido
+			//elimina dalla mappa il codiceQR scansionato
+			mappaQRcode.remove(codice); //elimina dalla mappa il codiceQR scansionato
 			System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
 			
-			return true; //codice valido 
+		} else {
+			System.out.println("Codice QR non valido. Impossibile aprire lo scompartimento.");
+		}
 	}
 
 //	@Override

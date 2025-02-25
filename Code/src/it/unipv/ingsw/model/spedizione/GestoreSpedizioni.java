@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
+import it.unipv.ingsw.model.utenze.ASuperUser;
 import it.unipv.ingsw.model.utenze.Carrier;
 import it.unipv.ingsw.model.utenze.Utente;
 
@@ -26,6 +27,29 @@ public class GestoreSpedizioni {
 		s.setItinerarioMancante(matchingService.itinerarioDivider(new Itinerario(s.getPartenza().getPosizione(), s.getDestinazione().getPosizione())));
 	}
 	
+	//metodo avvio spedizione
+	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario, Spedizione spedizione) { 
+		
+		if(spedizione.getPacco()==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
+		
+		spedizione.getCodice();
+		boolean controllo_disponibilita=punto_deposito_partenza.checkDisponibilita(spedizione.getPacco(), spedizione.getCodice().getQRcode());
+		
+		if(controllo_disponibilita==false) {
+			System.out.printf("Nel locker scelto non c'è disponibilità\n");
+		}else {
+			// if(pagamento.effettuaPagamento()=true)
+			// forse modifico lo stato qr dopo il pagamento
+			
+			spedizione.setStatoSpedizione("In attesa di consegna pacco in locker");
+			Date data_inizio=new Date();
+			spedizione.setDataInizio(data_inizio);
+		//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
+			System.out.printf("Finito avvioSpedizione\n");
+		}
+
+	}
+	
 	
 	//presa in carico di una spedizione 
 	public void presaInCaricoSpedizione(Carrier carrier, List<Spedizione> spedizioniDisponibili) {
@@ -38,22 +62,37 @@ public class GestoreSpedizioni {
 		
 	}
 	
-	public void ritiraPacco(Spedizione spedizione, boolean isRitiro) {
-		if (isRitiro) {
+	public void ritiraPacco(QRcode codice, Spedizione spedizione, boolean isRitiro) {
+		//creo istanza di locker
+		Locker locker = new Locker(null, 0);
+		
+		//verifica il QR con locker, passando false per 'isMittenteDeposita'
+		boolean codiceValido = locker.checkQR(codice, spedizione, isRitiro, false);
+		
+		if (codiceValido) {
+			if (isRitiro) {
 			spedizione.setStatoSpedizione("Consegnato");
 			System.out.println("Il pacco è stato ritirato dal destinatario. Stato aggiornato a 'Consegnato'.");
 		} else {
 			System.out.println("Errore: Il pacco non è stato ritirato dal destinatario.");
-		}
+			}	 
+		}else {	
+		System.out.println("Errore: Il codice QR non valido");
+			}
 	}
 	
-	public void depositaPacco(Spedizione spedizione, boolean isMittenteDeposita) {
-		if (isMittenteDeposita) {
-			//aggiorna lo stato a 'In attesa'
+	public void depositaPacco(QRcode codice, Spedizione spedizione, boolean isMittenteDeposita) {
+		//creo un'istanza di locker
+		Locker locker =new Locker(null, 0);
+		
+		//verifica il QR con locker, passando true per 'isMittenteDeposita' e false a 'isRitiro'
+		boolean codiceValido = locker.checkQR(codice, spedizione, true, false);
+		
+		if (codiceValido) {
+			System.out.println("Il pacco è stato depositato dal Mittente.");
 			spedizione.setStatoSpedizione("In attesa");
-			System.out.println("Il pacco è stato depositato dal mittente nel locker ed è in attesa per il ritiro");
 		} else {
-			System.out.println("Errore: Il pacco non è stato deposito dal mittente");
+			System.out.println("Errore: Il codice QR non è valido.");
 		}
 	}
 	
@@ -81,7 +120,7 @@ public class GestoreSpedizioni {
 		}
 	}
 	
-	public void aggiornaStatoSpedizione(Spedizione spedizione, boolean isRitiro, boolean isPresaInCarico) {
+	public void aggiornaStatoSpedizione(Spedizione spedizione, boolean isRitiro) {
 		//pacco ritirato dal destinatario
 		if (isRitiro) {
 			spedizione.setStatoSpedizione("Consegnato");

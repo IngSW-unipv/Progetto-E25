@@ -1,10 +1,14 @@
 package it.unipv.ingsw.model;
 
+import it.unipv.ingsw.controller.*;
+import it.unipv.ingsw.view.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 
+import it.unipv.ingsw.controller.ItinerarioCarrierController;
 import it.unipv.ingsw.controller.MainController;
+import it.unipv.ingsw.controller.ProfiloUtenteController;
 import it.unipv.ingsw.model.spedizione.Coordinate;
 import it.unipv.ingsw.model.spedizione.MatchingService;
 import it.unipv.ingsw.model.spedizione.QRcode;
@@ -16,6 +20,7 @@ import it.unipv.ingsw.model.utenze.Destinatario;
 import it.unipv.ingsw.model.utenze.Mittente;
 import it.unipv.ingsw.model.utenze.Utente;
 //import it.unipv.ingsw.view.MainView;
+import it.unipv.ingsw.view.ItinerarioCarrierView;
 
 public class Execute {
 	
@@ -28,7 +33,7 @@ public class Execute {
 		Utente uAttesa1=u1.modificaProfilo("CarloRossi@gmail.com",null,"Carli","Rosso!","345237623856",null,null,null);*/
 		//a1.validaAccount(Utente u1,Utente uAttesa1);
 		
-		Coordinate punto= new Coordinate(10,10);
+/*		Coordinate punto= new Coordinate(10,10);
 		IPuntoDeposito p= new Locker(punto,15);
 		
 		ArrayList<Locker>lockers = new ArrayList<>();
@@ -64,6 +69,8 @@ public class Execute {
 		s2.setPacco(p2);
 		s2.avvioSpedizione(u, lf, dest);
 		s2.confermaAvvioSpedizione(lf,q); //avvio spedizione con codiceQR errato
+*/		
 		
+		new MainController(new MainView());
 	}
 }

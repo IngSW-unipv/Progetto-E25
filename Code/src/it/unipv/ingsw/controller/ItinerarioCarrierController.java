@@ -59,21 +59,5 @@ public class ItinerarioCarrierController {
         }
     }
     
-    // Metodo main per avviare l'applicazione
-    public static void main(String[] args) {
-    	
-    	Carrier carrier = new Carrier(null);
-    	
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-            	
-            	ItinerarioCarrierView coordinateView = new ItinerarioCarrierView();
-                new ItinerarioCarrierController(coordinateView, carrier);
-                //System.out.println(carrier.getItinerario().getInizio().getLongitudine()+" "+carrier.getItinerario().getInizio().getLatitudine());
-                
-            }
-        });
-        
-        
-    }
+
 }

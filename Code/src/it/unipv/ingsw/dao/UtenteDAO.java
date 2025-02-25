@@ -71,14 +71,14 @@ public class UtenteDAO implements IUtenteDAO {
 		Utente result=null;
 				
 		try {
-			String query= "select * from utente where email = ? and password = ?";
+			String query= "select * from superuser natural join utente where email = ? and password = ?";
 			
 			st1=conn.prepareStatement(query);
 			st1.setString(1, mail);
 			st1.setString(2, password);
 			rs1=st1.executeQuery();
 			if(rs1.next()) {
-				result= new Utente(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4),rs1.getString(5),rs1.getString(6),rs1.getString(7),rs1.getString(8));
+				result= new Utente(rs1.getString("email"),rs1.getString("password"),rs1.getString("nome"), rs1.getString("cognome"),rs1.getString("dataNascita"),rs1.getString("numeroTelefono"),rs1.getString("indirizzoCivico"),rs1.getString("fotoDocumento"));
 			}
 			
 		} catch  (Exception e) { 
@@ -168,16 +168,10 @@ public class UtenteDAO implements IUtenteDAO {
 	
 	public static void main(String[] args) {
 		UtenteDAO u=new UtenteDAO();
-		ArrayList<Utente> result = u.selectAll();
-		for (Utente u2 : result)
-            System.out.println(u2.toString());
-		//String mail, String password,String nome, String cognome, String dataNascita,String numeroTelefono, String indirizzoCivico, Blob fotoDocumento
-		Utente u1=new Utente("user1@example.com","newPsw","newNome", "newCognome", "newDataNascita", "newTelefono", "newIndirizzo",result.get(0).getFotoDocumento());
-		System.out.println(u.aggiornamentoUtente(u1));
-		ArrayList<Utente> result1 = u.selectAll();
-		for (Utente u2 : result1)
-            System.out.println(u2.toString());
-		//commento
+		Utente result = u.getUtenteByEmailPassword("email","pwd");
+		
+        System.out.println(result.toString());
+		
 		
 	}
 }

@@ -2,7 +2,9 @@ package it.unipv.ingsw.model.spedizione;
 
 import java.sql.Blob;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
@@ -34,6 +36,61 @@ public class GestoreSpedizioni {
 		//assegno al carrier tutte le spedizioni compatibili con il suo itinerario
 		carrier.assegnaSpedizioni(spedizioniCompatibili);
 		
+	}
+	
+	public void ritiraPacco(Spedizione spedizione, boolean isRitiro) {
+		if (isRitiro) {
+			spedizione.setStatoSpedizione("Consegnato");
+			System.out.println("Il pacco è stato ritirato dal destinatario. Stato aggiornato a 'Consegnato'.");
+		} else {
+			System.out.println("Errore: Il pacco non è stato ritirato dal destinatario.");
+		}
+	}
+	
+	public void depositaPacco(Spedizione spedizione, boolean isMittenteDeposita) {
+		if (isMittenteDeposita) {
+			//aggiorna lo stato a 'In attesa'
+			spedizione.setStatoSpedizione("In attesa");
+			System.out.println("Il pacco è stato depositato dal mittente nel locker ed è in attesa per il ritiro");
+		} else {
+			System.out.println("Errore: Il pacco non è stato deposito dal mittente");
+		}
+	}
+	
+	public void verificaTempoDeposito(Spedizione spedizione, Date dataDeposito, boolean isRitiro) {	
+		try {
+			//verifica quanti gg sono passati dal deposito
+			//Date dataDeposito = this.getDataDeposito();
+			if (dataDeposito != null) {
+				long diffInMillies = Math.abs(new Date().getTime() - dataDeposito.getTime());
+				long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+				
+				//controlla se sono passati più di 3gg dal deposito
+				if(diffInDays > 3 && !isRitiro) {
+				//pacco reconsegnato al mittente
+				spedizione.setStatoSpedizione("Pacco riconsengato al mittente.");
+				System.out.println("Il pacco non è stato ritirato in tempo. Stato aggiornato a 'Riconsegnato al mittente'.");
+				spedizione.notifyObservers();
+				}
+			}
+		} catch (Exception e) {
+			//per esempio dataDeposito è 0. il calcolo è gestito da una libreria di java
+			System.out.println("Errore nel calcolo del tempo di deposito: " + e.getMessage());
+			System.out.println("Il pacco non è stato depositato entro 3gg. \nStato aggiornato a 'Pacco smarrito'."); // il corriere non ha depositato il pacco entro 3gg <= dataDeposito = 0
+			spedizione.setStatoSpedizione("Pacco Smarrito");
+		}
+	}
+	
+	public void aggiornaStatoSpedizione(Spedizione spedizione, boolean isRitiro, boolean isPresaInCarico) {
+		//pacco ritirato dal destinatario
+		if (isRitiro) {
+			spedizione.setStatoSpedizione("Consegnato");
+			System.out.println("Il pacco è stato ritirato.\nStato aggiornato a 'Consegna'.");
+		} else {
+			//pacco depositato dal carrier
+			spedizione.setStatoSpedizione("In attesa");
+			System.out.println("Il pacco è stato depositato nel locker ed è in attesa per il ritiro. \nStato aggiornato a 'In attesa'.");
+		}
 	}
 	
 	

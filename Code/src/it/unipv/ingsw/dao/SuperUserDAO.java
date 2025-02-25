@@ -196,7 +196,7 @@ public class SuperUserDAO implements ISuperUserDAO{
 		try {
 			String query=" insert into admin (matricola,email) values (?,?)";
 			st1 = conn.prepareStatement(query);
-			st1.setInt(1, ad.getIdAdmin());
+			st1.setInt(1, ad.getMatricola());
 			st1.setString(2, ad.getMail());
 			st1.executeUpdate();
 			

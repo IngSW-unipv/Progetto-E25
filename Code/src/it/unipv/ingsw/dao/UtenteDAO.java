@@ -89,38 +89,37 @@ public class UtenteDAO implements IUtenteDAO {
 		return result;
 	}
 	
-	public boolean aggiornamentoUtente(Utente u) {
+	public Utente aggiornamentoUtente(Utente utenteCorrente, String password,String nome,String cognome,String numeroTelefono,String dataNascita,String indirizzoCivico,String fotoDocumento){
 	    conn = DBConnection.startConnection(conn);
 	    PreparedStatement st1, st2;
-	    boolean esito = true;
+	    Utente esito = null;
 
 	    try {
 	        // Fase 1: Verifica se l'utente esiste
 	        String query = "SELECT id FROM `ShipUp`.`utente` WHERE `email` = ?";
 	        st1 = conn.prepareStatement(query);
-	        st1.setString(1, u.getMail());
+	        st1.setString(1, utenteCorrente.getMail()); //u.getMail()
 	        ResultSet rs = st1.executeQuery();
 
 	        // Verifica se l'utente esiste
 	        if (!rs.next()) {
 	            // Se non c'è l'utente, ritorna false
-	            esito = false;
+	            esito = null;
 	        } else {
 	            // Fase 2: Esegui l'aggiornamento dei dati dell'utente
-	            String query1 = "UPDATE `ShipUp`.`utente` SET `email` = ?, `nome` = ?, `cognome` = ?, "
+	            String query1 = "UPDATE `ShipUp`.`utente` SET `nome` = ?, `cognome` = ?, "
 	                    + "`dataNascita` = ?, `numeroTelefono` = ?, `indirizzoCivico` = ?, "
 	                    + "`fotoDocumento` = ?, `statoProfilo` = ? WHERE `id` = ?";
 
 	            st2 = conn.prepareStatement(query1);
-	            st2.setString(1, u.getMail());
-	            st2.setString(2, u.getNome());
-	            st2.setString(3, u.getCognome());
-	            st2.setObject(4, u.getDataNascita());  // Usa setObject per LocalDate
-	            st2.setString(5, u.getNumeroTelefono());
-	            st2.setString(6, u.getIndirizzoCivico());
-	            st2.setObject(7, u.getFotoDocumento()); // Se è un oggetto, altrimenti usa setString o altro metodo
-	            st2.setBoolean(8, u.getStatoProfilo());  // Assumendo che sia un booleano
-	            st2.setInt(9, rs.getInt("id"));
+	            st2.setString(1, nome);
+	            st2.setString(2, cognome);
+	            st2.setString(3, dataNascita);  
+	            st2.setString(4, numeroTelefono);
+	            st2.setString(5, indirizzoCivico);
+	            st2.setString(6, fotoDocumento); // Se è un oggetto, altrimenti usa setString o altro metodo
+	            st2.setBoolean(7, true);  // Assumendo che sia un booleano
+	            st2.setInt(8, rs.getInt("id"));
 	            
 
 	            st2.executeUpdate();
@@ -128,7 +127,7 @@ public class UtenteDAO implements IUtenteDAO {
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        esito = false;
+	        esito = null;
 	    } finally {
 	    	DBConnection.closeConnection(conn); // Assicurati di chiudere sempre la connessione
 	    }

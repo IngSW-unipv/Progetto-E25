@@ -44,6 +44,11 @@ public class Utente extends ASuperUser implements Subject{
 		super(mail);
 	}
 	
+	//utente non registrato
+		public Utente(String mail,String password) {
+			super(mail,password);
+		}
+	
 	
 	//getter
 	public Utente() {

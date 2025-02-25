@@ -86,6 +86,10 @@ public class Spedizione {
 		this.shippable = shippable;
 	}
 	
+	public IShippable getPacco() {
+		return shippable;
+	}
+	
 	public void registraDeposito(Date data) {
 		this.dataDeposito = data;
 	}
@@ -227,6 +231,7 @@ public class Spedizione {
 //		this.itinerario = itinerario;
 //	}
 
+	/*
 	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario) { 
 		
 		if(shippable==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
@@ -250,7 +255,7 @@ public class Spedizione {
 	}
 	
 	public void confermaAvvioSpedizione(IPuntoDeposito punto_deposito_partenza, QRcode codice) {
-		boolean controllo_QRcode=punto_deposito_partenza.checkQR(codice.getQRcode());
+		boolean controllo_QRcode=punto_deposito_partenza.checkQR(codice.getQRcode);
 		
 		if(controllo_QRcode==false) {
 			System.out.printf("La spedizione non è avviata\n");
@@ -262,7 +267,7 @@ public class Spedizione {
 			System.out.printf("Data deposito: "+ dataDeposito+"\n");
 		}
 		
-	}
+	}*/
 
 	
 	public void presaInCarico(Utente utente, Itinerario tratta) {

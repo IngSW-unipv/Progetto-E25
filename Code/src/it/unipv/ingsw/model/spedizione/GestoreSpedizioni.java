@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
+import it.unipv.ingsw.model.utenze.ASuperUser;
 import it.unipv.ingsw.model.utenze.Carrier;
 import it.unipv.ingsw.model.utenze.Utente;
 
@@ -24,6 +25,29 @@ public class GestoreSpedizioni {
 	public void dividiItinerario(Spedizione s) {
 		
 		s.setItinerarioMancante(matchingService.itinerarioDivider(new Itinerario(s.getPartenza().getPosizione(), s.getDestinazione().getPosizione())));
+	}
+	
+	//metodo avvio spedizione
+	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario, Spedizione spedizione) { 
+		
+		if(spedizione.getPacco()==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
+		
+		spedizione.getCodice();
+		boolean controllo_disponibilita=punto_deposito_partenza.checkDisponibilita(spedizione.getPacco(), spedizione.getCodice().getQRcode());
+		
+		if(controllo_disponibilita==false) {
+			System.out.printf("Nel locker scelto non c'è disponibilità\n");
+		}else {
+			// if(pagamento.effettuaPagamento()=true)
+			// forse modifico lo stato qr dopo il pagamento
+			
+			spedizione.setStatoSpedizione("In attesa di consegna pacco in locker");
+			Date data_inizio=new Date();
+		//	dataInizioSpedizione=data_inizio; //setto la data di inizio spedizione
+		//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
+			System.out.printf("Finito avvioSpedizione\n");
+		}
+
 	}
 	
 	

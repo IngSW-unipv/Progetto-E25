@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -33,6 +35,7 @@ import it.unipv.ingsw.view.UtenteView;
 public class ProfiloUtenteController {
 
 	private Utente model;
+	Carrier carrier;
 	private UtenteView view; 
 	private ModificaProfiloView modificaProfiloView;
 	private AvviaSpedizioneView avviaSpedizioneView;
@@ -132,8 +135,9 @@ public class ProfiloUtenteController {
 				manageAction();
 			}
 			private void manageAction() {
-				
+//				System.out.println("-4");
 				itinerarioCarrierView = new ItinerarioCarrierView();
+//				System.out.println("-3");
 				okPrendiInCaricoSpedizioneButton();
 			}
 		};
@@ -143,20 +147,26 @@ public class ProfiloUtenteController {
 	private void okPrendiInCaricoSpedizioneButton() {
 		ActionListener okPrendiInCaricoListener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				manageAction();
 			}
 			private void manageAction() {
-				MatchingService m = new MatchingService();
-				GestoreSpedizioni gs = new GestoreSpedizioni(m);
+				
 				try {
-					// AVVIA SPEDIZIONE
-					Carrier carrier = (Carrier)model;
-					gs.presaInCaricoSpedizione(carrier, null);
+
+					carrier = new Carrier(model.getMail(), model.getPassword(), model.getNome(), model.getCognome(), model.getNumeroTelefono(), model.getIndirizzoCivico(), model.getDataNascita(), model.getFotoDocumento());
+					
 					itinerarioCarrierView.setVisible(false);
+
 					view.setVisible(false);
-					new ItinerarioCarrierController(new ItinerarioCarrierView(), carrier);
+
+					//new ItinerarioCarrierController(new ItinerarioCarrierView(), carrier);
+
+					new ProfiloUtenteController(model, view);
 				} catch (Exception e) {
+					System.out.println(e.getMessage());
 					JOptionPane.showMessageDialog(itinerarioCarrierView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+					
 				}
 			
 			}

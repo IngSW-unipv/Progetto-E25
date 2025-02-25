@@ -3,12 +3,18 @@ package it.unipv.ingsw.controller;
 import javax.swing.*;
 
 import it.unipv.ingsw.model.spedizione.Coordinate;
+import it.unipv.ingsw.model.spedizione.GestoreSpedizioni;
 import it.unipv.ingsw.model.spedizione.Itinerario;
+import it.unipv.ingsw.model.spedizione.MatchingService;
+import it.unipv.ingsw.model.spedizione.Spedizione;
 import it.unipv.ingsw.model.utenze.Carrier;
+import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.view.ItinerarioCarrierView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItinerarioCarrierController {
 
@@ -20,11 +26,13 @@ public class ItinerarioCarrierController {
         this.view = view;
         this.carrier = carrier;
         initController();
+        System.out.println("costruttore");
     }
     
     private void initController() {
+    	System.out.println("ggggggggggggggg");
         // Registrazione dell'ActionListener sul bottone "Invia"
-        view.getSendButton().addActionListener(new ActionListener() {
+        view.getSendButton().addActionListener(new ActionListener() {	
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleSendButton();
@@ -34,6 +42,8 @@ public class ItinerarioCarrierController {
     
     private void handleSendButton() {
         try {
+        	
+        	System.out.println("ffffffffffffff");
             //prendo e converto i valori inseriti nei campi della view
             double startX = Double.parseDouble(view.getStartXField().getText());
             double startY = Double.parseDouble(view.getStartYField().getText());
@@ -44,12 +54,21 @@ public class ItinerarioCarrierController {
             System.out.println("Punto di partenza: (" + startX + ", " + startY + ")");
             System.out.println("Punto di arrivo: (" + endX + ", " + endY + ")");
             
+            MatchingService m = new MatchingService();
+			GestoreSpedizioni gs = new GestoreSpedizioni(m);
+			
+			List<Spedizione> lista = new ArrayList<Spedizione>();
+			Spedizione s = new Spedizione();
+			lista.add(s);
+			
             //passo dati al modello 
             it = new Itinerario(new Coordinate(startX,startY), new Coordinate(endX,endY));
-            carrier.setItinerario(it);
             
-            System.out.println(carrier.getItinerario());
+           //carrier.setItinerario(it);
             
+           // System.out.println(carrier.getItinerario());
+           gs.presaInCaricoSpedizione(carrier, lista);
+           
         } catch (NumberFormatException ex) {
             // Se l'input non è numerico, mostra un messaggio di errore
             JOptionPane.showMessageDialog(view, 

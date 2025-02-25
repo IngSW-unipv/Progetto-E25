@@ -4,6 +4,7 @@ import it.unipv.ingsw.model.Observer;
 import it.unipv.ingsw.model.spedizione.Spedizione;
 
 public class Admin extends ASuperUser implements Observer<Utente>{
+	private int matricola;
 	//costruttore
 	public Admin(String mail, String password) {
 		super(mail, password);
@@ -33,6 +34,14 @@ public class Admin extends ASuperUser implements Observer<Utente>{
 
 	public boolean disattivaAccount(Utente utente) {
 		return true;
+	}
+
+	public int getMatricola() {
+		return matricola;
+	}
+
+	public void setMatricola(int matricola) {
+		this.matricola = matricola;
 	}
 
 

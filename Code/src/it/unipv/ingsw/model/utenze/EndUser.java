@@ -74,6 +74,12 @@ public class EndUser extends Utente implements Observer{
     // metodo che simula l'invio della mail, mandata sia al destinatario sia al mittente
     public void inviaMail(Spedizione spedizione) {
 		System.out.println("Invio mail a: " + getMail() + "con lo stato della spedizione: " + spedizione.getStatoSpedizione());
+	}
+
+	@Override
+	public void update(Object dato) {
+		// TODO Auto-generated method stub
+		
 	} 
     
 }

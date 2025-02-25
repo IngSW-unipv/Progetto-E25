@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
+import it.unipv.ingsw.dao.UtenteDAO;
 import it.unipv.ingsw.exceptions.PaymentException;
 import it.unipv.ingsw.model.spedizione.GestoreSpedizioni;
 import it.unipv.ingsw.model.spedizione.MatchingService;
@@ -39,10 +40,12 @@ public class ProfiloUtenteController {
 	private ModificaProfiloView modificaProfiloView;
 	private AvviaSpedizioneView avviaSpedizioneView;
 	private ItinerarioCarrierView itinerarioCarrierView;
+	private UtenteDAO utenteDAO;
 	
 	public ProfiloUtenteController(Utente model, UtenteView view) {
 		this.model=model;
 		this.view=view;
+		utenteDAO=new UtenteDAO();
 		modificaProfiloInit();
 		avvioSpedizioneInit();
 		prendiInCaricoSpedizioneInit();
@@ -68,12 +71,19 @@ public class ProfiloUtenteController {
 				manageAction();
 			}
 			private void manageAction() {
-				Utente utente = new Utente(); //OK
+	            String password = String.valueOf(modificaProfiloView.getPasswordField().getPassword());
+	            String nome = modificaProfiloView.getNomeField().getText();
+	            String cognome = modificaProfiloView.getCognomeField().getText();
+	            String numeroTelefono = modificaProfiloView.getNumeroTelefonoField().getText();
+	            String dataNascita = modificaProfiloView.getDataNascitaField().getText();
+	            String indirizzoCivico = modificaProfiloView.getIndirizzoCivicoField().getText();
+	            String fotoDocumento = modificaProfiloView.getFotoDocumentoField().getText();
 				try {
-					utente.modificaProfilo(modificaProfiloView.getMailField().getText(), String.valueOf(modificaProfiloView.getPasswordField().getPassword()), modificaProfiloView.getNomeField().getText(),modificaProfiloView.getCognomeField().getText(), modificaProfiloView.getNumeroTelefonoField().getText(), modificaProfiloView.getDataNascitaField().getText(), modificaProfiloView.getIndirizzoCivicoField().getText(), modificaProfiloView.getFotoDocumentoField().getText());
+					Utente utente;
+					utente= utenteDAO.aggiornamentoUtente(model, password,nome,cognome,numeroTelefono,dataNascita,indirizzoCivico,fotoDocumento);
 					modificaProfiloView.setVisible(false);
 					view.setVisible(false);
-					//new ProfiloUtenteController(new Utente(), new UtenteView());	//magari schermata d'attesa convalida profilo?
+					new ProfiloUtenteController(utente, new UtenteView());	//magari schermata d'attesa convalida profilo?
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(modificaProfiloView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}

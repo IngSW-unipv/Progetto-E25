@@ -10,10 +10,12 @@ public class AvviaSpedizioneView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel formPanel;
 	private JTextField mailDestField;
-	private JTextField lockerDestinazioneField;
+	private JTextField lockerDestinazioneXField;
+	private JTextField lockerDestinazioneYField;
 	private JTextField coperturaField;
 	private JTextField pesoPaccoField;
-	private JTextField lockerInizioField;
+	private JTextField lockerInizioXField;
+	private JTextField lockerInizioYField;
 	private JComboBox<String> dimPaccoField;
 	
 	private JButton confirmButton;
@@ -48,26 +50,32 @@ public class AvviaSpedizioneView extends JFrame {
 	    mailDestField = new JTextField();
 	    formPanel.add(mailDestField);
 
+	    formPanel.add(new JLabel("  Locker di partenza: (X)"));
+	    lockerInizioXField = new JTextField();
+	    formPanel.add(lockerInizioXField);
 
-	    formPanel.add(new JLabel("  Locker inizio:"));
-	    lockerInizioField = new JTextField();
-	    formPanel.add(lockerInizioField);
-
+	    formPanel.add(new JLabel("  Locker di partenza: (Y)"));
+	    lockerInizioYField = new JTextField();
+	    formPanel.add(lockerInizioYField);
 	    
-	    formPanel.add(new JLabel("  Destinazione(locker):"));
-	    lockerDestinazioneField = new JTextField();
-	    formPanel.add(lockerDestinazioneField);
+	    formPanel.add(new JLabel("  Destinazione: (X)"));
+	    lockerDestinazioneXField = new JTextField();
+	    formPanel.add(lockerDestinazioneXField);
+	    
+	    formPanel.add(new JLabel("  Destinazione: (Y)"));
+	    lockerDestinazioneYField = new JTextField();
+	    formPanel.add(lockerDestinazioneYField);
 	    
 	    formPanel.add(new JLabel("  Dimensione del pacco:"));
 	    String[] sizeOptions = { "S", "M", "L", "XL" };
         dimPaccoField = new JComboBox<>(sizeOptions);;
         formPanel.add(dimPaccoField);  
 	    
-	    formPanel.add(new JLabel(" Peso del pacco:"));
+	    formPanel.add(new JLabel(" Peso del pacco: (kg)"));
 	    pesoPaccoField = new JTextField();
 	    formPanel.add(pesoPaccoField);
 	    
-	    formPanel.add(new JLabel("  Eventuale copertura assicurativa:"));
+	    formPanel.add(new JLabel("  Eventuale copertura assicurativa: (€)"));
 	    coperturaField = new JTextField();
 	    formPanel.add(coperturaField);
 	    
@@ -95,15 +103,22 @@ public class AvviaSpedizioneView extends JFrame {
 	}
 
 
-	public JTextField getLockerDestinazioneField() {
-		return lockerDestinazioneField;
+	public JTextField getLockerDestinazioneXField() {
+		return lockerDestinazioneXField;
 	}
 
 
-	public void setLockerDestinazioneField(JTextField lockerDestinazioneField) {
-		this.lockerDestinazioneField = lockerDestinazioneField;
+	public void setLockerDestinazioneXField(JTextField lockerDestinazioneField) {
+		this.lockerDestinazioneXField = lockerDestinazioneField;
 	}
 
+	public JTextField getLockerDestinazioneYField() {
+		return lockerDestinazioneYField;
+	}
+	
+	public void setLockerDestinazioneYField(JTextField lockerDestinazioneYField) {
+		this.lockerDestinazioneYField = lockerDestinazioneYField;
+	}
 
 	public JTextField getCoperturaField() {
 		return coperturaField;
@@ -130,15 +145,23 @@ public class AvviaSpedizioneView extends JFrame {
 	}
 	
 	
-	public JTextField getLockerInizioField() {
-		return lockerInizioField;
+	public JTextField getLockerInizioXField() {
+		return lockerInizioXField;
 	}
 
 
-	public void setLockerInizioField(JTextField lockerInizioField) {
-		this.lockerInizioField = lockerInizioField;
+	public void setLockerInizioXField(JTextField lockerInizioField) {
+		this.lockerInizioXField = lockerInizioField;
 	}
 	
+	public JTextField getLockerInizioYField() {
+		return lockerInizioYField;
+	}
+
+	public void setLockerInizioYField(JTextField lockerInizioYField) {
+		this.lockerInizioYField = lockerInizioYField;
+	}
+
 	public JTextField getPesoPaccoField() {
 		return pesoPaccoField;
 	}

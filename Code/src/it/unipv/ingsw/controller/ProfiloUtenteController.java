@@ -116,7 +116,7 @@ public class ProfiloUtenteController {
 					sp.avvioSpedizione(model, null, model);
 					model.setVisible(false);
 					view.setVisible(false);
-					//new ProfiloUtenteController(new Utente(), new UtenteView());	//ritorno a schermata del profilo
+					//new ProfiloUtenteController(new ItinerarioCarrierView(),model);	//ritorno a schermata del profilo
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(model, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}

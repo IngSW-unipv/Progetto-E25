@@ -12,7 +12,6 @@ public class Carrier extends Utente{
 	private List<Spedizione> spedizioniAssegnate;
 	
 	//costruttore
-	public Carrier(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico,String dataNascita, String fotoDocumento, Itinerario itinerario) {
 	public Carrier(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico,String dataNascita, String fotoDocumento,Itinerario itinerario) {
 		super(mail, password, nome, cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
 		this.itinerario = itinerario;

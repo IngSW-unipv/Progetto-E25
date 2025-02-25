@@ -75,16 +75,15 @@ public class MainController {
 			private void manageAction() {
 				String email = loginUtenteView.getEmailField().getText();
 	            String password = String.valueOf(loginUtenteView.getPasswordField().getPassword());
-				//ASuperUser utente = new Utente(); //OK
 				try {
-					//utente.loginUtente(loginUtenteView.getEmailField().getText(), String.valueOf(loginUtenteView.getPasswordField().getPassword()));
 					Utente utente;
 					utente = utenteDAO.getUtenteByEmailPassword(email, password);
+					System.out.println(utente.toString());
 					loginUtenteView.setVisible(false);
 					mainView.setVisible(false);
 					new ProfiloUtenteController(utente, new UtenteView());
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(loginUtenteView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(loginUtenteView, "Campi errati", "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 			
 			}

@@ -14,12 +14,12 @@ public class EndUser extends Utente implements Observer{
 	private String userType; //serve per l'invio della mail al destinatario ed al carrier
 
 	//costruttore
-	public EndUser(String mail, String password, String nome, String cognome,String numeroTelefono, String indirizzoCivico,String dataNascita, Blob fotoDocumento) {
+	public EndUser(String mail, String password, String nome, String cognome,String numeroTelefono, String indirizzoCivico,String dataNascita, String fotoDocumento) {
 		super(mail, password, nome, cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
 	}
 	
 	//nuovo costruttore che accetta userType
-	public EndUser(String mail, String password, String nome, String cognome,String numeroTelefono, String indirizzoCivico,String dataNascita, Blob fotoDocumento, String userType) {
+	public EndUser(String mail, String password, String nome, String cognome,String numeroTelefono, String indirizzoCivico,String dataNascita, String fotoDocumento, String userType) {
 		super(mail, password, nome, cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
 		this.userType = userType;
 	}

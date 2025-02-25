@@ -76,7 +76,7 @@ public abstract class ASuperUser {
         }
     }
     
-	/*public void loginAdmin (String id) throws WrongAdminException,EmptyFieldException{
+	public void loginAdmin (String id) throws WrongAdminException,EmptyFieldException, WrongFieldException{
 		campiAdminCheck(id);	
 		ASuperUser su = Singleton.getInstance().getSuperUserDAO().getAdminById(id);
 		if(su==null) {
@@ -85,7 +85,7 @@ public abstract class ASuperUser {
 		passwordAdminCheck(mail,password);
 		Singleton.getInstance().setUtenteLoggato(su);
 		utenteLoggato = true;
-	}	*/
+	}
 	
 	private void campiAdminCheck(String id) throws EmptyFieldException {
 		if(id.isEmpty()==true) {

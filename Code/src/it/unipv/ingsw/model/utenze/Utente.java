@@ -1,20 +1,22 @@
 package it.unipv.ingsw.model.utenze;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.swing.JOptionPane;
+
 import it.unipv.ingsw.exceptions.AccountAlreadyExistsException;
 import it.unipv.ingsw.exceptions.EmptyFieldException;
+import it.unipv.ingsw.exceptions.WrongFieldException;
 import it.unipv.ingsw.model.Singleton;
 import it.unipv.ingsw.model.Subject;
 
 public class Utente extends ASuperUser implements Subject{
 	private String nome,cognome,numeroTelefono,indirizzoCivico,dataNascita;
-	private Blob fotoDocumento;
+	private String fotoDocumento;
 	private Saldo saldo;
 	private boolean statoProfilo;
 	//map di admin
@@ -25,7 +27,7 @@ public class Utente extends ASuperUser implements Subject{
 	private String formatoIndirizzo = "^[A-Za-z0-9\\s,.-]+\\s\\d{1,5}\\s[A-Za-z\\s]+$";
 	
 	//costruttore
-	public Utente(String mail, String password,String nome, String cognome, String dataNascita,String numeroTelefono, String indirizzoCivico, Blob fotoDocumento) {
+	public Utente(String mail, String password,String nome, String cognome, String dataNascita,String numeroTelefono, String indirizzoCivico, String fotoDocumento) {
 		super(mail,password);
 		this.nome = nome;
 		this.cognome = cognome;
@@ -69,7 +71,7 @@ public class Utente extends ASuperUser implements Subject{
 		return dataNascita;
 	}
 
-	public Blob getFotoDocumento() {
+	public String getFotoDocumento() {
 		return fotoDocumento;
 	}
 
@@ -107,66 +109,49 @@ public class Utente extends ASuperUser implements Subject{
 		this.dataNascita = dataNascita;
 	}
 
-	public void setFotoDocumento(Blob fotoDocumento) {
+	public void setFotoDocumento(String fotoDocumento) {
 		this.fotoDocumento = fotoDocumento;
 	}	
 
 	public void setStatoProfilo(boolean statoProfilo) {
 		this.statoProfilo = statoProfilo;
 	}
-	
-	private boolean isPngImage(Blob imageBlob) throws SQLException, IOException {
-        // Leggi i byte dal BLOB
-        byte[] imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
 
-        // I primi 8 byte di un file PNG sono univoci
-        byte[] pngMagicBytes = { (byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47,
-                                 (byte) 0x0D, (byte) 0x0A, (byte) 0x1A, (byte) 0x0A };
-
-        // Confronta i primi 8 byte del BLOB con i byte del PNG
-        for (int i = 0; i < pngMagicBytes.length; i++) {
-            if (imageBytes[i] != pngMagicBytes[i]) {
-                return false; 
-            }
-        }
-        return true; //PNG
-    }
-
-	public Utente registrazione(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, Blob fotoDocumento) throws SQLException, IOException, AccountAlreadyExistsException, EmptyFieldException  {
-		fieldCheck();
-        boolean result = false;
+	public Utente registrazione(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, String fotoDocumento) throws SQLException, IOException, AccountAlreadyExistsException, EmptyFieldException, WrongFieldException  {
+		fieldCheck(mail,password,nome,cognome,numeroTelefono,indirizzoCivico,dataNascita,fotoDocumento);
+		Utente newUtente=new Utente(mail, password, nome,  cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
+        //boolean result = false;
         if (Singleton.getInstance().getSuperUserDAO().getUtenteByEmail((mail)) == null) {
-        	//Singleton.getInstance().getSuperUserDAO().insertUtente();
-            result = true;
+        	Singleton.getInstance().getSuperUserDAO().insertUtente(newUtente);
+        	System.out.println("Registrazione completata con successo!");
+        	JOptionPane.showMessageDialog(null, "Registrazione completata con successo!", "Benvenuto in ShipUp!", JOptionPane.INFORMATION_MESSAGE);
+            //result = true;
         } else {
             throw new AccountAlreadyExistsException();
         }
-        //return result;
 		if(super.isLoggedIn()){	
 			System.out.println("Utente già registrato. Effettua l'accesso!");
+			 JOptionPane.showMessageDialog(null,"Utente già registrato. Effettua l'accesso!","Errore",JOptionPane.ERROR_MESSAGE);
 			return null;
-		}	
-        Utente nuovo_utente = new Utente(mail, password, nome, cognome, dataNascita, indirizzoCivico, numeroTelefono, fotoDocumento);
-        System.out.println("Registrazione completata con successo!");
-        //query per salvare i dati nel DB
-        //query in cui si salvano i dati nel DB
-        return nuovo_utente;
+		}
+        return newUtente;
     }   
 	
-	private void fieldCheck() throws EmptyFieldException, SQLException, IOException {
-		if (super.getMail().isEmpty() || this.nome.isEmpty() || this.cognome.isEmpty()
-				|| String.valueOf(super.getPassword()).equals("") || this.dataNascita.isEmpty() || this.numeroTelefono.isEmpty() || this.indirizzoCivico.isEmpty() || this.fotoDocumento==null )
+	 public static boolean isPng(String filePath) {
+	        return filePath != null && filePath.toLowerCase().endsWith(".png");
+	 }
+	 
+	private void fieldCheck(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, String fotoDocumento) throws EmptyFieldException, SQLException, IOException, WrongFieldException {
+		if ( mail.isEmpty() || nome.isEmpty() || cognome.isEmpty() || dataNascita.isEmpty() || numeroTelefono.isEmpty() || indirizzoCivico.isEmpty()|| password.equals("") ) //
 		{
-			System.out.println("Tutti i campi sono obbligatori");
 			throw new EmptyFieldException();
 		}
-		if(!nome.matches(formatoNome) || !cognome.matches(formatoNome) || !super.getMail().matches(formatoMail) || !super.getPassword().matches(formatoPassword) || !numeroTelefono.matches(formatoNumero) || !indirizzoCivico.matches(formatoIndirizzo) || !isPngImage(fotoDocumento)) { 
-        	System.out.println("Uno dei campi non rispetta le regole");
-        	//THROWS
-		}	
+		//if(!nome.matches(formatoNome) || !cognome.matches(formatoNome) || !mail.matches(formatoMail) || !password.matches(formatoPassword) || !numeroTelefono.matches(formatoNumero) || !indirizzoCivico.matches(formatoIndirizzo) || !isPng(fotoDocumento) ) { 
+        	//throw new WrongFieldException();
+		//}	
 	}
 	
-	public Utente modificaProfilo(String mail,String password,String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, Blob fotoDocumento) { 
+	public Utente modificaProfilo(String mail,String password,String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, String fotoDocumento) { 
 		if(!super.isLoggedIn() || !statoProfilo) {
 		Utente utenteInAttesa = new Utente(); //parametri passati: null,ferri,34637738,null,...
 		if(mail != null && mail.matches(formatoMail) && !super.getMail().equals(mail)) 
@@ -184,13 +169,8 @@ public class Utente extends ASuperUser implements Subject{
 		if(dataNascita != null && !this.dataNascita.equals(dataNascita)) { 
 			utenteInAttesa.setDataNascita(dataNascita);
 		}
-		try {
-			if(fotoDocumento != null && isPngImage(fotoDocumento) && !this.fotoDocumento.equals(fotoDocumento))  
-				utenteInAttesa.setFotoDocumento(fotoDocumento);
-		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		if(fotoDocumento != null && !this.fotoDocumento.equals(fotoDocumento))  //&& isPngImage(fotoDocumento)
+			utenteInAttesa.setFotoDocumento(fotoDocumento);
 		//notify()
 		return utenteInAttesa; //utente fittizio con modifiche
 		}

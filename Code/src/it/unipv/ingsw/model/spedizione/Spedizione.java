@@ -72,6 +72,10 @@ public class Spedizione {
 		
 	}
 	
+	//costruttore default
+	public Spedizione() {
+		
+	}
 	
 	
 	

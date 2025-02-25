@@ -83,7 +83,7 @@ public class Locker implements IPuntoDeposito{
 		//verifica se il codice esiste nella mappa dei QR che il locker aspetta
 		if(!mappaQRcode.containsKey(codiceQR)) {
 			System.out.println("Codice QR non valido.");
-			return false; //il codice non è valido
+			return false; //il codice non è valido e non si esegue il resto del metodo
 		}
 		
 		Integer spedizioneAssociata = mappaQRcode.get(codiceQR);

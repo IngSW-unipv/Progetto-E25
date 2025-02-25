@@ -76,7 +76,7 @@ public class GestoreSpedizioni {
 		} else {
 			System.out.println("Errore: Il pacco non è stato ritirato dal destinatario.");
 			}	 
-	}else {	
+		}else {	
 		System.out.println("Errore: Il codice QR non valido");
 			}
 	}

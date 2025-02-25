@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import it.unipv.ingsw.model.utenze.ASuperUser;
 import it.unipv.ingsw.model.utenze.Utente;
 
 import java.sql.Blob;
@@ -61,6 +63,30 @@ public class UtenteDAO implements IUtenteDAO {
 		DBConnection.closeConnection(conn);
 		return esito;
 
+	}
+	public Utente getUtenteByEmailPassword(String mail,String password) {
+		conn=DBConnection.startConnection(conn);
+		PreparedStatement st1;
+		ResultSet rs1;
+		Utente result=null;
+				
+		try {
+			String query= "select * from utente where email = ? and password = ?";
+			
+			st1=conn.prepareStatement(query);
+			st1.setString(1, mail);
+			st1.setString(2, password);
+			rs1=st1.executeQuery();
+			if(rs1.next()) {
+				result= new Utente(rs1.getString(1),rs1.getString(2), rs1.getString(3),rs1.getString(4),rs1.getString(5),rs1.getString(6),rs1.getString(7),rs1.getString(8));
+			}
+			
+		} catch  (Exception e) { 
+			e.printStackTrace();
+		} finally {
+	        DBConnection.closeConnection(conn); 
+	    }
+		return result;
 	}
 	
 	public boolean aggiornamentoUtente(Utente u) {

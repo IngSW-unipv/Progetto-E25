@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.JOptionPane;
+
+import it.unipv.ingsw.dao.UtenteDAO;
 import it.unipv.ingsw.exceptions.*;
 import it.unipv.ingsw.model.utenze.ASuperUser;
 import it.unipv.ingsw.model.utenze.Admin;
@@ -22,9 +24,11 @@ public class MainController {
 	LoginUtenteView loginUtenteView;
 	RegistrazioneView regView;
 	LoginAdminView loginAdminView;
+	UtenteDAO utenteDAO;
 	
 	public MainController(MainView mainView) {
 		this.mainView=mainView;
+		utenteDAO=new UtenteDAO();
 		utenteInit();
 		adminInit();
 		
@@ -69,12 +73,16 @@ public class MainController {
 				manageAction();
 			}
 			private void manageAction() {
-				ASuperUser utente = new Utente(); //OK
+				String email = loginUtenteView.getEmailField().getText();
+	            String password = String.valueOf(loginUtenteView.getPasswordField().getPassword());
+				//ASuperUser utente = new Utente(); //OK
 				try {
-					utente.loginUtente(loginUtenteView.getEmailField().getText(), String.valueOf(loginUtenteView.getPasswordField().getPassword()));
+					//utente.loginUtente(loginUtenteView.getEmailField().getText(), String.valueOf(loginUtenteView.getPasswordField().getPassword()));
+					Utente utente;
+					utente = utenteDAO.getUtenteByEmailPassword(email, password);
 					loginUtenteView.setVisible(false);
 					mainView.setVisible(false);
-					new ProfiloUtenteController(new Utente(), new UtenteView());	//non sicuro
+					new ProfiloUtenteController(utente, new UtenteView());
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(loginUtenteView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}

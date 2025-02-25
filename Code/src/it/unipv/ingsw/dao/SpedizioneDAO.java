@@ -1,6 +1,7 @@
 package it.unipv.ingsw.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -66,9 +67,31 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		
 	}
 
+	//carica nel database i dati relativi alla spedizione appena avviata
 	@Override
 	public void addSpedizione(Spedizione spedizione) {
+		conn = DBConnection.startConnection(conn);
+		PreparedStatement st;
 		
+		try {
+			String query1= "INSERT INTO 'spedizione' ('statoSpedizione', 'dataAvvio', 'dataFine', 'mittente', 'destinatario', 'lockerIniziale', 'lockerFinale', 'assicurazione')";
+			st = conn.prepareStatement(query1);
+			
+			st.setString(1, spedizione.getStatoSpedizione());
+			st.setObject(2, spedizione.getDataInizio());
+			st.setObject(3, spedizione.getDataFine());
+			st.setObject(4, spedizione.getMittente()); //funge cosi?
+			st.setObject(5, spedizione.getDestinatario());
+//			st.setInt(6, spedizione.getPartenza().getPosizione()); //devo inserire il codice del locker?
+//			st.setInt(7, spedizione.getPartenza().getPosizione()); 
+			st.setInt(8, spedizione.getAssicurazione());
+			st.executeUpdate();
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		DBConnection.closeConnection(conn);
 		
 	}
 	

@@ -30,7 +30,8 @@ public class Spedizione {
 	private int assicurazione; //non sono sicuro
 	private IPuntoDeposito partenza;
 	private IPuntoDeposito destinazione;
-//	private IPuntoDeposito partenza;
+	private Date dataInizio;
+	private Date dataFine;
 	private Date dataDeposito;
 	private Date dataInizioSpedizione;
 	QRcode codice; //questo è il codice Qr
@@ -77,10 +78,26 @@ public class Spedizione {
 		
 	}
 	
+	public Mittente getMittente() {
+		return mittente;
+	}
+	
+	public void setMittente(Mittente mittente) {
+		this.mittente=mittente;
+	}
+	
+	public Destinatario getDestinatario() {
+		return destinatario;
+	}
+	
+	public void setDestinatario(Destinatario destinatario) {
+		this.destinatario=destinatario;
+	}
+	
+	
 	public QRcode getCodice() {
 		return codice;
 	}
-	
 	
 	public void setPacco(IShippable shippable) {
 		this.shippable = shippable;
@@ -88,6 +105,14 @@ public class Spedizione {
 	
 	public IShippable getPacco() {
 		return shippable;
+	}
+	
+	public void setAssicurazione(int assicurazione) {
+		this.assicurazione = assicurazione;
+	}
+	
+	public int getAssicurazione() {
+		return assicurazione;
 	}
 	
 	public void registraDeposito(Date data) {
@@ -101,6 +126,24 @@ public class Spedizione {
 	public String getStatoSpedizione() {
 		return statoSpedizione;
 	}
+	
+	public void setDataInizio(Date data) {
+		this.dataInizio=data;
+	}
+	
+	public Date getDataInizio() {
+		return dataInizio;
+	}
+	
+	public void setDataFine(Date data) {
+		this.dataFine=data;
+	}
+	
+	public Date getDataFine() {
+		return dataFine;
+	}
+	
+
 	
 //	public void aggiornaStatoSpedizione(boolean isRitiro, boolean isPresaInCarico) {
 //		//pacco ritirato dal destinatario

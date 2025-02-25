@@ -43,7 +43,7 @@ public class GestoreSpedizioni {
 			
 			spedizione.setStatoSpedizione("In attesa di consegna pacco in locker");
 			Date data_inizio=new Date();
-		//	dataInizioSpedizione=data_inizio; //setto la data di inizio spedizione
+			spedizione.setDataInizio(data_inizio);
 		//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
 			System.out.printf("Finito avvioSpedizione\n");
 		}

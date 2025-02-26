@@ -1,16 +1,16 @@
 package it.unipv.ingsw.model.spedizione;
 
 //per leggere dati da tastiera:
-import java.io.BufferedReader; 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.sql.Blob;
+//import java.io.BufferedReader; 
+//import java.io.IOException;
+//import java.io.InputStreamReader;
+//import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+//import java.util.concurrent.TimeUnit;
 //per controllare data di deposito
 import java.util.Date;
-import javax.xml.crypto.Data;
+//import javax.xml.crypto.Data;
 
 //per utilizzare package shippable
 import it.unipv.ingsw.model.spedizione.shippable.*;
@@ -18,7 +18,7 @@ import it.unipv.ingsw.model.utenze.*;
 import it.unipv.ingsw.model.Observer;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.*;
 
-import it.unipv.ingsw.model.transazioni.*;
+//import it.unipv.ingsw.model.transazioni.*;
 
 public class Spedizione {
 	
@@ -33,16 +33,17 @@ public class Spedizione {
 	private Date dataInizio;
 	private Date dataFine;
 	private Date dataDeposito;
-	private Date dataInizioSpedizione;
+//	private Date dataInizioSpedizione;
 	QRcode codice; //questo è il codice Qr
 	
+	private Itinerario itinerarioTot;
 	private MatchingService matchingService;
 	private List <Itinerario> itinerarioMancante; //i sottoitinerari che mancano fino alla fine della spedizione 
 	private Itinerario itinerarioCorrente; //itinerario che fornisco al carrier (FORSE NON VA QUI)
 	
 
 	private String statoSpedizione;
-	List <Observer<String>> observers = new ArrayList<>();
+	List <Observer<Spedizione>> observers = new ArrayList<>();
 	List <Locker> lockers = new ArrayList<>(); //lista dei locker associati alla spedizione
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito a, IPuntoDeposito b, MatchingService m, Date dataDeposito) { 
@@ -56,6 +57,8 @@ public class Spedizione {
 		this.partenza = a;
 		this.destinazione = b;
 		this.dataDeposito = null; //inizialmente nessuna data di deposito
+		this.codice = new QRcode();
+		this.codice.generaQRcode();
 	//	this.itinerario.setFine(destinazione.getPosizione());
 		
 		//matchingService = new MatchingService();
@@ -70,12 +73,30 @@ public class Spedizione {
 		this.shippable = shippable; 
 		this.partenza = a;
 		this.destinazione = b;
+		itinerarioTot = new Itinerario(a.getPosizione(),b.getPosizione());
 		
 	}
 	
 	//costruttore default
 	public Spedizione() {
 		
+	}
+	
+	
+	public Itinerario getItinerarioTot() {
+		return itinerarioTot;
+	}
+
+	public void setItinerarioTot(Itinerario itinerarioTot) {
+		this.itinerarioTot = itinerarioTot;
+	}
+
+	public int getIDSpedizione() {
+		return IDSpedizione;
+	}
+	
+	public void setIDSpedizione(int IDSpedizione) {
+		this.IDSpedizione=IDSpedizione;
 	}
 	
 	public Mittente getMittente() {
@@ -144,44 +165,6 @@ public class Spedizione {
 	}
 	
 
-	
-//	public void aggiornaStatoSpedizione(boolean isRitiro, boolean isPresaInCarico) {
-//		//pacco ritirato dal destinatario
-//		if (isRitiro) {
-//			this.statoSpedizione = "Consegnato";
-//			System.out.println("Il pacco è stato ritirato.\nStato aggiornato a 'Consegna'.");
-//		} else if (isPresaInCarico){
-//			this.statoSpedizione = "Presa In Carico";
-//			System.out.println("Il pacco è stato preso in carico dal corriere.\nStato aggiornato a 'Presa In Carico'.");
-//		} else {
-//			//pacco depositato dal carrier
-//			this.statoSpedizione = "In attesa";
-//			System.out.println("Il pacco è stato depositato nel locker ed è in attesa per il ritiro. \nStato aggiornato a 'In attesa'.");
-//		}
-//	}
-//	public void verificaTempoDeposito(Date dataDeposito, boolean isRitiro) {	
-//		try {
-//			//verifica quanti gg sono passati dal deposito
-//			//Date dataDeposito = this.getDataDeposito();
-//			if (dataDeposito != null) {
-//				long diffInMillies = Math.abs(new Date().getTime() - dataDeposito.getTime());
-//				long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-//				
-//				//controlla se sono passati più di 3gg dal deposito
-//				if(diffInDays > 3 && !isRitiro) {
-//				//pacco reconsegnato al mittente
-//				this.setStatoSpedizione("Pacco riconsengato al mittente.");
-//				System.out.println("Il pacco non è stato ritirato in tempo. Stato aggiornato a 'Riconsegnato al mittente'.");
-//				this.notifyObservers();
-//				}
-//			}
-//		} catch (Exception e) {
-//			//per esempio dataDeposito è 0. il calcolo è gestito da una libreria di java
-//			System.out.println("Errore nel calcolo del tempo di deposito: " + e.getMessage());
-//			System.out.println("Il pacco non è stato depositato entro 3gg. \nStato aggiornato a 'Pacco smarrito'."); // il corriere non ha depositato il pacco entro 3gg <= dataDeposito = 0
-//			this.setStatoSpedizione("Pacco Smarrito");
-//		}
-//	}
 	//metodo per ottenere l'ultimo deposito
 	public Date getUltimoDeposito() {
 		if (lockers.isEmpty()) {
@@ -202,12 +185,12 @@ public class Spedizione {
 	}
 
 	//aggiungi observer
-	public void addObserver(Observer<String> observer) {
+	public void addObserver(Observer<Spedizione> observer) {
 		observers.add(observer);
 	}
 	
 	//remove observer
-	public void removeObserver(Observer<String> observer) {
+	public void removeObserver(Observer<Spedizione> observer) {
 		observers.remove(observer);
 	}
 	
@@ -215,6 +198,13 @@ public class Spedizione {
 		this.statoSpedizione = statoSpedizione;
 		//notifica gli Observers ad ogni aggiornamento
 		notifyObservers();
+	}
+	
+	//notify observers
+	public void notifyObservers() {
+		for (Observer<Spedizione> observer : observers) {
+			observer.update(this); //facco riferimento alla spedizione
+		}
 	}
 	
 	public List<Itinerario> getItinerarioMancante(){
@@ -259,12 +249,6 @@ public class Spedizione {
 		this.itinerarioMancante = itinerarioMancante;
 	}
 
-	//notify observers
-	public void notifyObservers() {
-		for (Observer<String> observer : observers) {
-			observer.update(statoSpedizione); //faccio riferimento alla spedizione
-		}
-	}
 
 //	public Itinerario getItinerario() {
 //		return itinerario;
@@ -314,6 +298,7 @@ public class Spedizione {
 	}
  
 	}*/
-
 	
+	
+
 }

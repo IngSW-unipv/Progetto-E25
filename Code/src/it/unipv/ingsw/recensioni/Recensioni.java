@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 
 public class Recensioni {
 
+	String recensione_scritta;
 	public Recensioni() {
 		// TODO Auto-generated constructor stub
 	}
@@ -19,16 +20,20 @@ public class Recensioni {
 		String name;
 		try {
 			name=keyboard.readLine();
+			recensione_scritta=name;
 		}catch(IOException e){
 			System.out.printf("Errore durante inserimento recensione");	
 		}
-		
 	}
 	
 	public void vota() {
 		System.out.printf("Come valuteresti il nostro servizio?");
 		//forse con interfaccia grafica
 		
+	}
+	
+	public String getRecensione() {
+		return recensione_scritta;
 	}
 
 }

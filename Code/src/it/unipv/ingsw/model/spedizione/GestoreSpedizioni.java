@@ -1,11 +1,15 @@
 package it.unipv.ingsw.model.spedizione;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.sql.Blob;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.jupiter.api.Test;
 
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
@@ -21,13 +25,6 @@ public class GestoreSpedizioni {
 	
 	public GestoreSpedizioni(MatchingService matchingService) {
 		this.matchingService = matchingService;
-	}
-	
-	
-	//divisione itinerario di una spedizione 
-	public void dividiItinerario(Spedizione s) {
-		
-		s.setItinerarioMancante(matchingService.itinerarioDivider(new Itinerario(s.getPartenza().getPosizione(), s.getDestinazione().getPosizione())));
 	}
 	
 	//metodo avvio spedizione
@@ -63,48 +60,56 @@ public class GestoreSpedizioni {
 
 	}
 	
+	//divisione itinerario di una spedizione 
+	public void dividiItinerario(Spedizione s) {
+			
+		s.setItinerarioMancante(matchingService.itinerarioDivider(new Itinerario(s.getPartenza().getPosizione(), s.getDestinazione().getPosizione())));
+	}
 	
-	//presa in carico di una spedizione 
-	public void presaInCaricoSpedizione(Carrier carrier, List<Spedizione> spedizioniDisponibili) {
+	//prima fase di presa in carico di una spedizione (ricerca delle spedizioni compatibili)
+	public List<Spedizione> presaInCaricoSpedizione(Carrier carrier) {
 		
 		//ricerca delle spedizioni compatibili
-		List<Spedizione> spedizioniCompatibili = matchingService.trovaSpedizioniCompatibili(carrier.getItinerario(), spedizioniDisponibili);
+		List<Spedizione> spedizioniCompatibili = matchingService.trovaSpedizioniCompatibili(carrier.getItinerario());
 		
+		return spedizioniCompatibili;
+		
+	}
+	
+	//accetto la presa in carico delle spedizioni compatibili
+	public void accettaPresaInCarico(Carrier carrier, List<Spedizione> spedizioniCompatibili) {
 		//assegno al carrier tutte le spedizioni compatibili con il suo itinerario
 		carrier.assegnaSpedizioni(spedizioniCompatibili);
 		
+		for(Spedizione s : spedizioniCompatibili) {
+			s.setStatoSpedizione("IN_TRANSITO");
+			//aggiorno lo stato della spedizione dal DAO
+			
+		}
 	}
 	
-	public void ritiraPacco(QRcode codice, Spedizione spedizione, boolean isRitiro) {
-		//creo istanza di locker
-		Locker locker = new Locker(null, 0);
+	
+	
+	//gli passo Locker come parametro anziché istanziarne uno ogni volta
+	public void ritiraPacco(QRcode codice, Spedizione spedizione, boolean isRitiro, Locker locker) {
 		
 		//verifica il QR con locker, passando false per 'isMittenteDeposita'
-		boolean codiceValido = locker.checkQR(codice, spedizione, isRitiro, false);
-		
-		if (codiceValido) {
-			if (isRitiro) {
-			spedizione.setStatoSpedizione("Consegnato");
-			System.out.println("Il pacco è stato ritirato dal destinatario. Stato aggiornato a 'Consegnato'.");
-		} else {
-			System.out.println("Errore: Il pacco non è stato ritirato dal destinatario.");
-			}	 
-		}else {	
-		System.out.println("Errore: Il codice QR non valido");
-			}
-	}
-	
-	public void depositaPacco(QRcode codice, Spedizione spedizione, boolean isMittenteDeposita) {
-		//creo un'istanza di locker
-		Locker locker =new Locker(null, 0);
-		
-		//verifica il QR con locker, passando true per 'isMittenteDeposita' e false a 'isRitiro'
 		boolean codiceValido = locker.checkQR(codice, spedizione, true, false);
 		
-		if (codiceValido) {
-			System.out.println("Il pacco è stato depositato dal Mittente.");
-			spedizione.setStatoSpedizione("In attesa");
-		} else {
+		
+		//metodo che chiama il metodo checkQR nella classe Locker
+		
+	}
+	
+	//gli passo Locker come parametro anziché istanziarne uno ogni volta
+	public void depositaPacco(QRcode codice, Spedizione spedizione, boolean isMittenteDeposita, Locker locker) {
+
+		
+		//verifica il QR con locker, passando true per 'isMittenteDeposita' e false a 'isRitiro'
+		
+		boolean codiceValido = locker.checkQR(codice, spedizione, false, isMittenteDeposita);
+		
+		if (!codiceValido) {
 			System.out.println("Errore: Il codice QR non è valido.");
 		}
 	}
@@ -120,7 +125,7 @@ public class GestoreSpedizioni {
 				//controlla se sono passati più di 3gg dal deposito
 				if(diffInDays > 3 && !isRitiro) {
 				//pacco reconsegnato al mittente
-				spedizione.setStatoSpedizione("Pacco riconsengato al mittente.");
+				spedizione.setStatoSpedizione("Pacco riconsegnato al mittente.");
 				System.out.println("Il pacco non è stato ritirato in tempo. Stato aggiornato a 'Riconsegnato al mittente'.");
 				spedizione.notifyObservers();
 				}
@@ -129,7 +134,7 @@ public class GestoreSpedizioni {
 			//per esempio dataDeposito è 0. il calcolo è gestito da una libreria di java
 			System.out.println("Errore nel calcolo del tempo di deposito: " + e.getMessage());
 			System.out.println("Il pacco non è stato depositato entro 3gg. \nStato aggiornato a 'Pacco smarrito'."); // il corriere non ha depositato il pacco entro 3gg <= dataDeposito = 0
-			spedizione.setStatoSpedizione("Pacco Smarrito");
+			spedizione.setStatoSpedizione("Pacco Smarrito.");
 		}
 	}
 	
@@ -188,7 +193,7 @@ public class GestoreSpedizioni {
 		MatchingService m = new MatchingService();
 		GestoreSpedizioni gs = new GestoreSpedizioni(m);
 		
-		Itinerario it = new Itinerario(a,b); //spedizione
+		//Itinerario it = new Itinerario(a,b); //spedizione
 		
 		
 		m.setPuntiDeposito(puntiDeposito);
@@ -203,24 +208,17 @@ public class GestoreSpedizioni {
 		Itinerario ic = new Itinerario(i,j);
 		Carrier car = new Carrier(ic);
 		
+	
+		gs.presaInCaricoSpedizione(car);
 		
-		Spedizione s1 = new Spedizione(0, null, l1, l2);
-		
-		gs.dividiItinerario(s1);
-		
-		List <Spedizione> ls = new ArrayList<>();
-		ls.add(s1);
-		
-		gs.presaInCaricoSpedizione(car, ls);
-		
-		System.out.println(car.getSpedizioniAssegnate());
+		System.out.println("numero spedizioni assegnate:::"+car.getSpedizioniAssegnate().size());
+		System.out.println("---id spedizione assegnata:: "+car.getSpedizioniAssegnate().get(0).getIDSpedizione());
+		System.out.println("---id spedizione assegnata:: "+car.getSpedizioniAssegnate().get(1).getIDSpedizione());
 
 
 		
 		
 	}
-	
-	
 	
 
 }

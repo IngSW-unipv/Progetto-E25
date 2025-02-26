@@ -43,7 +43,7 @@ import it.unipv.ingsw.view.ModificaProfiloView;
 import it.unipv.ingsw.view.PagamentoView;
 import it.unipv.ingsw.view.PrendiInCaricoSpedizioneView;
 import it.unipv.ingsw.view.UtenteView;
-
+import it.unipv.ingsw.dao.*;
 
 public class ProfiloUtenteController {
 
@@ -57,6 +57,7 @@ public class ProfiloUtenteController {
 	private UtenteDAO utenteDAO;
     private Itinerario it;
 	private LockerDAO lockerDAO;
+	private SpedizioneDAO spedizioneDAO;
 	
 	public ProfiloUtenteController(Utente model, UtenteView view) {
 		this.model=model;
@@ -172,6 +173,7 @@ public class ProfiloUtenteController {
 				} catch (Exception e) {
 					//JOptionPane.showMessageDialog(model, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}
+				spedizioneDAO.addSpedizione(s); //non so se si fa cosi?
 			
 			}
 		};

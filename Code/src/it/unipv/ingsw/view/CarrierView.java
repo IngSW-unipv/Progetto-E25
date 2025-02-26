@@ -7,6 +7,7 @@ import java.awt.*;
 public class CarrierView extends JFrame {
     private JTable shipmentsTable;
     private JButton acceptShipmentsButton;
+    private JLabel titleLabel;
     
     public CarrierView() {
         setTitle("Carrier - Visualizza Spedizioni");
@@ -14,19 +15,17 @@ public class CarrierView extends JFrame {
         setSize(600, 400);
         setLocationRelativeTo(null);
         
-        // Impostiamo le colonne della tabella (ad es. ID, Origine, Destinazione, Stato)
-        String[] columnNames = {"ID", "Origine", "Destinazione", "Stato"};
-        // Dati fittizi per dimostrazione
-        Object[][] data = {
-            {"1", "Milano", "Roma", "In transito"},
-            {"2", "Napoli", "Torino", "Consegnato"},
-            {"3", "Venezia", "Bologna", "In attesa"}
-        };
+        titleLabel = new JLabel("Spedizioni compatibili con la tua tratta:");
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
+        // Definiamo le colonne della tabella
+        String[] columnNames = {"IDspedizione", "coordinataInizio", "coordinataFine", "distanza"};
+        //la tabella parte vuota, verrà popolata dal controller
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // disabilita la modifica delle celle
+                return false; //rende le celle non modificabili
             }
         };
         shipmentsTable = new JTable(tableModel);
@@ -35,10 +34,10 @@ public class CarrierView extends JFrame {
         // Bottone per accettare le spedizioni
         acceptShipmentsButton = new JButton("Accetta Spedizioni");
         
-        // Layout della view
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
-        getContentPane().add(acceptShipmentsButton, BorderLayout.SOUTH);
+        setLayout(new BorderLayout());
+        add(titleLabel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
+        add(acceptShipmentsButton, BorderLayout.SOUTH);
     }
     
     public JButton getAcceptShipmentsButton() {

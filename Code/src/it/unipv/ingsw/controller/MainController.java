@@ -130,10 +130,12 @@ public class MainController {
 	            }
 	        } 
 	        private void manageAction() throws WrongAdminException {
-	        	String matricola = String.valueOf(loginAdminView.getTextId().getPassword());
+	        	int matricola = Integer.parseInt(loginAdminView.getTextId().getText());
+	        	String email = loginAdminView.getEmailField().getText();
+	            String password = String.valueOf(loginAdminView.getPasswordField().getPassword()); 
 				try {
 					Admin admin;
-					admin = adminDAO.getAdminByMatricola(matricola);
+					admin = adminDAO.getAdmin(matricola,email,password);
 					System.out.println(admin.toString());
 					loginAdminView.setVisible(false);
 					mainView.setVisible(false);

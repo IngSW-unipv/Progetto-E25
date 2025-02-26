@@ -14,7 +14,7 @@ public class AdminDAO implements IAdminDAO{
 	public AdminDAO() {
 		this.schema = "ShipUp";
 	}
-	public Admin getAdminByMatricola(String matricola) {
+	public Admin getAdminByMatricola(int matricola) {
 		conn=DBConnection.startConnection(conn);
 		PreparedStatement st1;
 		ResultSet rs1;
@@ -24,10 +24,10 @@ public class AdminDAO implements IAdminDAO{
 			String query= "select * from admin where matricola = ?";
 			
 			st1=conn.prepareStatement(query);
-			st1.setString(1, matricola);
+			st1.setInt(1, matricola);
 			rs1=st1.executeQuery();
 			if(rs1.next()) {
-				result= new Admin(rs1.getString("email"),rs1.getString("matricola"));
+				result= new Admin(rs1.getString("email"),rs1.getString("password"));
 			}
 			
 		} catch  (Exception e) { 
@@ -36,5 +36,37 @@ public class AdminDAO implements IAdminDAO{
 	        DBConnection.closeConnection(conn); 
 	    }
 		return result;
+	}
+	
+	public Admin getAdmin(int matricola,String email,String password) {
+		conn=DBConnection.startConnection(conn);
+		PreparedStatement st1;
+		ResultSet rs1;
+		Admin result=null;
+				
+		try {
+			String query= "select * from admin natural join superuser where matricola = ?, email = ?, password = ?";
+			
+			st1=conn.prepareStatement(query);
+			st1.setInt(1, matricola);
+			st1.setString(2, email);
+			st1.setString(3, password);
+			rs1=st1.executeQuery();
+			if(rs1.next()) {
+				result= new Admin(rs1.getString("email"),rs1.getString("password"));
+			}
+			
+		} catch  (Exception e) { 
+			e.printStackTrace();
+		} finally {
+	        DBConnection.closeConnection(conn); 
+	    }
+		return result;
+	}
+	
+	public static void main(String[] args) {
+		AdminDAO adminDAO= new AdminDAO();
+		adminDAO.getAdminByMatricola(1);
+		
 	}
 }

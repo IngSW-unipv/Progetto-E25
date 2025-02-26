@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import it.unipv.ingsw.dao.LockerDAO;
@@ -21,6 +22,9 @@ import it.unipv.ingsw.model.spedizione.MatchingService;
 import it.unipv.ingsw.model.spedizione.Spedizione;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
+import it.unipv.ingsw.model.spedizione.shippable.IShippable;
+import it.unipv.ingsw.model.spedizione.shippable.Pacco;
+import it.unipv.ingsw.model.spedizione.shippable.Size;
 import it.unipv.ingsw.model.transazioni.IPagamento;
 import it.unipv.ingsw.model.transazioni.Pagamento;
 import it.unipv.ingsw.model.transazioni.PagamentoCarta;
@@ -36,6 +40,7 @@ import it.unipv.ingsw.view.ItinerarioCarrierView;
 import it.unipv.ingsw.view.LoginAdminView;
 import it.unipv.ingsw.view.MainView;
 import it.unipv.ingsw.view.ModificaProfiloView;
+import it.unipv.ingsw.view.PagamentoView;
 import it.unipv.ingsw.view.PrendiInCaricoSpedizioneView;
 import it.unipv.ingsw.view.UtenteView;
 
@@ -47,6 +52,7 @@ public class ProfiloUtenteController {
 	private UtenteView view; 
 	private ModificaProfiloView modificaProfiloView;
 	private AvviaSpedizioneView avviaSpedizioneView;
+	private PagamentoView pagamentoView;
 	private ItinerarioCarrierView itinerarioCarrierView;
 	private UtenteDAO utenteDAO;
     private Itinerario it;
@@ -128,26 +134,41 @@ public class ProfiloUtenteController {
 	            double lockerInizioY = Double.parseDouble(avviaSpedizioneView.getLockerInizioYField().getText());
 	            double lockerDestinazioneX = Double.parseDouble(avviaSpedizioneView.getLockerDestinazioneXField().getText());
 	            double lockerDestinazioneY = Double.parseDouble(avviaSpedizioneView.getLockerDestinazioneYField().getText());
-	            Toolkit dimPacco = avviaSpedizioneView.getDimPaccoField().getToolkit(); //menù a tendina
-	            String pesoPacco = avviaSpedizioneView.getPesoPaccoField().getText();
+	            JComboBox dimPacco = avviaSpedizioneView.getDimPaccoField(); //menù a tendina
+	            double pesoPacco = Double.parseDouble(avviaSpedizioneView.getPesoPaccoField().getText());
 	            String copertura = avviaSpedizioneView.getCoperturaField().getText();
 				
 	            MatchingService ms=new MatchingService();
 				GestoreSpedizioni gs = new GestoreSpedizioni(ms);
-				Spedizione s=new Spedizione(); //fittizia, sbagliato
 				Destinatario d=new Destinatario(mailDest); 
 				Coordinate ci=new Coordinate(lockerInizioX,lockerInizioY);
 				Coordinate cf=new Coordinate(lockerDestinazioneX,lockerDestinazioneY);
+				Size selectedDim = (Size) ((JComboBox) dimPacco).getSelectedItem();		
+			        switch (selectedDim) {
+			            case S:
+			                // Logica per dimensione Small (S)
+			                break;
+			            case M:
+			                // Logica per dimensione Medium (M)
+			                break;
+			            case L:
+			                // Logica per dimensione Large (L)
+			                break;
+			            case XL:
+			                // Logica per dimensione Extra Large (XL)
+			                break;
+			        }
+				IShippable p=new Pacco(selectedDim,pesoPacco);
 				IPuntoDeposito ipi,ipf;
 				ipi=lockerDAO.selectPuntoDeposito(ci);
 				ipf=lockerDAO.selectPuntoDeposito(cf);
+				Spedizione s=new Spedizione(); //fittizia, sbagliato
 				try {
 					// AVVIA SPEDIZIONE
-					gs.avvioSpedizione(model, ipi, d, s); //avvioSpedizione da modificare
-					System.out.println("ieee");
+					s=gs.avvioSpedizione(model, ipi, ipf, d, s, p); //avvioSpedizione da modificare
 					avviaSpedizioneView.setVisible(false);
 					view.setVisible(false);
-					new ProfiloUtenteController(model, new UtenteView());	//ritorno a schermata del profilo
+					new PagamentoController(model,s, new PagamentoView(lockerInizioX));	//costo spedizione effettivo, metodo Zein
 				} catch (Exception e) {
 					//JOptionPane.showMessageDialog(model, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}

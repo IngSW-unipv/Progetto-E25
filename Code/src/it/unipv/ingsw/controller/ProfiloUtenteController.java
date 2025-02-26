@@ -98,6 +98,9 @@ public class ProfiloUtenteController {
 				try {
 					Utente utente;
 					utente= utenteDAO.aggiornamentoUtente(model, password,nome,cognome,numeroTelefono,dataNascita,indirizzoCivico,fotoDocumento);
+					if (utente!= null) {
+						utente.notifyObservers();
+					}
 					modificaProfiloView.setVisible(false);
 					view.setVisible(false);
 					new ProfiloUtenteController(utente, new UtenteView());	//magari schermata d'attesa convalida profilo?

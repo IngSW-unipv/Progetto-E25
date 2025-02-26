@@ -13,7 +13,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class LoginAdminView extends JFrame {
-	private JPasswordField textId;
+	private JPasswordField passwordField;
+	private JTextField textId;
+	private JTextField emailField;
 	private JButton confirm;
 
 	public LoginAdminView() {
@@ -27,8 +29,16 @@ public class LoginAdminView extends JFrame {
         
         
         panel.add(new JLabel("ID:"));
-        textId = new JPasswordField(10);
+        textId = new JTextField(10);
         panel.add(textId);
+        
+        panel.add(new JLabel("Email:"));
+        emailField = new JTextField(10);
+        panel.add(emailField);
+        
+        panel.add(new JLabel("Password:"));
+        passwordField = new JPasswordField(10);
+        panel.add(passwordField);
         
         
         confirm=new JButton("Conferma");
@@ -36,12 +46,28 @@ public class LoginAdminView extends JFrame {
         
 	}
 	
-	public JPasswordField getTextId() {
+	public JPasswordField getPasswordField() {
+		return passwordField;
+	}
+
+	public void setPasswordField(JPasswordField passwordField) {
+		this.passwordField = passwordField;
+	}
+
+	public JTextField getTextId() {
 		return textId;
 	}
 
-	public void setTextId(JPasswordField textId) {
+	public void setTextId(JTextField textId) {
 		this.textId = textId;
+	}
+
+	public JTextField getEmailField() {
+		return emailField;
+	}
+
+	public void setEmailField(JTextField emailField) {
+		this.emailField = emailField;
 	}
 
 	public JButton getConfirmButton() {

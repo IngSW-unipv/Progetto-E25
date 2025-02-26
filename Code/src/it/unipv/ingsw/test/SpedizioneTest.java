@@ -2,10 +2,12 @@ package it.unipv.ingsw.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
 
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import it.unipv.ingsw.model.spedizione.Coordinate;
 import it.unipv.ingsw.model.spedizione.GestoreSpedizioni;
@@ -14,45 +16,94 @@ import it.unipv.ingsw.model.spedizione.Spedizione;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Scompartimento;
+import it.unipv.ingsw.model.spedizione.shippable.IShippable;
 import it.unipv.ingsw.model.spedizione.shippable.Size;
 
 public class SpedizioneTest {
 	
-	@Test
-	public void testAggiornamentoStatoSpedizione() {
-		Coordinate punto= new Coordinate(15,20);
-		IPuntoDeposito locker1 = new Locker(punto, 10);
-		IPuntoDeposito locker2 = new Locker(punto, 15);
-		Spedizione spedizione = new Spedizione(null, null, null, 0, locker1, locker2, null, new Date(0));
-		GestoreSpedizioni gestore = new GestoreSpedizioni(null);
+	private Locker locker;
+	private QRcode codice;
+	private Spedizione spedizione;
+	
+	
+//	@Test
+//	public void testAggiornamentoStatoSpedizione() {
+//		Coordinate punto= new Coordinate(15,20);
+//		IPuntoDeposito locker1 = new Locker(punto, 10);
+//		IPuntoDeposito locker2 = new Locker(punto, 15);
+//		Spedizione spedizione = new Spedizione(null, null, null, 0, locker1, locker2, null, new Date(0));
+//		GestoreSpedizioni gestore = new GestoreSpedizioni(null);
+//		
+//		//istanza il qr e lo genera
+//		QRcode codice = new QRcode();
+//		codice.generaQRcode();
+//		
+//		//aggiunge lo scompartimento di ID=1 alla mappa
+//		((Locker) locker1).aggiungiScompartimento(new Scompartimento(1, Size.M));
+//		
+//		//testa il metodo checkQR() con la condizione che il pacco è stato ritirato dal destinatario
+//		boolean result = ((Locker) locker1).checkQR(codice, spedizione, true, false); //true indica che il codice è valido ed è stato ritirato il pacco
+//		//verifica che lo stato della spedizione sia "Consegnato"
+//		assertTrue(result);
+//		//assertEquals è un metodo che controlla se la stringa che mi aspetto è uguale alla stringa reale 
+//		asserEquals("Consegnato", spedizione.getStatoSpedizione());
+//		
+//		//verifico che inizialmente lo stato è in attesa
+//		gestore.aggiornaStatoSpedizione(spedizione, true); // pacco depositato
+//		assertEquals("In attesa", spedizione.getStatoSpedizione()); //dovrebbe essere preso in carico
+//		
+//		//aggiorna lo stato a "Consegnato"
+//		gestore.aggiornaStatoSpedizione(spedizione, false);
+//		assertEquals("Consegnato", spedizione.getStatoSpedizione());
+//		
+//	}
+
+//	private void asserEquals(String string, String statoSpedizione) {
+//		
+//	}
+
+	@BeforeEach
+	public void setUp() {
+		Coordinate a = new Coordinate(4,5);
+		Coordinate b = new Coordinate(7,-2);
+		IPuntoDeposito l1 = new Locker(a, 1);
+		IPuntoDeposito l2 = new Locker(b,2);
 		
-		//istanza il qr e lo genera
+		l1 = new Locker(a, 1);
+		codice = new QRcode();
+		codice.generaQRcode();
+		
+		//creo la spedizione
+		Spedizione spedizione = new Spedizione(12345, null, l1, l2);
+		
+		//inserisco la spedizione nella mappaQRcode
+//		locker.getMappaQRcode().put(codice.getQRcode(), spedizione);
+	}
+	
+	
+	@Test
+	public void testCheckQRValido() {
+		
+		Coordinate a = new Coordinate(4,5);
+		Coordinate b = new Coordinate(7,-2);
+		IPuntoDeposito l1 = new Locker(a, 1);
+		IPuntoDeposito l2 = new Locker(b,2);
+		
+		//creo la spedizione
+		Spedizione spedizione = new Spedizione(12345, null, l1, null);
+		
+		//istanzo il QR e lo genero
 		QRcode codice = new QRcode();
 		codice.generaQRcode();
 		
-		//aggiunge lo scompartimento di ID=1 alla mappa
-		((Locker) locker1).aggiungiScompartimento(new Scompartimento(1, Size.M));
+		boolean isRitiro = true;
+		boolean isMittenteDeposita = false;
 		
-		//testa il metodo checkQR() con la condizione che il pacco è stato ritirato dal destinatario
-		boolean result = ((Locker) locker1).checkQR(codice, spedizione, true, false); //true indica che il codice è valido ed è stato ritirato il pacco
-		//verifica che lo stato della spedizione sia "Consegnato"
-		assertTrue(result);
-		//assertEquals è un metodo che controlla se la stringa che mi aspetto è uguale alla stringa reale 
-		asserEquals("Consegnato", spedizione.getStatoSpedizione());
-		
-		//verifico che inizialmente lo stato è in attesa
-		gestore.aggiornaStatoSpedizione(spedizione, true); // pacco depositato
-		assertEquals("In attesa", spedizione.getStatoSpedizione()); //dovrebbe essere preso in carico
-		
-		//aggiorna lo stato a "Consegnato"
-		gestore.aggiornaStatoSpedizione(spedizione, false);
-		assertEquals("Consegnato", spedizione.getStatoSpedizione());
-		
-	}
 
-	private void asserEquals(String string, String statoSpedizione) {
+		boolean result = locker.checkQR(codice, spedizione, isRitiro, isMittenteDeposita);
 		
+		assertTrue(result, "Codice QR valido.");
+		
+		assertEquals("Consegnato", spedizione.getStatoSpedizione(), "Lo stato della spedizione dovrebbe essere 'Consegnato'");
 	}
-	
-
 }

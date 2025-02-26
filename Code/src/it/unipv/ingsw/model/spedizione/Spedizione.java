@@ -57,6 +57,8 @@ public class Spedizione {
 		this.partenza = a;
 		this.destinazione = b;
 		this.dataDeposito = null; //inizialmente nessuna data di deposito
+		this.codice = new QRcode();
+		this.codice.generaQRcode();
 	//	this.itinerario.setFine(destinazione.getPosizione());
 		
 		//matchingService = new MatchingService();
@@ -95,6 +97,8 @@ public class Spedizione {
 	
 	public void setIDSpedizione(int IDSpedizione) {
 		this.IDSpedizione=IDSpedizione;
+	public int getId() {
+		return this.IDSpedizione;
 	}
 	
 	public Mittente getMittente() {
@@ -376,4 +380,16 @@ public class Spedizione {
 	
 
 	
+	public void presaInCarico(Utente utente, Itinerario tratta) {
+		
+		Size size = shippable.getSize();
+		double weight = shippable.getWeight();
+		
+		//faccio verificare dall'itinerario della spedizione se essa contiene l'itinerario della tratta del carrier
+		
+		this.carrier = (Carrier) utente;
+		
+	}
+
+
 }

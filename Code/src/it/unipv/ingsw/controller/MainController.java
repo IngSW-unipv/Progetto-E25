@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.JOptionPane;
 
+import it.unipv.ingsw.dao.AdminDAO;
 import it.unipv.ingsw.dao.UtenteDAO;
 import it.unipv.ingsw.exceptions.*;
 import it.unipv.ingsw.model.utenze.ASuperUser;
@@ -16,6 +17,7 @@ import it.unipv.ingsw.view.MainView;
 import it.unipv.ingsw.view.RegistrazioneView;
 import it.unipv.ingsw.view.UtenteView;
 import it.unipv.ingsw.view.LoginUtenteView;
+import it.unipv.ingsw.view.AdminView;
 import it.unipv.ingsw.view.LoginAdminView;
 
 
@@ -25,6 +27,7 @@ public class MainController {
 	RegistrazioneView regView;
 	LoginAdminView loginAdminView;
 	UtenteDAO utenteDAO;
+	AdminDAO adminDAO;
 	
 	public MainController(MainView mainView) {
 		this.mainView=mainView;
@@ -117,29 +120,36 @@ public class MainController {
     }
 	
 	private void okAdminButtonInit() {
-    ActionListener okListener = new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                manageAction();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                JOptionPane.showMessageDialog(loginAdminView, e1.getMessage(), "Errore Admin", JOptionPane.ERROR_MESSAGE);
-            }
-        } 
-        private void manageAction() throws WrongAdminException {
-        	ASuperUser su = new Admin(); //OK
-            String idview = String.valueOf(loginAdminView.getTextId().getPassword());
-            try {
-            	su.loginAdmin(String.valueOf(loginAdminView.getTextId().getPassword()));
-            	loginAdminView.setVisible(false);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(loginAdminView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
-                return; 
-            }
-        }
-    };
-    loginAdminView.getConfirmButton().addActionListener(okListener);
-}
+	    ActionListener okListener = new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            try {
+	                manageAction();
+	            } catch (Exception e1) {
+	                e1.printStackTrace();
+	                JOptionPane.showMessageDialog(loginAdminView, e1.getMessage(), "Errore Admin", JOptionPane.ERROR_MESSAGE);
+	            }
+	        } 
+	        private void manageAction() throws WrongAdminException {
+	        	int matricola = Integer.parseInt(loginAdminView.getTextId().getText());
+	        	String email = loginAdminView.getEmailField().getText();
+	            String password = String.valueOf(loginAdminView.getPasswordField().getPassword()); 
+				try {
+					Admin admin;
+					admin = adminDAO.getAdmin(matricola,email,password);
+					System.out.println(admin.toString());
+					loginAdminView.setVisible(false);
+					mainView.setVisible(false);
+					new ProfiloAdminController(admin, new AdminView());
+	
+	            } catch (Exception e) {
+	                JOptionPane.showMessageDialog(loginAdminView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+	                return; 
+	            }
+	        }
+	    };
+	    loginAdminView.getConfirmButton().addActionListener(okListener);
+	}
 	
 }
+
 	

@@ -1,16 +1,23 @@
 package it.unipv.ingsw.model.spedizione;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.sql.Blob;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.jupiter.api.Test;
 
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
 import it.unipv.ingsw.model.utenze.ASuperUser;
 import it.unipv.ingsw.model.utenze.Carrier;
 import it.unipv.ingsw.model.utenze.Utente;
+import it.unipv.ingsw.model.spedizione.shippable.*;
+import it.unipv.ingsw.model.utenze.*;
 
 public class GestoreSpedizioni {
 
@@ -21,7 +28,15 @@ public class GestoreSpedizioni {
 	}
 	
 	//metodo avvio spedizione
-	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario, Spedizione spedizione) { 
+	public Spedizione avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, IPuntoDeposito punto_deposito_destinazione, ASuperUser destinatario, Spedizione spedizione, IShippable spedibile) {
+		
+		Mittente mittente_spedizione= new Mittente(utente.getMail(), null, utente.getNome(), utente.getCognome(), utente.getNumeroTelefono(), utente.getIndirizzoCivico(), utente.getDataNascita(), utente.getFotoDocumento());
+		Destinatario destinatario_spedizione= new Destinatario(destinatario.getMail());
+		spedizione.setMittente(mittente_spedizione);
+		spedizione.setPartenza(punto_deposito_partenza);
+		spedizione.setDestinazione(punto_deposito_destinazione);
+		spedizione.setDestinatario(destinatario_spedizione);
+		spedizione.setPacco(spedibile);
 		
 		if(spedizione.getPacco()==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
 		
@@ -40,6 +55,8 @@ public class GestoreSpedizioni {
 		//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
 			System.out.printf("Finito avvioSpedizione\n");
 		}
+		
+		return spedizione;
 
 	}
 	
@@ -60,12 +77,11 @@ public class GestoreSpedizioni {
 		
 	}
 	
-	public void ritiraPacco(QRcode codice, Spedizione spedizione, boolean isRitiro) {
-		//creo istanza di locker
-		Locker locker = new Locker(null, 0);
+	//gli passo Locker come parametro anziché istanziarne uno ogni volta
+	public void ritiraPacco(QRcode codice, Spedizione spedizione, boolean isRitiro, Locker locker) {
 		
 		//verifica il QR con locker, passando false per 'isMittenteDeposita'
-		boolean codiceValido = locker.checkQR(codice, spedizione, isRitiro, false);
+		boolean codiceValido = locker.checkQR(codice, spedizione, true, false);
 		
 		if (codiceValido) {
 			if (isRitiro) {
@@ -79,9 +95,9 @@ public class GestoreSpedizioni {
 			}
 	}
 	
-	public void depositaPacco(QRcode codice, Spedizione spedizione, boolean isMittenteDeposita) {
-		//creo un'istanza di locker
-		Locker locker =new Locker(null, 0);
+	//gli passo Locker come parametro anziché istanziarne uno ogni volta
+	public void depositaPacco(QRcode codice, Spedizione spedizione, boolean isMittenteDeposita, Locker locker) {
+
 		
 		//verifica il QR con locker, passando true per 'isMittenteDeposita' e false a 'isRitiro'
 		boolean codiceValido = locker.checkQR(codice, spedizione, true, false);
@@ -105,7 +121,7 @@ public class GestoreSpedizioni {
 				//controlla se sono passati più di 3gg dal deposito
 				if(diffInDays > 3 && !isRitiro) {
 				//pacco reconsegnato al mittente
-				spedizione.setStatoSpedizione("Pacco riconsengato al mittente.");
+				spedizione.setStatoSpedizione("Pacco riconsegnato al mittente.");
 				System.out.println("Il pacco non è stato ritirato in tempo. Stato aggiornato a 'Riconsegnato al mittente'.");
 				spedizione.notifyObservers();
 				}
@@ -199,8 +215,6 @@ public class GestoreSpedizioni {
 		
 		
 	}
-	
-	
 	
 
 }

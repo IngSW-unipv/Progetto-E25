@@ -51,7 +51,7 @@ public class SpedizioneDAO implements ISpedizioneDAO{
             	//pd1 = new Locker(); devo risalire alla posizione del locker 
             	
             	//int id, IShippable shippable, IPuntoDeposito a, IPuntoDeposito b
-                s = new Spedizione(rs.getInt(0), ship, null, null);
+                s = new Spedizione(rs.getInt(0), ship, null, null); //da errore qua
                 
 
                 result.add(s);
@@ -72,24 +72,38 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 	public void addSpedizione(Spedizione spedizione) {
 		conn = DBConnection.startConnection(conn);
 		PreparedStatement st;
-		
+		ResultSet rs;
 		try {
 			String query1= "INSERT INTO 'spedizione' ('statoSpedizione', 'dataAvvio', 'dataFine', 'mittente', 'destinatario', 'lockerIniziale', 'lockerFinale', 'assicurazione')";
 			st = conn.prepareStatement(query1);
 			
 			st.setString(1, spedizione.getStatoSpedizione());
-			st.setObject(2, spedizione.getDataInizio());
+			st.setObject(2, spedizione.getDataInizio()); 
 			st.setObject(3, spedizione.getDataFine());
-			st.setObject(4, spedizione.getMittente()); //funge cosi?
-			st.setObject(5, spedizione.getDestinatario());
-//			st.setInt(6, spedizione.getPartenza().getPosizione()); //devo inserire il codice del locker?
-//			st.setInt(7, spedizione.getPartenza().getPosizione()); 
+			st.setObject(4, spedizione.getMittente().getMail()); //email mittente
+			st.setObject(5, spedizione.getDestinatario().getMail()); //email destinatario
+			st.setInt(6, spedizione.getPartenza().getID()); 
+			st.setInt(7, spedizione.getPartenza().getID()); 
 			st.setInt(8, spedizione.getAssicurazione());
-			st.executeUpdate();
+			st.executeQuery();
 			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		//fare natural join tra questa query, mittente e destinatario. poi, where idmittente=?, maildestinatario=? 
+	try {
+			String query1= "SELECT * FROM SPEDIZIONE NATURAL JOIN UTENTE where idmittente=? and iddestinatario=?";
+			st=conn.prepareStatement(query1);
+			st.setString(1,spedizione.getMittente().getMail());
+			st.setString(2,spedizione.getDestinatario().getMail());
+			rs=st.executeQuery();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		
 		DBConnection.closeConnection(conn);
 		

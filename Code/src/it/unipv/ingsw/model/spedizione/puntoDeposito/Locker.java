@@ -57,6 +57,12 @@ public class Locker implements IPuntoDeposito{
 		return posizione;
 	}
 	
+	@Override
+	public int getID() {
+		return IDlocker;
+	}
+	
+	
 	//getter per IDlocker
 	public int getIDlocker() {
 		return IDlocker;

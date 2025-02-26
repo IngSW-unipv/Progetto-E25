@@ -97,8 +97,6 @@ public class Spedizione {
 	
 	public void setIDSpedizione(int IDSpedizione) {
 		this.IDSpedizione=IDSpedizione;
-	public int getId() {
-		return this.IDSpedizione;
 	}
 	
 	public Mittente getMittente() {
@@ -339,57 +337,5 @@ public class Spedizione {
 	}*/
 	
 	
-	//debug:
-	int id;
-	String inizio;
-	String fine;
-	String statoSped;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getInizio() {
-		return inizio;
-	}
-
-	public String getFine() {
-		return fine;
-	}
-
-	public String getStatoSped() {
-		return statoSped;
-	}
-
-	public void setInizio(String inizio) {
-		this.inizio = inizio;
-	}
-
-	public void setFine(String fine) {
-		this.fine = fine;
-	}
-
-	public void setStatoSped(String statoSped) {
-		this.statoSped = statoSped;
-	}
-	
-	
-
-	
-	public void presaInCarico(Utente utente, Itinerario tratta) {
-		
-		Size size = shippable.getSize();
-		double weight = shippable.getWeight();
-		
-		//faccio verificare dall'itinerario della spedizione se essa contiene l'itinerario della tratta del carrier
-		
-		this.carrier = (Carrier) utente;
-		
-	}
-
 
 }

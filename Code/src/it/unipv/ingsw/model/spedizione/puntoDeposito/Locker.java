@@ -12,6 +12,7 @@ import java.sql.Blob;
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
 import it.unipv.ingsw.model.spedizione.Coordinate;
 import it.unipv.ingsw.model.spedizione.GestoreSpedizioni;
+import it.unipv.ingsw.model.spedizione.MatchingService;
 import it.unipv.ingsw.model.spedizione.QRcode;
 import it.unipv.ingsw.model.spedizione.Spedizione;
 import it.unipv.ingsw.model.spedizione.shippable.IShippable;
@@ -91,6 +92,9 @@ public class Locker implements IPuntoDeposito{
 	//metodo che funziona sia per il carrier che per il destinatario
 	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isMittenteDeposita) {
 		
+		MatchingService m = new MatchingService();
+		GestoreSpedizioni gs = new GestoreSpedizioni(m);
+		
 		//recupera il codice dalla classe QRcode
 		String codiceQR = codice.getQRcode();
 		
@@ -98,18 +102,25 @@ public class Locker implements IPuntoDeposito{
 		if(mappaQRcode.containsKey(codiceQR)) {
 			System.out.println("Codice QR valido: " + codiceQR);
 			
-			
-			//se il qr valido, procede
-			System.out.println("Codice QR valido: " + codiceQR);
-			int s = mappaQRcode.get(codiceQR);
-			Scompartimento sc = scompartimenti.get(s);
-			
-				sc.Open();
+			if (isMittenteDeposita) {
+				spedizione.setStatoSpedizione("In attesa.");
+				System.out.println("Il pacco è stato deppositato dal mittente.");
+			}
 				
-				if (isRitiro) {
-					spedizione.setStatoSpedizione("Consegnato.");
-					System.out.println("Il pacco è stato ritirato dal destinatario. Stato aggiornato a 'Consegnato'.");
-				}
+			if (isRitiro) {
+				spedizione.setStatoSpedizione("Consegnato.");
+				System.out.println("Il pacco è stato ritirato dal destinatario. Stato aggiornato a 'Consegnato'.");
+			}
+			
+				
+				//se il qr valido, procede ed apre lo sc associato
+				System.out.println("Codice QR valido: " + codiceQR);
+				int s = mappaQRcode.get(codiceQR);
+				Scompartimento sc = scompartimenti.get(s);
+					sc.Open();
+				
+				this.registraDeposito(dataDeposito);
+					
 				return true;
 			} else {
 				System.out.println("Errore: Il codice QR non è valido.");

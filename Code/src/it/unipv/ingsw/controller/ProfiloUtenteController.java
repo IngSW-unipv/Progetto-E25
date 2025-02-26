@@ -37,6 +37,7 @@ import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.view.AvviaSpedizioneView;
 import it.unipv.ingsw.view.CarrierView;
 import it.unipv.ingsw.view.ItinerarioCarrierView;
+import it.unipv.ingsw.view.LogOutView;
 import it.unipv.ingsw.view.LoginAdminView;
 import it.unipv.ingsw.view.MainView;
 import it.unipv.ingsw.view.ModificaProfiloView;
@@ -50,8 +51,10 @@ public class ProfiloUtenteController {
 	private Utente model;
 	private Carrier carrier;
 	private UtenteView view; 
+	private MainView mainView;
 	private ModificaProfiloView modificaProfiloView;
 	private AvviaSpedizioneView avviaSpedizioneView;
+	private LogOutView logOutView;
 	private PagamentoView pagamentoView;
 	private ItinerarioCarrierView itinerarioCarrierView;
 	private UtenteDAO utenteDAO;
@@ -66,8 +69,14 @@ public class ProfiloUtenteController {
 		modificaProfiloInit();
 		avvioSpedizioneInit();
 		prendiInCaricoSpedizioneInit();
+		logOutInit();
 	}
 	
+	//costruttore per logout
+	public ProfiloUtenteController(Utente model, MainView mainView) {
+		this.model=model;
+		this.mainView=mainView;
+	}
 	private void modificaProfiloInit() {
 		ActionListener listener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -237,6 +246,31 @@ public class ProfiloUtenteController {
 	            }
 	        }
 	    });
+	}
+	private void logOutInit() {
+		ActionListener listener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+				
+				logOutView = new LogOutView();
+				okLogOutButton();
+			}
+		};
+		view.getLogout().addActionListener(listener); 
+	} 
+	
+	private void okLogOutButton() {
+		ActionListener okLogOutListener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+				new ProfiloUtenteController(model, new MainView());	//ritorna a view iniziale	
+			}
+		};
+		logOutView.getConfirmButton().addActionListener(okLogOutListener); //bottone di logout 
 	}
 
 

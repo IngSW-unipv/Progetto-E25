@@ -36,6 +36,7 @@ public class Spedizione {
 //	private Date dataInizioSpedizione;
 	QRcode codice; //questo è il codice Qr
 	
+	private Itinerario itinerarioTot;
 	private MatchingService matchingService;
 	private List <Itinerario> itinerarioMancante; //i sottoitinerari che mancano fino alla fine della spedizione 
 	private Itinerario itinerarioCorrente; //itinerario che fornisco al carrier (FORSE NON VA QUI)
@@ -72,6 +73,7 @@ public class Spedizione {
 		this.shippable = shippable; 
 		this.partenza = a;
 		this.destinazione = b;
+		itinerarioTot = new Itinerario(a.getPosizione(),b.getPosizione());
 		
 	}
 	
@@ -80,8 +82,21 @@ public class Spedizione {
 		
 	}
 	
-	public int getId() {
-		return this.IDSpedizione;
+	
+	public Itinerario getItinerarioTot() {
+		return itinerarioTot;
+	}
+
+	public void setItinerarioTot(Itinerario itinerarioTot) {
+		this.itinerarioTot = itinerarioTot;
+	}
+
+	public int getIDSpedizione() {
+		return IDSpedizione;
+	}
+	
+	public void setIDSpedizione(int IDSpedizione) {
+		this.IDSpedizione=IDSpedizione;
 	}
 	
 	public Mittente getMittente() {
@@ -283,18 +298,7 @@ public class Spedizione {
 	}
  
 	}*/
-
 	
-	public void presaInCarico(Utente utente, Itinerario tratta) {
-		
-		Size size = shippable.getSize();
-		double weight = shippable.getWeight();
-		
-		//faccio verificare dall'itinerario della spedizione se essa contiene l'itinerario della tratta del carrier
-		
-		this.carrier = (Carrier) utente;
-		
-	}
-
+	
 
 }

@@ -41,7 +41,7 @@ public class LockerDAO implements IPuntoDepositoDAO{
                 double latitudine = rs.getDouble("lat");
                 double longitudine = rs.getDouble("lon");
                 
-                Coordinate posizione = new Coordinate(latitudine, longitudine);
+                Coordinate posizione = new Coordinate(longitudine, latitudine);
                 
                 l = new Locker(posizione, id);
 

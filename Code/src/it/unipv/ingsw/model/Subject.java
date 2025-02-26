@@ -1,9 +1,7 @@
 package it.unipv.ingsw.model;
 
-public interface Subject {
-	
-	
-	public void addObserver();
-	public boolean removeObserver();
+public interface Subject<T> {
+	public void addObserver(T dato);
+	public void removeObserver(T dato);
 	public void notifyObservers();
 }

@@ -14,6 +14,11 @@ public class Admin extends ASuperUser implements Observer<Utente>{
 	public Admin() {
 	}
 
+	public Admin(int matricola,String mail, String password) {
+		super(mail, password);
+		this.matricola=matricola;
+	}
+	
 	
 	//metodi da implementare
 	public boolean validaAccount() {return true;}

@@ -89,51 +89,66 @@ public class UtenteDAO implements IUtenteDAO {
 		return result;
 	}
 	
-	public Utente aggiornamentoUtente(Utente utenteCorrente, String password,String nome,String cognome,String numeroTelefono,String dataNascita,String indirizzoCivico,String fotoDocumento){
-	    conn = DBConnection.startConnection(conn);
-	    PreparedStatement st1, st2;
-	    Utente esito = null;
+	public Utente aggiornamentoUtente(Utente utenteCorrente, String password, String nome, String cognome, String numeroTelefono, String dataNascita, String indirizzoCivico, String fotoDocumento) {
+		conn = DBConnection.startConnection(conn);
+		PreparedStatement st1, st2;
+		Utente utenteModificato = utenteCorrente;
+		
+		try {
+		// Fase 1: Verifica se l'utente esiste
+		String query = "SELECT id FROM `ShipUp`.`utente` WHERE `email` = ?";
+		st1 = conn.prepareStatement(query);
+		st1.setString(1, utenteCorrente.getMail()); //u.getMail()
+		ResultSet rs = st1.executeQuery();
+		
+		// Verifica se l'utente esiste
+		if (!rs.next()) {
+		// Se non c'è l'utente, ritorna null
+		utenteModificato = null;
+		} else {
+		// Fase 2: Esegui l'aggiornamento dei dati dell'utente
+		String query1 = "UPDATE `ShipUp`.`utente` u "
+		               + "JOIN `ShipUp`.`superuser` s ON u.email = s.email "
+		               + "SET u.nome = ?, u.cognome = ?, u.dataNascita = ?, u.numeroTelefono = ?, "
+		               + "u.indirizzoCivico = ?, u.fotoDocumento = ?, u.statoProfilo = ?, s.password = ? "
+		               + "WHERE u.id = ?";
 
-	    try {
-	        // Fase 1: Verifica se l'utente esiste
-	        String query = "SELECT id FROM `ShipUp`.`utente` WHERE `email` = ?";
-	        st1 = conn.prepareStatement(query);
-	        st1.setString(1, utenteCorrente.getMail()); //u.getMail()
-	        ResultSet rs = st1.executeQuery();
+		
+		st2 = conn.prepareStatement(query1);
+		st2.setString(1, nome);
+		st2.setString(2, cognome);
+		st2.setString(3, dataNascita);  
+		st2.setString(4, numeroTelefono);
+		st2.setString(5, indirizzoCivico);
+		st2.setString(6, fotoDocumento); // Se è un oggetto, altrimenti usa setString o altro metodo
+		st2.setBoolean(7, true);  // Assumendo che sia un booleano
+		st2.setString(8, password);
+		st2.setInt(9, rs.getInt("id"));
+		
+		st2.executeUpdate();
+		
+		// Crea un nuovo oggetto Utente con i dati aggiornati
+		utenteModificato.setMail(utenteCorrente.getMail()); // La mail non cambia
+		utenteModificato.setNome(nome);
+		utenteModificato.setCognome(cognome);
+		utenteModificato.setNumeroTelefono(numeroTelefono);
+		utenteModificato.setDataNascita(dataNascita);
+		utenteModificato.setIndirizzoCivico(indirizzoCivico);
+		utenteModificato.setFotoDocumento(fotoDocumento);
+		utenteModificato.setPassword(password);
+		utenteModificato.setStatoProfilo(true); // Aggiorna lo stato del profilo
+		}
+		
+		} catch (Exception e) {
+		e.printStackTrace();
+		utenteModificato = null;
+		} finally {
+		DBConnection.closeConnection(conn); // Assicurati di chiudere sempre la connessione
+		}
+		
+		return utenteModificato; // Restituisce l'utente con i dati aggiornati
+}
 
-	        // Verifica se l'utente esiste
-	        if (!rs.next()) {
-	            // Se non c'è l'utente, ritorna false
-	            esito = null;
-	        } else {
-	            // Fase 2: Esegui l'aggiornamento dei dati dell'utente
-	            String query1 = "UPDATE `ShipUp`.`utente` SET `nome` = ?, `cognome` = ?, "
-	                    + "`dataNascita` = ?, `numeroTelefono` = ?, `indirizzoCivico` = ?, "
-	                    + "`fotoDocumento` = ?, `statoProfilo` = ? WHERE `id` = ?";
-
-	            st2 = conn.prepareStatement(query1);
-	            st2.setString(1, nome);
-	            st2.setString(2, cognome);
-	            st2.setString(3, dataNascita);  
-	            st2.setString(4, numeroTelefono);
-	            st2.setString(5, indirizzoCivico);
-	            st2.setString(6, fotoDocumento); // Se è un oggetto, altrimenti usa setString o altro metodo
-	            st2.setBoolean(7, true);  // Assumendo che sia un booleano
-	            st2.setInt(8, rs.getInt("id"));
-	            
-
-	            st2.executeUpdate();
-	        }
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        esito = null;
-	    } finally {
-	    	DBConnection.closeConnection(conn); // Assicurati di chiudere sempre la connessione
-	    }
-
-	    return esito;
-	}
 
 	@Override
     public ArrayList<Utente> selectAll() {

@@ -3,6 +3,8 @@ package it.unipv.ingsw.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import it.unipv.ingsw.model.utenze.Admin;
 import it.unipv.ingsw.model.utenze.Utente;
@@ -64,9 +66,38 @@ public class AdminDAO implements IAdminDAO{
 		return result;
 	}
 	
+	@Override
+    public ArrayList<Admin> selectAll() {
+        ArrayList<Admin> result = new ArrayList<>();
+
+        conn = DBConnection.startConnection(conn);
+        Statement st1,st2;
+        ResultSet rs1;
+        Admin a;
+
+        try {
+            st1 = conn.createStatement();
+            String query = "SELECT * FROM SUPERUSER NATURAL JOIN ADMIN";
+            rs1 = st1.executeQuery(query);
+
+            while (rs1.next()) {
+            	
+                 a = new Admin(rs1.getInt("matricola"),rs1.getString("email"),rs1.getString("password"));
+
+                 result.add(a);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+
+        DBConnection.closeConnection(conn);
+        return result;
+    }
+	
 	public static void main(String[] args) {
 		AdminDAO adminDAO= new AdminDAO();
-		adminDAO.getAdminByMatricola(1);
-		
+		System.out.println(adminDAO.selectAll().get(0).getMail());
 	}
 }

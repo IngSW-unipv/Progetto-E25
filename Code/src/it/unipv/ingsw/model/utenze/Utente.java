@@ -2,29 +2,33 @@ package it.unipv.ingsw.model.utenze;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import javax.swing.JOptionPane;
 
+import it.unipv.ingsw.dao.AdminDAO;
 import it.unipv.ingsw.exceptions.AccountAlreadyExistsException;
 import it.unipv.ingsw.exceptions.EmptyFieldException;
 import it.unipv.ingsw.exceptions.WrongFieldException;
 import it.unipv.ingsw.model.Singleton;
 import it.unipv.ingsw.model.Subject;
 
-public class Utente extends ASuperUser implements Subject{
+public class Utente extends ASuperUser implements Subject<Admin>{
 	private String nome,cognome,numeroTelefono,indirizzoCivico,dataNascita;
 	private String fotoDocumento;
 	private Saldo saldo;
 	private boolean statoProfilo;
-	//map di admin
+	private List<Admin> listAdmin;
 	private String formatoNome = "^[A-Za-zàèéìòóùçÁÉÍÓÚÑñ ]{1,100}$"; // Consente lettere, accenti e spazi
 	private String formatoMail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,}$"; //formato nomemail@example.com
 	private String formatoPassword = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,32}$"; //Contenga almeno una lettera minuscola, maiuscola, un numero, un carattere speciale e una lunghezza compresa tra 8 e 32 caratteri 
 	private String formatoNumero = "^\\+\\d{1,3}\\s?\\d{1,4}[\\s-]?\\d{1,4}[\\s-]?\\d{1,4}$";
 	private String formatoIndirizzo = "^[A-Za-z0-9\\s,.-]+\\s\\d{1,5}\\s[A-Za-z\\s]+$";
+	private AdminDAO adminDAO;
 	
 	//costruttore
 	public Utente(String mail, String password,String nome, String cognome, String dataNascita,String numeroTelefono, String indirizzoCivico, String fotoDocumento) {
@@ -36,7 +40,11 @@ public class Utente extends ASuperUser implements Subject{
 		this.dataNascita = dataNascita;
 		this.fotoDocumento = fotoDocumento;
 		this.statoProfilo = false;
-		this.saldo= new Saldo(0.0,0);
+		this.listAdmin = new ArrayList<>();
+		this.adminDAO = new AdminDAO();
+		listAdmin = adminDAO.selectAll();
+		System.out.println(listAdmin);
+		this.saldo = new Saldo(0.0,0);
 	}
 	
 	//utente non registrato
@@ -208,11 +216,23 @@ public class Utente extends ASuperUser implements Subject{
 	}
 	
 	
-	
-	public void addObserver() {}
-	public boolean removeObserver(){return true;}
-	public void notifyObservers() {}
+	@Override
+	public void addObserver(Admin dato) {
+		listAdmin.add(dato);
+	}
 
+	@Override
+	public void removeObserver(Admin dato) {
+		listAdmin.remove(dato);
+	}
+	
+	public void notifyObservers() {
+		for(Admin admin: listAdmin) {
+			admin.update(this);
+		}
+	}
+
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

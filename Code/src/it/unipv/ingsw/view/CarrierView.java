@@ -21,7 +21,7 @@ public class CarrierView extends JFrame {
         
         // Definiamo le colonne della tabella
         String[] columnNames = {"IDspedizione", "coordinataInizio", "coordinataFine", "distanza"};
-        // La tabella parte vuota, verrà popolata dal controller
+        //la tabella parte vuota, verrà popolata dal controller
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {

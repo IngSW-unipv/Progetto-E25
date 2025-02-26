@@ -66,16 +66,29 @@ public class GestoreSpedizioni {
 		s.setItinerarioMancante(matchingService.itinerarioDivider(new Itinerario(s.getPartenza().getPosizione(), s.getDestinazione().getPosizione())));
 	}
 	
-	//presa in carico di una spedizione 
-	public void presaInCaricoSpedizione(Carrier carrier) {
+	//prima fase di presa in carico di una spedizione (ricerca delle spedizioni compatibili)
+	public List<Spedizione> presaInCaricoSpedizione(Carrier carrier) {
 		
 		//ricerca delle spedizioni compatibili
 		List<Spedizione> spedizioniCompatibili = matchingService.trovaSpedizioniCompatibili(carrier.getItinerario());
 		
+		return spedizioniCompatibili;
+		
+	}
+	
+	//accetto la presa in carico delle spedizioni compatibili
+	public void accettaPresaInCarico(Carrier carrier, List<Spedizione> spedizioniCompatibili) {
 		//assegno al carrier tutte le spedizioni compatibili con il suo itinerario
 		carrier.assegnaSpedizioni(spedizioniCompatibili);
 		
+		for(Spedizione s : spedizioniCompatibili) {
+			s.setStatoSpedizione("IN_TRANSITO");
+			//aggiorno lo stato della spedizione dal DAO
+			
+		}
 	}
+	
+	
 	
 	//gli passo Locker come parametro anziché istanziarne uno ogni volta
 	public void ritiraPacco(QRcode codice, Spedizione spedizione, boolean isRitiro, Locker locker) {

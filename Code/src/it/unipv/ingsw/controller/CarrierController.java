@@ -19,6 +19,7 @@ public class CarrierController {
     private Carrier carrier; // il modello Carrier, già definito altrove
     private MatchingService ms;
     private GestoreSpedizioni gs;
+    private List<Spedizione> spedizioniCompatibili;
 
     public CarrierController(CarrierView carrierView, Carrier carrier) {
         this.carrierView = carrierView;
@@ -41,16 +42,16 @@ public class CarrierController {
     
     private void loadShipments() {
     	
-    	System.out.println("inizio-fine itinerario carrier::::");
-    	System.out.println("("+carrier.getItinerario().getInizio().getLongitudine()+","+carrier.getItinerario().getInizio().getLatitudine()+")");
-    	System.out.println("("+carrier.getItinerario().getFine().getLongitudine()+","+carrier.getItinerario().getFine().getLatitudine()+")");
-    	gs.presaInCaricoSpedizione(carrier);
+//    	System.out.println("inizio-fine itinerario carrier::::");
+//    	System.out.println("("+carrier.getItinerario().getInizio().getLongitudine()+","+carrier.getItinerario().getInizio().getLatitudine()+")");
+//    	System.out.println("("+carrier.getItinerario().getFine().getLongitudine()+","+carrier.getItinerario().getFine().getLatitudine()+")");
+    	spedizioniCompatibili = gs.presaInCaricoSpedizione(carrier);
     	
         DefaultTableModel tableModel = (DefaultTableModel) carrierView.getShipmentsTable().getModel();
         //rimuove eventuali righe esistenti
         tableModel.setRowCount(0);
         //aggiungo ogni spedizione come nuova riga nella tabella
-        for (Spedizione sped : carrier.getSpedizioniAssegnate()) {
+        for (Spedizione sped : spedizioniCompatibili) {
             Object[] rowData = {
                 sped.getIDSpedizione(),
                 "("+sped.getItinerarioCorrente().getInizio().getLongitudine()+","+sped.getItinerarioCorrente().getInizio().getLatitudine()+")",
@@ -63,7 +64,17 @@ public class CarrierController {
     }
     
     private void acceptShipments() {
-        //qui dovrei mettere la logica per accettare le spedizioni; ad es. aggiornare lo stato nel DB
-        JOptionPane.showMessageDialog(carrierView, "Spedizioni accettate!", "Informazione", JOptionPane.INFORMATION_MESSAGE);
+        //logica per accettare le spedizioni
+    	gs.accettaPresaInCarico(carrier, spedizioniCompatibili);
+    	//verifica 
+    	for (Spedizione sped : carrier.getSpedizioniAssegnate()) {
+    		System.out.println("id"+sped.getIDSpedizione()+
+                " ("+sped.getItinerarioCorrente().getInizio().getLongitudine()+","+sped.getItinerarioCorrente().getInizio().getLatitudine()+") "+
+                " ("+sped.getItinerarioCorrente().getFine().getLongitudine()+","+sped.getItinerarioCorrente().getFine().getLatitudine()+") "+
+                (double) Math.round(sped.getItinerarioCorrente().getInizio().distanza(sped.getItinerarioCorrente().getFine()) * 100) / 100); //formula per arrotondare a 2 decimali
+             
+        }
+        JOptionPane.showMessageDialog(carrierView, "Spedizioni accettate!\nRiceverai una mail con i QRcode per il ritiro e la consegna dei pacchi", "Informazione", JOptionPane.INFORMATION_MESSAGE);
+        carrierView.dispose();
     }
 }

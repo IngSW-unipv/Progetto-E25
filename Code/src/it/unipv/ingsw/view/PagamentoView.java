@@ -1,6 +1,7 @@
 package it.unipv.ingsw.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -20,24 +21,24 @@ public class PagamentoView extends JFrame {
     // Variabili per i componenti
     private JPanel formPanel;
     private JLabel cardNumberLabel;
-    private JComboBox<String> cardNumberField;
+    private JComboBox<String> opzioneMetodoPagamentoField;
     private JLabel cvvLabel;
     private JTextField cvvField;
     private JLabel amountLabel;
     private JTextField amountField;
     private JButton payButton;
-    private JLabel balanceLabel;
-    private JTextField balanceField;
-    private JLabel pointsLabel;
-    private JTextField pointsField;
-    private JLabel cardNumberInputLabel;
-    private JTextField cardNumberFieldInput;
+    private JLabel saldoLabel;
+    private JTextField saldoField;
+    private JLabel puntiLabel;
+    private JTextField puntiField;
+    private JLabel numeroCartaInputLabel;
+    private JTextField numeroCartaFieldInput;
 
     // Dati finti per l'utente (questi dovrebbero essere sostituiti con i dati reali)
     private double saldoUtente = 100.0; // Esempio di saldo
     private int puntiApp = 200;         // Esempio di puntiApp
 
-    public PagamentoView(double costo) {
+    public PagamentoView(double costoSpedizione) {
         setTitle("Pagamento");
         setSize(1000, 600);
         setLayout(new BorderLayout());
@@ -46,66 +47,66 @@ public class PagamentoView extends JFrame {
         add(formPanel, BorderLayout.CENTER);
 
         // Etichetta per la selezione del metodo di pagamento
-        JLabel methodLabel = new JLabel("Seleziona il metodo di pagamento:");
+        JLabel methodLabel = new JLabel("  Seleziona il metodo di pagamento:");
         formPanel.add(methodLabel);
 
         // ComboBox per la selezione del metodo di pagamento
         String[] sizeOptions = { 
             "Saldo", "PuntiApp", "Carta", "Saldo+PuntiApp", "Carta+PuntiApp", "Saldo+Carta", "PuntiApp+Carta" 
         };
-        cardNumberField = new JComboBox<>(sizeOptions);
-        formPanel.add(cardNumberField);
+        opzioneMetodoPagamentoField = new JComboBox<>(sizeOptions);
+        formPanel.add(opzioneMetodoPagamentoField);
 
         // Etichetta per il saldo
-        balanceLabel = new JLabel("Saldo disponibile: €");
-        balanceField = new JTextField();
-        balanceField.setEditable(false);
-        formPanel.add(balanceLabel);
-        formPanel.add(balanceField);
+        saldoLabel = new JLabel("  Saldo attuale: €");
+        saldoField = new JTextField();
+        saldoField.setEditable(false);
+        formPanel.add(saldoLabel);
+        formPanel.add(saldoField);
 
         // Etichetta per i puntiApp
-        pointsLabel = new JLabel("PuntiApp disponibili:");
-        pointsField = new JTextField();
-        pointsField.setEditable(false);
-        formPanel.add(pointsLabel);
-        formPanel.add(pointsField);
+        puntiLabel = new JLabel("  PuntiApp accumulati:");
+        puntiField = new JTextField();
+        puntiField.setEditable(false);
+        formPanel.add(puntiLabel);
+        formPanel.add(puntiField);
 
         // Etichetta per il numero della carta
-        cardNumberInputLabel = new JLabel("Numero carta:");
-        cardNumberFieldInput = new JTextField();
-        cardNumberFieldInput.setEditable(false);
-        formPanel.add(cardNumberInputLabel);
-        formPanel.add(cardNumberFieldInput);
+        numeroCartaInputLabel = new JLabel("  Numero carta:");
+        numeroCartaFieldInput = new JTextField();
+        numeroCartaFieldInput.setEditable(false);
+        formPanel.add(numeroCartaInputLabel);
+        formPanel.add(numeroCartaFieldInput);
 
         // Etichetta per il CVV
-        cvvLabel = new JLabel("CVV:");
+        cvvLabel = new JLabel("  CVV:");
         cvvField = new JTextField();
         cvvField.setEditable(false);
         formPanel.add(cvvLabel);
         formPanel.add(cvvField);
 
         // Etichetta per l'importo da pagare
-        amountLabel = new JLabel("Totale da pagare:");
+        amountLabel = new JLabel("  Totale da pagare:");
         amountField = new JTextField();
         amountField.setEditable(false);
         formPanel.add(amountLabel);
         formPanel.add(amountField);
 
         // Bottone per confermare il pagamento
-        payButton = new JButton("Conferma pagamento");
+        payButton = new JButton("  Conferma pagamento");
         formPanel.add(new JLabel());  // Spazio vuoto
         formPanel.add(payButton);
 
         // Impostiamo il font per i componenti
         Font font = new Font("Arial", Font.PLAIN, 22);
         methodLabel.setFont(font);
-        cardNumberField.setFont(font);
-        balanceLabel.setFont(font);
-        balanceField.setFont(font);
-        pointsLabel.setFont(font);
-        pointsField.setFont(font);
-        cardNumberInputLabel.setFont(font);
-        cardNumberFieldInput.setFont(font);
+        opzioneMetodoPagamentoField.setFont(font);
+        saldoLabel.setFont(font);
+        saldoField.setFont(font);
+        puntiLabel.setFont(font);
+        puntiField.setFont(font);
+        numeroCartaInputLabel.setFont(font);
+        numeroCartaFieldInput.setFont(font);
         cvvLabel.setFont(font);
         cvvField.setFont(font);
         amountLabel.setFont(font);
@@ -119,29 +120,29 @@ public class PagamentoView extends JFrame {
         validate();
 
         // Aggiungiamo un ActionListener per la ComboBox
-        cardNumberField.addActionListener(new ActionListener() {
+        opzioneMetodoPagamentoField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateUIBasedOnSelection();
+                updateUIBasedOnSelection(costoSpedizione);
             }
         });
 
-        updateUIBasedOnSelection();  // Per impostare l'interfaccia all'avvio
+        updateUIBasedOnSelection(costoSpedizione);  // Per impostare l'interfaccia all'avvio
 
         setVisible(true);
     }
 
     // Metodo per aggiornare l'interfaccia in base alla selezione della ComboBox
-    private void updateUIBasedOnSelection() {
-        String selectedPaymentMethod = (String) cardNumberField.getSelectedItem();
+    private void updateUIBasedOnSelection(double costoSpedizione) {
+        String selectedPaymentMethod = (String) opzioneMetodoPagamentoField.getSelectedItem();
 
         // Nascondi tutti i campi per un aggiornamento pulito
-        balanceLabel.setVisible(false);
-        balanceField.setVisible(false);
-        pointsLabel.setVisible(false);
-        pointsField.setVisible(false);
-        cardNumberInputLabel.setVisible(false);
-        cardNumberFieldInput.setVisible(false);
+        saldoLabel.setVisible(false);
+        saldoField.setVisible(false);
+        puntiLabel.setVisible(false);
+        puntiField.setVisible(false);
+        numeroCartaInputLabel.setVisible(false);
+        numeroCartaFieldInput.setVisible(false);
         cvvLabel.setVisible(false);
         cvvField.setVisible(false);
         amountLabel.setVisible(false);
@@ -149,87 +150,87 @@ public class PagamentoView extends JFrame {
 
         // Gestiamo la visibilità dei campi in base alla selezione
         if (selectedPaymentMethod.equals("Saldo")) {
-            balanceLabel.setVisible(true);
-            balanceField.setVisible(true);
-            balanceField.setText(String.valueOf(saldoUtente)); // Mostra il saldo
+            saldoLabel.setVisible(true);
+            saldoField.setVisible(true);
+            saldoField.setText(String.valueOf(saldoUtente)); // Mostra il saldo
 
             amountLabel.setVisible(true);
             amountField.setVisible(true);
-            amountField.setText(String.valueOf(saldoUtente)); // Mostra l'importo in euro
+            amountField.setText(String.valueOf(costoSpedizione)); // Mostra il costo spedizione
 
         } else if (selectedPaymentMethod.equals("PuntiApp")) {
-            pointsLabel.setVisible(true);
-            pointsField.setVisible(true);
-            pointsField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp
+            puntiLabel.setVisible(true);
+            puntiField.setVisible(true);
+            puntiField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp
 
             amountLabel.setVisible(true);
             amountField.setVisible(true);
-            amountField.setText(String.valueOf(puntiApp)); // Mostra il totale in puntiApp
+            amountField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp come importo
 
         } else if (selectedPaymentMethod.equals("Carta")) {
-            cardNumberInputLabel.setVisible(true);
-            cardNumberFieldInput.setVisible(true);
+            numeroCartaInputLabel.setVisible(true);
+            numeroCartaFieldInput.setVisible(true);
             cvvLabel.setVisible(true);
             cvvField.setVisible(true);
 
             amountLabel.setVisible(true);
             amountField.setVisible(true);
-            amountField.setText("50.00"); // Mostra un importo esempio
+            amountField.setText(String.valueOf(costoSpedizione)); // Mostra il costo spedizione
 
         } else if (selectedPaymentMethod.equals("Saldo+PuntiApp")) {
-            balanceLabel.setVisible(true);
-            balanceField.setVisible(true);
-            balanceField.setText(String.valueOf(saldoUtente)); // Mostra il saldo
+            saldoLabel.setVisible(true);
+            saldoField.setVisible(true);
+            saldoField.setText(String.valueOf(saldoUtente)); // Mostra il saldo
 
-            pointsLabel.setVisible(true);
-            pointsField.setVisible(true);
-            pointsField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp
+            puntiLabel.setVisible(true);
+            puntiField.setVisible(true);
+            puntiField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp
 
             amountLabel.setVisible(true);
             amountField.setVisible(true);
-            amountField.setText("200.00"); // Mostra un importo esempio
+            amountField.setText(String.valueOf(costoSpedizione)); // Mostra il costo spedizione
 
         } else if (selectedPaymentMethod.equals("Carta+PuntiApp")) {
-            cardNumberInputLabel.setVisible(true);
-            cardNumberFieldInput.setVisible(true);
+            numeroCartaInputLabel.setVisible(true);
+            numeroCartaFieldInput.setVisible(true);
             cvvLabel.setVisible(true);
             cvvField.setVisible(true);
 
-            pointsLabel.setVisible(true);
-            pointsField.setVisible(true);
-            pointsField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp
+            puntiLabel.setVisible(true);
+            puntiField.setVisible(true);
+            puntiField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp
 
             amountLabel.setVisible(true);
             amountField.setVisible(true);
-            amountField.setText("150.00"); // Mostra un importo esempio
+            amountField.setText(String.valueOf(costoSpedizione)); // Mostra il costo spedizione
 
         } else if (selectedPaymentMethod.equals("Saldo+Carta")) {
-            balanceLabel.setVisible(true);
-            balanceField.setVisible(true);
-            balanceField.setText(String.valueOf(saldoUtente)); // Mostra il saldo
+            saldoLabel.setVisible(true);
+            saldoField.setVisible(true);
+            saldoField.setText(String.valueOf(saldoUtente)); // Mostra il saldo
 
-            cardNumberInputLabel.setVisible(true);
-            cardNumberFieldInput.setVisible(true);
+            numeroCartaInputLabel.setVisible(true);
+            numeroCartaFieldInput.setVisible(true);
             cvvLabel.setVisible(true);
             cvvField.setVisible(true);
 
             amountLabel.setVisible(true);
             amountField.setVisible(true);
-            amountField.setText("100.00"); // Mostra un importo esempio
+            amountField.setText(String.valueOf(costoSpedizione)); // Mostra il costo spedizione
 
         } else if (selectedPaymentMethod.equals("PuntiApp+Carta")) {
-            pointsLabel.setVisible(true);
-            pointsField.setVisible(true);
-            pointsField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp
+            puntiLabel.setVisible(true);
+            puntiField.setVisible(true);
+            puntiField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp
 
-            cardNumberInputLabel.setVisible(true);
-            cardNumberFieldInput.setVisible(true);
+            numeroCartaInputLabel.setVisible(true);
+            numeroCartaFieldInput.setVisible(true);
             cvvLabel.setVisible(true);
             cvvField.setVisible(true);
 
             amountLabel.setVisible(true);
             amountField.setVisible(true);
-            amountField.setText("75.00"); // Mostra un importo esempio
+            amountField.setText(String.valueOf(costoSpedizione)); // Mostra il costo spedizione
         }
     }
 
@@ -239,7 +240,7 @@ public class PagamentoView extends JFrame {
             @Override
             public void run() {
                 // Crea una nuova istanza di PagamentoView
-            	double costo=5.2;
+                double costo = 2.5;
                 PagamentoView pagamentoView = new PagamentoView(costo);
                 // Puoi usare il metodo setVisible(true) per mostrare la finestra
                 pagamentoView.setVisible(true);

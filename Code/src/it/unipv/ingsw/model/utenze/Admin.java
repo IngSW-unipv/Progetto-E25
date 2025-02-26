@@ -1,13 +1,19 @@
 package it.unipv.ingsw.model.utenze;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.unipv.ingsw.model.Observer;
 import it.unipv.ingsw.model.spedizione.Spedizione;
 
 public class Admin extends ASuperUser implements Observer<Utente>{
 	private int matricola;
+	private List<Utente> utentiDaValidare;
+	
 	//costruttore
 	public Admin(String mail, String password) {
 		super(mail, password);
+		utentiDaValidare = new ArrayList<>();
 	}
 	
 	//costruttore di default
@@ -29,16 +35,21 @@ public class Admin extends ASuperUser implements Observer<Utente>{
 	
 	@Override
 	public void update(Utente dato) {
-		System.out.println("Aggiornato il profilo dell'utente con email: "+dato.getMail());
-		
+		System.out.println("il profilo dell'utente con email: '"+dato.getMail()+"' è stato modificato");
+		utentiDaValidare.add(dato);
 	}
 	
-	public boolean validaAccount(Utente utente) {
-		return true;
+	public void validaAccount(Utente utente) {
+		utente.setStatoProfilo(true);
 	}
 
 	public boolean disattivaAccount(Utente utente) {
+		utente.setStatoProfilo(false);
 		return true;
+	}
+	
+	public void cancellaAccount(Utente utente) {
+		//dao cancellazione utente;
 	}
 
 	public int getMatricola() {

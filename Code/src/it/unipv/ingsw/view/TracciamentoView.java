@@ -25,10 +25,11 @@ public class TracciamentoView {
 	private JTextArea statoSpedizioneArea;
 	private JButton tracciaButton;
 	
-	Coordinate punto= new Coordinate(15,20);
-	IPuntoDeposito locker1 = new Locker(punto, 10);
-	IPuntoDeposito locker2 = new Locker(punto, 15);
-	private Spedizione spedizione = new Spedizione(null, null, null, 0, locker1, locker2, null, new Date(0));
+	Coordinate a = new Coordinate(4,5);
+	Coordinate b = new Coordinate(7,-2);
+	IPuntoDeposito l1 = new Locker(a,1);
+	IPuntoDeposito l2 = new Locker(b,2);
+	private Spedizione spedizione = new Spedizione(null, null, null, 0, l1, l2, null, new Date(0));
 	
 	public TracciamentoView() {
 		

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 public class PagamentoView extends JFrame {
-    // Variabili per i componenti
+	// Variabili per i componenti
     private JPanel formPanel;
     private JLabel cardNumberLabel;
     private JComboBox<String> opzioneMetodoPagamentoField;
@@ -33,6 +34,8 @@ public class PagamentoView extends JFrame {
     private JTextField puntiField;
     private JLabel numeroCartaInputLabel;
     private JTextField numeroCartaFieldInput;
+    private int selectedIndex;
+    //private PagamentoView pagamentoView;
 
     // Dati finti per l'utente (questi dovrebbero essere sostituiti con i dati reali)
     private double saldoUtente = 100.0; // Esempio di saldo
@@ -74,14 +77,14 @@ public class PagamentoView extends JFrame {
         // Etichetta per il numero della carta
         numeroCartaInputLabel = new JLabel("  Numero carta:");
         numeroCartaFieldInput = new JTextField();
-        numeroCartaFieldInput.setEditable(false);
+        numeroCartaFieldInput.setEditable(true);
         formPanel.add(numeroCartaInputLabel);
         formPanel.add(numeroCartaFieldInput);
 
         // Etichetta per il CVV
         cvvLabel = new JLabel("  CVV:");
         cvvField = new JTextField();
-        cvvField.setEditable(false);
+        cvvField.setEditable(true);
         formPanel.add(cvvLabel);
         formPanel.add(cvvField);
 
@@ -113,16 +116,24 @@ public class PagamentoView extends JFrame {
         amountField.setFont(font);
         payButton.setFont(font);
 
-        // Impostiamo la dimensione della finestra per il display
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(screenSize.width / 4, screenSize.height / 4);
         setLocationRelativeTo(null);  // Centra la finestra sullo schermo
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         validate();
-
-        // Aggiungiamo un ActionListener per la ComboBox
+        
         opzioneMetodoPagamentoField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Recupera l'indice selezionato
+                int selectedIndex = opzioneMetodoPagamentoField.getSelectedIndex();
+                
+                // Verifica se l'indice cambia correttamente
+                System.out.println("Indice selezionato nel listener della ComboBox: " + selectedIndex);
+
+                // Verifica anche la voce selezionata nella ComboBox
+                String selectedOption = (String) opzioneMetodoPagamentoField.getSelectedItem(); //OKKK
+                System.out.println("Opzione selezionata: " + selectedOption);
+                
+                // Aggiungi anche l'aggiornamento della UI
                 updateUIBasedOnSelection(costoSpedizione);
             }
         });
@@ -232,9 +243,85 @@ public class PagamentoView extends JFrame {
             amountField.setVisible(true);
             amountField.setText(String.valueOf(costoSpedizione)); // Mostra il costo spedizione
         }
+        this.revalidate();  // Rende il componente visibile con le modifiche applicate
+        this.repaint(); 
     }
+    
 
-    public static void main(String[] args) {
+	public int getSelectedIndex() {
+		return selectedIndex;
+	}
+	
+    public void setSelectedIndex(int selectedIndex) {
+		this.selectedIndex = selectedIndex;
+	}
+
+	public JComboBox<String> getOpzioneMetodoPagamentoField() {
+		return opzioneMetodoPagamentoField;
+	}
+
+	public void setOpzioneMetodoPagamentoField(JComboBox<String> opzioneMetodoPagamentoField) {
+		this.opzioneMetodoPagamentoField = opzioneMetodoPagamentoField;
+	}
+
+	public JTextField getCvvField() {
+		return cvvField;
+	}
+
+	public void setCvvField(JTextField cvvField) {
+		this.cvvField = cvvField;
+	}
+
+	public JTextField getAmountField() {
+		return amountField;
+	}
+
+	public void setAmountField(JTextField amountField) {
+		this.amountField = amountField;
+	}
+
+	public JTextField getSaldoField() {
+		return saldoField;
+	}
+
+	public void setSaldoField(JTextField saldoField) {
+		this.saldoField = saldoField;
+	}
+
+	public JTextField getPuntiField() {
+		return puntiField;
+	}
+
+	public void setPuntiField(JTextField puntiField) {
+		this.puntiField = puntiField;
+	}
+
+	public JTextField getNumeroCartaFieldInput() {
+		return numeroCartaFieldInput;
+	}
+
+	public void setNumeroCartaFieldInput(JTextField numeroCartaFieldInput) {
+		this.numeroCartaFieldInput = numeroCartaFieldInput;
+	}
+
+	public double getSaldoUtente() {
+		return saldoUtente;
+	}
+
+	public void setSaldoUtente(double saldoUtente) {
+		this.saldoUtente = saldoUtente;
+	}
+	
+	public JButton getPayButton() {
+		return payButton;
+	}
+
+	public void setPayButton(JButton payButton) {
+		this.payButton = payButton;
+	}
+	
+
+	public static void main(String[] args) {
         // Imposta l'aspetto dell'interfaccia grafica in modo più fluido (threading Swing)
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -243,7 +330,7 @@ public class PagamentoView extends JFrame {
                 double costo = 2.5;
                 PagamentoView pagamentoView = new PagamentoView(costo);
                 // Puoi usare il metodo setVisible(true) per mostrare la finestra
-                pagamentoView.setVisible(true);
+                pagamentoView.setVisible(false);
             }
         });
     }

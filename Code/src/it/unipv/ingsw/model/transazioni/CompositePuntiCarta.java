@@ -4,6 +4,7 @@ import it.unipv.ingsw.exceptions.PaymentException;
 import it.unipv.ingsw.model.Singleton;
 import it.unipv.ingsw.model.utenze.Mittente;
 import it.unipv.ingsw.model.utenze.Saldo;
+import it.unipv.ingsw.model.utenze.Utente;
 
 public class CompositePuntiCarta extends CompositePagamentiStrategy{
 	private PagamentoCarta pagaConCarta;
@@ -15,16 +16,17 @@ public class CompositePuntiCarta extends CompositePagamentiStrategy{
 	}
 	
 	//pagamento con punti e carta
-	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{ 
+	public void effettuaPagamento(double amount,int puntiApp,Utente utente) throws PaymentException{ 
 		double temp=amount;
 		Saldo sal;
+		System.out.println("QUI PUNTI-CARTA");
 		
 		Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
 		
 		//trasformo puntiApp in saldo 
 		temp-=(super.convertiPuntiInSaldo(m.getSaldo().getPuntiApp())); //utilizzo una variabile temp per vedere se ho punti sufficienti per pagare
 		if(temp<0) { //Posso pagare con puntiApp, non c'è bisogno di carta!
-			pagaConPuntiApp.effettuaPagamento(amount, puntiApp); ;
+			pagaConPuntiApp.effettuaPagamento(amount, puntiApp, utente); ;
 		}
 		else {
 			//ho abbastanza denaro: pagamento solo con i puntiApp trasformati in saldo

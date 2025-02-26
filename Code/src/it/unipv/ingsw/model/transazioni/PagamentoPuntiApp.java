@@ -4,11 +4,13 @@ import it.unipv.ingsw.exceptions.PaymentException;
 import it.unipv.ingsw.model.Singleton;
 import it.unipv.ingsw.model.utenze.Mittente;
 import it.unipv.ingsw.model.utenze.Saldo;
+import it.unipv.ingsw.model.utenze.Utente;
 
 public class PagamentoPuntiApp implements IPagamento{ //aggiunto implements IPagamento per far funzionare composite, dovrei far capire che lo sta già implementando senza fare implements
 		
 		//pagamento con puntiApp
-		public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{ 
+		public void effettuaPagamento(double amount,int puntiApp,Utente utente) throws PaymentException{ 
+			System.out.println("QUI PUNTIAPP");
 			int temp;
 			Saldo sal;
 			Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();

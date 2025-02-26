@@ -3,6 +3,7 @@ package it.unipv.ingsw.model.transazioni;
 import java.util.LinkedList;
 import java.util.List;
 import it.unipv.ingsw.exceptions.PaymentException;
+import it.unipv.ingsw.model.utenze.Utente;
 
 public abstract class CompositePagamentiStrategy implements IPagamento{
 
@@ -35,6 +36,6 @@ public abstract class CompositePagamentiStrategy implements IPagamento{
 	}
 	
 	@Override
-	public abstract void effettuaPagamento(double amount,int puntiApp) throws PaymentException;
+	public abstract void effettuaPagamento(double amount,int puntiApp,Utente utente) throws PaymentException;
 	
 }	

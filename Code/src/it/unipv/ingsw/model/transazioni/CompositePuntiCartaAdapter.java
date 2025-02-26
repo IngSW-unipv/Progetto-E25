@@ -1,6 +1,7 @@
 package it.unipv.ingsw.model.transazioni;
 
 import it.unipv.ingsw.exceptions.PaymentException;
+import it.unipv.ingsw.model.utenze.Utente;
 
 public class CompositePuntiCartaAdapter implements IPagamento {
 		private CompositePuntiCarta pagamentoPuntiCarta;
@@ -10,8 +11,8 @@ public class CompositePuntiCartaAdapter implements IPagamento {
 		}
 		
 		@Override
-		public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{
-			pagamentoPuntiCarta.effettuaPagamento(amount, puntiApp);
+		public void effettuaPagamento(double amount,int puntiApp,Utente utente) throws PaymentException{
+			pagamentoPuntiCarta.effettuaPagamento(amount, puntiApp, utente);
 		}
 
 }

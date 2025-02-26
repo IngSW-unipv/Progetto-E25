@@ -1,6 +1,7 @@
 package it.unipv.ingsw.model.transazioni;
 
 import it.unipv.ingsw.exceptions.PaymentException;
+import it.unipv.ingsw.model.utenze.Utente;
 
 public class PagamentoPuntiAppAdapter implements IPagamento{
 	private PagamentoPuntiApp pagamentoPuntiApp;
@@ -10,7 +11,7 @@ public class PagamentoPuntiAppAdapter implements IPagamento{
 	}
 	
 	@Override
-	public void effettuaPagamento(double amount,int puntiApp) throws PaymentException{
-		pagamentoPuntiApp.effettuaPagamento(amount, puntiApp);
+	public void effettuaPagamento(double amount,int puntiApp,Utente utente) throws PaymentException{
+		pagamentoPuntiApp.effettuaPagamento(amount, puntiApp,utente);
 	}
 }

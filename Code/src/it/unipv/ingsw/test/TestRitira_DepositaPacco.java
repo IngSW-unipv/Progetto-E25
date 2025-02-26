@@ -25,10 +25,12 @@ public class TestRitira_DepositaPacco {
 		GestoreSpedizioni gs = new GestoreSpedizioni(m);
 		
 		Coordinate a = new Coordinate(4,5);	
+		Coordinate b = new Coordinate(7,-2);
 		IPuntoDeposito l1 = new Locker(a,1);
+		IPuntoDeposito l2 = new Locker(b,2);
 		QRcode codice = new QRcode();
 		codice.generaQRcode();
-		Spedizione spedizione = new Spedizione(12345, null, l1, null);
+		Spedizione spedizione = new Spedizione(12345, null, l1, l2);
 		Scompartimento sc = new Scompartimento(2, Size.S);
 		
 		((Locker) l1).getScompartimenti().put(2, sc);
@@ -56,12 +58,15 @@ public class TestRitira_DepositaPacco {
 		MatchingService m = new MatchingService();
 		GestoreSpedizioni gs = new GestoreSpedizioni(m);
 	
-		Coordinate a = new Coordinate(4,5);	
-		IPuntoDeposito l6 = new Locker(a,1);
+		Coordinate f = new Coordinate(5,-1);	
+		Coordinate g = new Coordinate(8,-2);
+		IPuntoDeposito l6 = new Locker(f,6);
+		IPuntoDeposito l7 = new Locker(g,7);
+		
 		QRcode codice = new QRcode();
 		codice.generaQRcode();
 		
-		Spedizione spedizione = new Spedizione(12345, null, l6, null);
+		Spedizione spedizione = new Spedizione(12345, null, l6, l7);
 		spedizione.addObserver(user);
 		
 		Scompartimento sc = new Scompartimento(3, Size.S);
@@ -81,7 +86,7 @@ public class TestRitira_DepositaPacco {
 //		spedizione.notifyObservers(); si può non mettere perché una volta che cambia lo stato della spedizione viene chiamato il metodo notify
 		
 		//verifica che lo stato sped. sia stato aggiornato correttamente
-		assertEquals("In attesa.", spedizione.getStatoSpedizione(), "L'utente dovrebbe ricevere la mail dell'aggiornamento"); 
+		assertEquals("In attesa.", spedizione.getStatoSpedizione()); //L'utente dovrebbe ricevere la mail dell'aggiornamento 
 		
 		
 		

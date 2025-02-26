@@ -1,22 +1,41 @@
 package it.unipv.ingsw.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.TextArea;
 
 import javax.swing.*;
 
 public class RecensioniView extends JFrame {
 	
+	private String recensione;
+	
 	public RecensioniView() {
+		
 		setTitle("Recensioni");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1000, 600);
+		setLocationRelativeTo(null);
+	
+		JLabel label=new JLabel("Lascia una recensione sul nostro servizio");
+		add(label, BorderLayout.PAGE_START);
 		
-		JPanel textAreaPanel = new JPanel(new BorderLayout());
-		 JTextArea textArea = new JTextArea("Lascia una recensione sul nostro servizio");
-		  textArea.setEditable(false);  // Impedisce che l'utente modifichi il testo
-		  textArea.setWrapStyleWord(true);  
-		  textArea.setLineWrap(true);
-		  add(textAreaPanel, BorderLayout.NORTH); 
+		JTextArea casella_testo= new JTextArea();
+		casella_testo.setBackground(Color.LIGHT_GRAY);
+		add(casella_testo,BorderLayout.CENTER );
+		recensione=casella_testo.getText();
+		
+		JButton button=new JButton("Invia recensione");
+		add(button,BorderLayout.PAGE_END);
+		
+		 
+		setVisible(true);
+		  
+	}
+	
+	public String getRecensione() {
+		return recensione;
 	}
 
 		
@@ -28,6 +47,5 @@ public class RecensioniView extends JFrame {
 	        	r.setVisible(true);
 	        }
 	    });
-		
 	}
 }

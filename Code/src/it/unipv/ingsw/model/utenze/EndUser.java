@@ -1,9 +1,9 @@
 package it.unipv.ingsw.model.utenze;
 
-import java.sql.Blob;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+//import java.sql.Blob;
+//import java.time.LocalDate;
+//import java.util.ArrayList;
+//import java.util.List;
 
 import it.unipv.ingsw.model.Observer;
 import it.unipv.ingsw.model.spedizione.Spedizione;

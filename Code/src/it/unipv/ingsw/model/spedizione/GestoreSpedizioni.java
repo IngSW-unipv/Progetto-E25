@@ -96,16 +96,9 @@ public class GestoreSpedizioni {
 		//verifica il QR con locker, passando false per 'isMittenteDeposita'
 		boolean codiceValido = locker.checkQR(codice, spedizione, true, false);
 		
-		if (codiceValido) {
-			if (isRitiro) {
-			spedizione.setStatoSpedizione("Consegnato");
-			System.out.println("Il pacco è stato ritirato dal destinatario. Stato aggiornato a 'Consegnato'.");
-		} else {
-			System.out.println("Errore: Il pacco non è stato ritirato dal destinatario.");
-			}	 
-		}else {	
-		System.out.println("Errore: Il codice QR non valido");
-			}
+		
+		//metodo che chiama il metodo checkQR nella classe Locker
+		
 	}
 	
 	//gli passo Locker come parametro anziché istanziarne uno ogni volta
@@ -113,12 +106,10 @@ public class GestoreSpedizioni {
 
 		
 		//verifica il QR con locker, passando true per 'isMittenteDeposita' e false a 'isRitiro'
-		boolean codiceValido = locker.checkQR(codice, spedizione, true, false);
 		
-		if (codiceValido) {
-			System.out.println("Il pacco è stato depositato dal Mittente.");
-			spedizione.setStatoSpedizione("In attesa");
-		} else {
+		boolean codiceValido = locker.checkQR(codice, spedizione, false, isMittenteDeposita);
+		
+		if (!codiceValido) {
 			System.out.println("Errore: Il codice QR non è valido.");
 		}
 	}
@@ -143,7 +134,7 @@ public class GestoreSpedizioni {
 			//per esempio dataDeposito è 0. il calcolo è gestito da una libreria di java
 			System.out.println("Errore nel calcolo del tempo di deposito: " + e.getMessage());
 			System.out.println("Il pacco non è stato depositato entro 3gg. \nStato aggiornato a 'Pacco smarrito'."); // il corriere non ha depositato il pacco entro 3gg <= dataDeposito = 0
-			spedizione.setStatoSpedizione("Pacco Smarrito");
+			spedizione.setStatoSpedizione("Pacco Smarrito.");
 		}
 	}
 	

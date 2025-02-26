@@ -56,6 +56,8 @@ public class Spedizione {
 		this.partenza = a;
 		this.destinazione = b;
 		this.dataDeposito = null; //inizialmente nessuna data di deposito
+		this.codice = new QRcode();
+		this.codice.generaQRcode();
 	//	this.itinerario.setFine(destinazione.getPosizione());
 		
 		//matchingService = new MatchingService();
@@ -76,6 +78,10 @@ public class Spedizione {
 	//costruttore default
 	public Spedizione() {
 		
+	}
+	
+	public int getId() {
+		return this.IDSpedizione;
 	}
 	
 	public Mittente getMittente() {
@@ -324,5 +330,6 @@ public class Spedizione {
 		this.carrier = (Carrier) utente;
 		
 	}
+
 
 }

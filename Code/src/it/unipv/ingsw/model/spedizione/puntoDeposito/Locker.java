@@ -21,15 +21,16 @@ public class Locker implements IPuntoDeposito{
 	private Coordinate posizione;
 	private Map<Integer, Scompartimento> scompartimenti; // ogni scompartimento e' identificato da un unico Key
 	private Map<String, Integer> mappaQRcode= new HashMap<>(); //mappa dei Qr che il locker si aspetta di ricevere
+//	private Map<String, Spedizione> mappaQR= new HashMap<>(); //ha come chiave codice QR e valore l'oggetto spedizione
 	private int IDscompartimento;
 	private int IDlocker;
 	private Date dataDeposito;
 	
 	public Locker(Coordinate posizione, int Idlocker) {
 		this.posizione = posizione;
-		scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
 		dataDeposito = null; //inizialmente nessuna data di deposito
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
+//		this.mappaQR = new HashMap<>();
 	}
 	
 	public void aggiungiScompartimento(Scompartimento scompartimento) {
@@ -75,6 +76,7 @@ public class Locker implements IPuntoDeposito{
 		return dataDeposito;
 	}
 	
+	
 	//metodo che funziona sia per il carrier che per il destinatario
 	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isMittenteDeposita) {
 		
@@ -82,36 +84,45 @@ public class Locker implements IPuntoDeposito{
 		String codiceQR = codice.getQRcode();
 		
 		//verifica se il codice esiste nella mappa dei QR che il locker aspetta
-		if(!mappaQRcode.containsKey(codiceQR)) {
-			System.out.println("Codice QR non valido.");
-			return false; //il codice non è valido e non si esegue il resto del metodo
-		}
-		
-		Integer spedizioneAssociata = mappaQRcode.get(codiceQR);
-		if(!spedizioneAssociata.equals(spedizione)) {
-			System.out.println("Il codiceQR non corrisponde alla spedizione");
-			return false;
-		}		
-			return true; //codice valido 
+		if(mappaQRcode.containsKey(codiceQR)) {
+			System.out.println("Codice QR valido: " + codiceQR);
+			
+			
+			//se il qr valido, procede
+			System.out.println("Codice QR valido: " + codiceQR);
+			int s = mappaQRcode.get(codiceQR);
+			Scompartimento sc = scompartimenti.get(s);
+			
+				sc.Open();
+				
+				if (isRitiro) {
+					spedizione.setStatoSpedizione("Consegnato.");
+					System.out.println("Il pacco è stato ritirato dal destinatario. Stato aggiornato a 'Consegnato'.");
+				}
+				return true;
+			} else {
+				System.out.println("Errore: Il codice QR non è valido.");
+				return false;
+			}
 	}
-	
-	public void apriScompartimento(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isMittenteDeposita) {
-		if (checkQR(codice, spedizione, isRitiro, isMittenteDeposita) == true) {
-			
-			int IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
-			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
-			scompartimento.Open();
-			
-			this.registraDeposito(new Date());
-			
-			//elimina dalla mappa il codiceQR scansionato
-			mappaQRcode.remove(codice); //elimina dalla mappa il codiceQR scansionato
-			System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
-			
-		} else {
-			System.out.println("Codice QR non valido. Impossibile aprire lo scompartimento.");
-		}
-	}
+
+//	public void apriScompartimento(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isMittenteDeposita) {
+//		if (checkQR(codice, spedizione, isRitiro, isMittenteDeposita) == true) {
+//			
+//			int IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
+//			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
+//			scompartimento.Open();
+//			
+//			this.registraDeposito(new Date());
+//			
+//			//elimina dalla mappa il codiceQR scansionato
+//			mappaQRcode.remove(codice); //elimina dalla mappa il codiceQR scansionato
+//			System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
+//			
+//		} else {
+//			System.out.println("Codice QR non valido. Impossibile aprire lo scompartimento.");
+//		}
+//	}
 
 //	@Override
 //	public boolean checkQRsecondo(String codice) {
@@ -161,5 +172,15 @@ public class Locker implements IPuntoDeposito{
 					}
 				}
 				
-	}	
+	}
+
+	public Map<String, Integer> getMappaQRcode() {
+		return mappaQRcode;
+	}
+
+	public Map<Integer, Scompartimento> getScompartimenti() {
+		return scompartimenti;
+	}
+
+
 }

@@ -21,15 +21,15 @@ public class CompositePuntiSaldo extends CompositePagamentiStrategy{
 		
 		Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
 		//trasformo puntiApp in saldo
-		amount-=(super.convertiPuntiInSaldo(m.getSaldo().getPuntiApp()));
-		if(m.getSaldo().getDenaro()<amount) {
+		amount-=(super.convertiPuntiInSaldo(utente.getSaldo().getPuntiApp()));
+		if(utente.getSaldo().getDenaro()<amount) {
 			throw new PaymentException();
 		}
 		else {
-			temp=m.getSaldo().getDenaro();
+			temp=utente.getSaldo().getDenaro();
 			temp=temp-puntiApp;
 			sal=new Saldo(temp,0);
-			m.setSaldo(sal);
+			utente.setSaldo(sal);
 		}
 	}
 }

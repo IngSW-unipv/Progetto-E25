@@ -33,27 +33,45 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		ArrayList<Spedizione> result = new ArrayList<>();
 
         conn = DBConnection.startConnection(conn);
-        Statement st;
-        ResultSet rs;
+        Statement st1;
+        Statement st2;
+        ResultSet rs1;
+        ResultSet rs2;
         Spedizione s;
         IShippable ship;
         IPuntoDeposito pd1;
         IPuntoDeposito pd2;
+        Coordinate c1;
+        Coordinate c2;
 
         try {
-            st = conn.createStatement();
-            String query = "SELECT * FROM spedizione natural join pacco WHERE statoSpedizione = 'IN_ATTESA'";
-            rs = st.executeQuery(query);
-
-            while (rs.next()) {
+            st1 = conn.createStatement();
+            String query1 = "SELECT * FROM spedizione natural join pacco WHERE statoSpedizione = 'IN_ATTESA'";
+            rs1 = st1.executeQuery(query1);
+            
+            while (rs1.next()) {
             	
-            	ship = new Pacco(Size.valueOf(rs.getString("size")), rs.getDouble("peso"));
-            	//pd1 = new Locker(); devo risalire alla posizione del locker 
+            	ship = new Pacco(Size.valueOf(rs1.getString("size")), rs1.getDouble("peso"));
             	
-            	//int id, IShippable shippable, IPuntoDeposito a, IPuntoDeposito b
-                s = new Spedizione(rs.getInt(0), ship, null, null);
+            	//ricavo la posizione del locker iniziale e finale 
+            	st2 = conn.createStatement();
+            	
+                String query2 = "SELECT ST_X(posizione) AS lon, ST_Y(posizione) AS lat FROM locker WHERE IDlocker = "+rs1.getInt("lockerIniziale");
+                rs2 = st2.executeQuery(query2);
+                rs2.next();
+                c1 = new Coordinate(rs2.getDouble("lon"),rs2.getDouble("lat"));
+            	pd1 = new Locker(c1);
+            	
+            	query2 = "SELECT ST_X(posizione) AS lon, ST_Y(posizione) AS lat FROM locker WHERE IDlocker = "+rs1.getInt("lockerFinale");
+                rs2 = st2.executeQuery(query2);
+                rs2.next();
+                c2 = new Coordinate(rs2.getDouble("lon"),rs2.getDouble("lat"));
+            	pd2 = new Locker(c2);
+            	
+            	//costruttore spedizione = (int id, IShippable shippable, IPuntoDeposito a, IPuntoDeposito b)
+                s = new Spedizione(rs1.getInt("IDspedizione"), ship, pd1, pd2);
                 
-
+                System.out.println(s);
                 result.add(s);
             }
             
@@ -63,6 +81,7 @@ public class SpedizioneDAO implements ISpedizioneDAO{
         
 
         DBConnection.closeConnection(conn);
+        System.out.println("size:"+result.size());
         return result;
 		
 	}
@@ -97,7 +116,12 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 	
 	public static void main(String[] args) {
 		SpedizioneDAO sd = new SpedizioneDAO();
-		sd.selectAllInAttesa();
+		List<Spedizione> spedizioni = sd.selectAllInAttesa();
+		
+		for(Spedizione sped : spedizioni) {
+			System.out.println(sped.getIDSpedizione());
+		}
+		
 	}
 	
 }

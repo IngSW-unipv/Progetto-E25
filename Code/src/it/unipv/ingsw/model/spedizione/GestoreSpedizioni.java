@@ -20,13 +20,6 @@ public class GestoreSpedizioni {
 		this.matchingService = matchingService;
 	}
 	
-	
-	//divisione itinerario di una spedizione 
-	public void dividiItinerario(Spedizione s) {
-		
-		s.setItinerarioMancante(matchingService.itinerarioDivider(new Itinerario(s.getPartenza().getPosizione(), s.getDestinazione().getPosizione())));
-	}
-	
 	//metodo avvio spedizione
 	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario, Spedizione spedizione) { 
 		
@@ -50,12 +43,17 @@ public class GestoreSpedizioni {
 
 	}
 	
+	//divisione itinerario di una spedizione 
+	public void dividiItinerario(Spedizione s) {
+			
+		s.setItinerarioMancante(matchingService.itinerarioDivider(new Itinerario(s.getPartenza().getPosizione(), s.getDestinazione().getPosizione())));
+	}
 	
 	//presa in carico di una spedizione 
-	public void presaInCaricoSpedizione(Carrier carrier, List<Spedizione> spedizioniDisponibili) {
+	public void presaInCaricoSpedizione(Carrier carrier) {
 		
 		//ricerca delle spedizioni compatibili
-		List<Spedizione> spedizioniCompatibili = matchingService.trovaSpedizioniCompatibili(carrier.getItinerario(), spedizioniDisponibili);
+		List<Spedizione> spedizioniCompatibili = matchingService.trovaSpedizioniCompatibili(carrier.getItinerario());
 		
 		//assegno al carrier tutte le spedizioni compatibili con il suo itinerario
 		carrier.assegnaSpedizioni(spedizioniCompatibili);
@@ -175,7 +173,7 @@ public class GestoreSpedizioni {
 		MatchingService m = new MatchingService();
 		GestoreSpedizioni gs = new GestoreSpedizioni(m);
 		
-		Itinerario it = new Itinerario(a,b); //spedizione
+		//Itinerario it = new Itinerario(a,b); //spedizione
 		
 		
 		m.setPuntiDeposito(puntiDeposito);
@@ -190,17 +188,12 @@ public class GestoreSpedizioni {
 		Itinerario ic = new Itinerario(i,j);
 		Carrier car = new Carrier(ic);
 		
+	
+		gs.presaInCaricoSpedizione(car);
 		
-		Spedizione s1 = new Spedizione(0, null, l1, l2);
-		
-		gs.dividiItinerario(s1);
-		
-		List <Spedizione> ls = new ArrayList<>();
-		ls.add(s1);
-		
-		gs.presaInCaricoSpedizione(car, ls);
-		
-		System.out.println(car.getSpedizioniAssegnate());
+		System.out.println("numero spedizioni assegnate:::"+car.getSpedizioniAssegnate().size());
+		System.out.println("---id spedizione assegnata:: "+car.getSpedizioniAssegnate().get(0).getIDSpedizione());
+		System.out.println("---id spedizione assegnata:: "+car.getSpedizioniAssegnate().get(1).getIDSpedizione());
 
 
 		

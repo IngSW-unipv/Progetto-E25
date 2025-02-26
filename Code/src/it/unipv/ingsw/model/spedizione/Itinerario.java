@@ -39,7 +39,7 @@ public class Itinerario {
 //		System.out.println(altro.getInizio().distanza(inizio, fine));	
 //		System.out.println(altro.getFine().distanza(inizio, fine));	
 		
-		if(altro.getInizio().distanza(inizio, fine)<TOLLERANZA) {
+		if(altro.getInizio().distanza(inizio, fine)<TOLLERANZA && altro.getFine().distanza(inizio, fine)<TOLLERANZA) {
 			
 			//caso 1: l'itinerario del pacco è completamente contenuto nell'itinerario del carrier
 			if(altro.getFine().distanza(inizio, fine)<TOLLERANZA) {

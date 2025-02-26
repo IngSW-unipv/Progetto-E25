@@ -36,6 +36,7 @@ public class Spedizione {
 	private Date dataInizioSpedizione;
 	QRcode codice; //questo è il codice Qr
 	
+	private Itinerario itinerarioTot;
 	private MatchingService matchingService;
 	private List <Itinerario> itinerarioMancante; //i sottoitinerari che mancano fino alla fine della spedizione 
 	private Itinerario itinerarioCorrente; //itinerario che fornisco al carrier (FORSE NON VA QUI)
@@ -70,12 +71,30 @@ public class Spedizione {
 		this.shippable = shippable; 
 		this.partenza = a;
 		this.destinazione = b;
+		itinerarioTot = new Itinerario(a.getPosizione(),b.getPosizione());
 		
 	}
 	
 	//costruttore default
 	public Spedizione() {
 		
+	}
+	
+	
+	public Itinerario getItinerarioTot() {
+		return itinerarioTot;
+	}
+
+	public void setItinerarioTot(Itinerario itinerarioTot) {
+		this.itinerarioTot = itinerarioTot;
+	}
+
+	public int getIDSpedizione() {
+		return IDSpedizione;
+	}
+	
+	public void setIDSpedizione(int IDSpedizione) {
+		this.IDSpedizione=IDSpedizione;
 	}
 	
 	public Mittente getMittente() {
@@ -314,6 +333,47 @@ public class Spedizione {
 	}
  
 	}*/
+	
+	
+	//debug:
+	int id;
+	String inizio;
+	String fine;
+	String statoSped;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getInizio() {
+		return inizio;
+	}
+
+	public String getFine() {
+		return fine;
+	}
+
+	public String getStatoSped() {
+		return statoSped;
+	}
+
+	public void setInizio(String inizio) {
+		this.inizio = inizio;
+	}
+
+	public void setFine(String fine) {
+		this.fine = fine;
+	}
+
+	public void setStatoSped(String statoSped) {
+		this.statoSped = statoSped;
+	}
+	
+	
 
 	
 }

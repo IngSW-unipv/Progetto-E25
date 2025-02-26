@@ -8,12 +8,11 @@ import it.unipv.ingsw.model.spedizione.Spedizione;
 
 public class Admin extends ASuperUser implements Observer<Utente>{
 	private int matricola;
-	private List<Utente> utentiDaValidare;
+	private List<Utente> utentiDaValidare = new ArrayList<Utente>();
 	
 	//costruttore
 	public Admin(String mail, String password) {
 		super(mail, password);
-		utentiDaValidare = new ArrayList<>();
 	}
 	
 	//costruttore di default
@@ -26,25 +25,22 @@ public class Admin extends ASuperUser implements Observer<Utente>{
 	}
 	
 	
-	//metodi da implementare
-	public boolean validaAccount() {return true;}
-	//public boolean validaAccount(Utente u1,Utente uAttesa1) {return true;}
-	public boolean disattivaAccount() {return true;}
-//	public void update(Spedizione spedizione) {
-		// TODO Auto-generated method stub
-	
 	@Override
 	public void update(Utente dato) {
 		System.out.println("il profilo dell'utente con email: '"+dato.getMail()+"' è stato modificato");
+		dato.setStatoProfilo(false);
+		//chiamare dao
 		utentiDaValidare.add(dato);
 	}
 	
 	public void validaAccount(Utente utente) {
 		utente.setStatoProfilo(true);
+		//chiamare dao
 	}
 
 	public boolean disattivaAccount(Utente utente) {
 		utente.setStatoProfilo(false);
+		//dao
 		return true;
 	}
 	

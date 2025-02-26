@@ -35,5 +35,9 @@ public class Recensioni {
 	public String getRecensione() {
 		return recensione_scritta;
 	}
+	
+	public void setRecensione(String recensione) {
+		this.recensione_scritta=recensione;
+	}
 
 }

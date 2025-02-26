@@ -131,7 +131,6 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 	public static void main(String[] args) {
 		SpedizioneDAO sd = new SpedizioneDAO();
 		List<Spedizione> spedizioni = sd.selectAllInAttesa();
-		
 		for(Spedizione sped : spedizioni) {
 			System.out.println(sped.getIDSpedizione());
 		}

@@ -24,15 +24,15 @@ public class CompositePuntiCarta extends CompositePagamentiStrategy{
 		Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
 		
 		//trasformo puntiApp in saldo 
-		temp-=(super.convertiPuntiInSaldo(m.getSaldo().getPuntiApp())); //utilizzo una variabile temp per vedere se ho punti sufficienti per pagare
+		temp-=(super.convertiPuntiInSaldo(utente.getSaldo().getPuntiApp())); //utilizzo una variabile temp per vedere se ho punti sufficienti per pagare
 		if(temp<0) { //Posso pagare con puntiApp, non c'è bisogno di carta!
 			pagaConPuntiApp.effettuaPagamento(amount, puntiApp, utente); ;
 		}
 		else {
 			//ho abbastanza denaro: pagamento solo con i puntiApp trasformati in saldo
 			pagaConCarta.pagaCarta(temp); ////tot-punti (>0)
-			sal=new Saldo(m.getSaldo().getDenaro(),0); //ho utilizzato tutti i puntiApp
-			m.setSaldo(sal);
+			sal=new Saldo(utente.getSaldo().getDenaro(),0); //ho utilizzato tutti i puntiApp
+			utente.setSaldo(sal);
 		}
 	}
 }

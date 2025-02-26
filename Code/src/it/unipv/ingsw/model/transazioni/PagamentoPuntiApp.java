@@ -14,15 +14,15 @@ public class PagamentoPuntiApp implements IPagamento{ //aggiunto implements IPag
 			int temp;
 			Saldo sal;
 			Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
-			if(m.getSaldo().getPuntiApp()<puntiApp) {
+			if(utente.getSaldo().getPuntiApp()<puntiApp) {
 				throw new PaymentException();
 			}
 			else {
-				temp=m.getSaldo().getPuntiApp();
+				temp=utente.getSaldo().getPuntiApp();
 				temp=temp-puntiApp;
 				
-				sal=new Saldo(m.getSaldo().getDenaro(),temp); 
-				m.setSaldo(sal);
+				sal=new Saldo(utente.getSaldo().getDenaro(),temp); 
+				utente.setSaldo(sal);
 			}
 		}
 }

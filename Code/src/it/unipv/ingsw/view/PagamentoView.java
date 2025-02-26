@@ -99,6 +99,16 @@ public class PagamentoView extends JFrame {
         payButton = new JButton("  Conferma pagamento");
         formPanel.add(new JLabel());  // Spazio vuoto
         formPanel.add(payButton);
+        
+        payButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Logica di pagamento (ad esempio, verifica pagamento, saldo, ecc.)
+                
+                // Dopo la logica del pagamento, chiudi la finestra:
+                dispose();  // Questo chiude la finestra
+            }
+        });
 
         // Impostiamo il font per i componenti
         Font font = new Font("Arial", Font.PLAIN, 22);
@@ -229,19 +239,6 @@ public class PagamentoView extends JFrame {
             amountField.setVisible(true);
             amountField.setText(String.valueOf(costoSpedizione)); // Mostra il costo spedizione
 
-        } else if (selectedPaymentMethod.equals("PuntiApp+Carta")) {
-            puntiLabel.setVisible(true);
-            puntiField.setVisible(true);
-            puntiField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp
-
-            numeroCartaInputLabel.setVisible(true);
-            numeroCartaFieldInput.setVisible(true);
-            cvvLabel.setVisible(true);
-            cvvField.setVisible(true);
-
-            amountLabel.setVisible(true);
-            amountField.setVisible(true);
-            amountField.setText(String.valueOf(costoSpedizione)); // Mostra il costo spedizione
         }
         this.revalidate();  // Rende il componente visibile con le modifiche applicate
         this.repaint(); 

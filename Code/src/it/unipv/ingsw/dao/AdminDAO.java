@@ -47,15 +47,15 @@ public class AdminDAO implements IAdminDAO{
 		Admin result=null;
 				
 		try {
-			String query= "select * from admin natural join superuser where matricola = ?, email = ?, password = ?";
+			String query= "select * from admin natural join superuser where email = ? and matricola = ? and password = ?";
 			
 			st1=conn.prepareStatement(query);
-			st1.setInt(1, matricola);
-			st1.setString(2, email);
+			st1.setString(1, email);
+			st1.setInt(2, matricola);
 			st1.setString(3, password);
 			rs1=st1.executeQuery();
 			if(rs1.next()) {
-				result= new Admin(rs1.getString("email"),rs1.getString("password"));
+				result= new Admin(rs1.getInt("matricola"), rs1.getString("email"),rs1.getString("password"));
 			}
 			
 		} catch  (Exception e) { 
@@ -63,6 +63,8 @@ public class AdminDAO implements IAdminDAO{
 		} finally {
 	        DBConnection.closeConnection(conn); 
 	    }
+		//System.out.println("qui");
+		//System.out.println(result);
 		return result;
 	}
 	
@@ -98,6 +100,7 @@ public class AdminDAO implements IAdminDAO{
 	
 	public static void main(String[] args) {
 		AdminDAO adminDAO= new AdminDAO();
-		System.out.println(adminDAO.selectAll().get(0).getMail());
+		System.out.println(adminDAO.getAdmin(2, "a", "p").getMail());
+		
 	}
 }

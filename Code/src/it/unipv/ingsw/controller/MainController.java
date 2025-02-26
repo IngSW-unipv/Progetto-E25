@@ -32,6 +32,7 @@ public class MainController {
 	public MainController(MainView mainView) {
 		this.mainView=mainView;
 		utenteDAO=new UtenteDAO();
+		adminDAO=new AdminDAO();
 		utenteInit();
 		adminInit();
 		
@@ -105,7 +106,6 @@ public class MainController {
             }
 	
             private void manageAction() throws EmptyFieldException, AccountAlreadyExistsException, SQLException, IOException, WrongFieldException {
-            	SerialBlob fotoDocumento = null;
             	regView.setAlwaysOnTop(false);
             	Utente utente = new Utente();        
                 utente.registrazione(regView.getMailField().getText(),String.valueOf(regView.getPasswordField().getPassword()),regView.getNomeField().getText(),regView.getCognomeField().getText(),
@@ -136,7 +136,7 @@ public class MainController {
 				try {
 					Admin admin;
 					admin = adminDAO.getAdmin(matricola,email,password);
-					System.out.println(admin.toString());
+					System.out.println("ciao"+admin.toString());
 					loginAdminView.setVisible(false);
 					mainView.setVisible(false);
 					new ProfiloAdminController(admin, new AdminView());

@@ -3,6 +3,7 @@ package it.unipv.ingsw.model.spedizione;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Blob;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,8 @@ import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
 import it.unipv.ingsw.model.utenze.ASuperUser;
 import it.unipv.ingsw.model.utenze.Carrier;
 import it.unipv.ingsw.model.utenze.Utente;
+import it.unipv.ingsw.model.spedizione.shippable.*;
+import it.unipv.ingsw.model.utenze.*;
 
 public class GestoreSpedizioni {
 
@@ -32,7 +35,15 @@ public class GestoreSpedizioni {
 	}
 	
 	//metodo avvio spedizione
-	public void avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, ASuperUser destinatario, Spedizione spedizione) { 
+	public Spedizione avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, IPuntoDeposito punto_deposito_destinazione, ASuperUser destinatario, Spedizione spedizione, IShippable spedibile) {
+		
+		Mittente mittente_spedizione= new Mittente(utente.getMail(), null, utente.getNome(), utente.getCognome(), utente.getNumeroTelefono(), utente.getIndirizzoCivico(), utente.getDataNascita(), utente.getFotoDocumento());
+		Destinatario destinatario_spedizione= new Destinatario(destinatario.getMail());
+		spedizione.setMittente(mittente_spedizione);
+		spedizione.setPartenza(punto_deposito_partenza);
+		spedizione.setDestinazione(punto_deposito_destinazione);
+		spedizione.setDestinatario(destinatario_spedizione);
+		spedizione.setPacco(spedibile);
 		
 		if(spedizione.getPacco()==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
 		
@@ -51,6 +62,8 @@ public class GestoreSpedizioni {
 		//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
 			System.out.printf("Finito avvioSpedizione\n");
 		}
+		
+		return spedizione;
 
 	}
 	

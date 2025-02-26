@@ -32,7 +32,12 @@ public class Locker implements IPuntoDeposito{
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
 //		this.mappaQR = new HashMap<>();
 	}
-	
+	public Locker(Coordinate posizione) {
+		this.posizione = posizione;
+		scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
+		dataDeposito = null; //inizialmente nessuna data di deposito
+		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
+	}
 	public void aggiungiScompartimento(Scompartimento scompartimento) {
 		scompartimenti.put(scompartimento.getIDscompartimento(), scompartimento);
 	}
@@ -52,6 +57,12 @@ public class Locker implements IPuntoDeposito{
 	public Coordinate getPosizione() {
 		return posizione;
 	}
+	
+	@Override
+	public int getID() {
+		return IDlocker;
+	}
+	
 	
 	//getter per IDlocker
 	public int getIDlocker() {

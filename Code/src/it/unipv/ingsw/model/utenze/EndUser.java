@@ -23,6 +23,9 @@ public class EndUser extends Utente implements Observer<Spedizione>{
 		this.userType = userType;
 	}
 	
+	public EndUser() {
+	}
+	
 	public String getUserType() {
 		return userType;
 	}

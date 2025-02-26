@@ -9,6 +9,10 @@ public class Destinatario extends EndUser {
 		super(mail, password, nome, cognome, numeroTelefono, indirizzoCivico, dataNascita, fotoDocumento);
 	}
 
+	public Destinatario(String mailDest) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void update() {
 		
 	}

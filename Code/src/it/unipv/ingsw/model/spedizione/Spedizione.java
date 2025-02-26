@@ -317,6 +317,8 @@ public class Spedizione {
 			System.out.printf("Data deposito: "+ dataDeposito+"\n");
 		}
 		
+	}
+ 
 	}*/
 
 	

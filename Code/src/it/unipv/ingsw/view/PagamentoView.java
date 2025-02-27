@@ -39,8 +39,7 @@ import it.unipv.ingsw.model.utenze.Utente;
 		    private int selectedIndex;
 		    private double saldoUtente = 0.0; 
 		    private int puntiApp = 0;      
-
-		    public PagamentoView(double costoSpedizione,Utente utente) {
+		    public PagamentoView(double costoSpedizione,int costoPunti,Utente utente) {
 		        setTitle("Pagamento");
 		        setSize(1000, 600);
 		        setLayout(new BorderLayout());
@@ -116,7 +115,7 @@ import it.unipv.ingsw.model.utenze.Utente;
 		                System.out.println("Opzione selezionata: " + selectedOption);
 		                
 		                // Aggiungi anche l'aggiornamento della UI
-		                updateUIBasedOnSelection(costoSpedizione);
+		                updateUIBasedOnSelection(costoSpedizione, costoPunti);
 		            }
 		        });
 		        
@@ -140,13 +139,12 @@ import it.unipv.ingsw.model.utenze.Utente;
 		        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		        validate();
 
-		        updateUIBasedOnSelection(costoSpedizione);  // Per impostare l'interfaccia all'avvio
+		        updateUIBasedOnSelection(costoSpedizione, costoPunti);  // Per impostare l'interfaccia all'avvio
 
 		        setVisible(true);
 		    }
 
-		    // Metodo per aggiornare l'interfaccia in base alla selezione della ComboBox
-		    private void updateUIBasedOnSelection(double costoSpedizione) {
+		    private void updateUIBasedOnSelection(double costoSpedizione, int costoPunti) {
 		        String selectedPaymentMethod = (String) opzioneMetodoPagamentoField.getSelectedItem();
 
 		        // Nascondi tutti i campi per un aggiornamento pulito
@@ -178,7 +176,7 @@ import it.unipv.ingsw.model.utenze.Utente;
 
 		            amountLabel.setVisible(true);
 		            amountField.setVisible(true);
-		            amountField.setText(String.valueOf(puntiApp)); // Mostra i puntiApp come importo
+		            amountField.setText(String.valueOf(costoPunti)); // Mostra i puntiApp come importo
 
 		        } else if (selectedPaymentMethod.equals("Carta")) {
 		            numeroCartaInputLabel.setVisible(false);
@@ -230,11 +228,10 @@ import it.unipv.ingsw.model.utenze.Utente;
 		            amountLabel.setVisible(true);
 		            amountField.setVisible(true);
 		            amountField.setText(String.valueOf(costoSpedizione)); // Mostra il costo spedizione
-
 		        }
 		        this.revalidate();  // Rende il componente visibile con le modifiche applicate
-		        this.repaint(); 
-		        
+		        this.repaint();
+	        
 		        payButton.addActionListener(new ActionListener() {
 	        	    @Override
 	        	    public void actionPerformed(ActionEvent e) {
@@ -247,16 +244,10 @@ import it.unipv.ingsw.model.utenze.Utente;
 			        	    
 			        	    // Mostra la finestra di PagamentoEsternoView
 			        	    pagamentoEsternoView.setVisible(true);
-			        	    
-			        	    // Chiudi la finestra di PagamentoView
-			        	    dispose();
+
 	        	        } else {
 	        	            // Altrimenti esegui la logica del pagamento, verifica saldo, ecc.
 	        	            System.out.println("Pagamento eseguito con metodo: " + selectedOption);
-	        	            
-	        	            // Puoi aggiungere la logica per il pagamento qui.
-	        	            // Chiudi la finestra una volta completato il pagamento:
-	        	            dispose();
 	        	        }
 	        	    }
 	        	});
@@ -345,8 +336,9 @@ import it.unipv.ingsw.model.utenze.Utente;
 		            public void run() {
 		                // Crea una nuova istanza di PagamentoView
 		                double costo = 2.5;
+		                int punti =2; 
 		                Utente u=new Utente();
-		                PagamentoView pagamentoView = new PagamentoView(costo,u);
+		                PagamentoView pagamentoView = new PagamentoView(costo,punti,u);
 		                // Puoi usare il metodo setVisible(true) per mostrare la finestra
 		                pagamentoView.setVisible(false);
 		            }

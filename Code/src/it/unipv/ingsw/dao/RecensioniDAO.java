@@ -36,21 +36,20 @@ public class RecensioniDAO implements IRecensioniDAO{
 		
 		
 		try {
-			String query= "INSERT INTO `ShipUp`.`recensione` ( `IDrecensione`,`IDspedizione`,`comoditaLocker`, `testo`, `costoSpedizione` , `soddisfazioneGenerale`, `tempoSpedizione`, `semplicita`, `compenso`, `affidabilita`, `rapiditaConsegna`)"
-					+ " VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+			String query= "INSERT INTO `ShipUp`.`recensione` (`IDspedizione`,`comoditaLocker`, `testo`, `costoSpedizione` , `soddisfazioneGenerale`, `tempoSpedizione`, `semplicita`, `compenso`, `affidabilita`, `rapiditaConsegna`)"
+					+ " VALUES(?,?,?,?,?,?,?,?,?,?)";
 			st=conn.prepareStatement(query);
-			st.setInt(1, 4);
-			st.setInt(2, s.getIDSpedizione());
-			st.setInt(3, r.getPunteggioComoditaLocker());
-			st.setString(4, r.getRecensione()); 
-			st.setInt(5, r.getPunteggioCostoSpedizione());
-			st.setInt(6, r.getPunteggioSoddisfazioneGenerale());
-			st.setInt(7, r.getPunteggioTempoSpedione());
-			st.setInt(8, r.getPunteggioSemplicita());
-			st.setInt(9, r.getPunteggioCompenso());
-			st.setInt(10, r.getPunetggioAffidabilita());
-			st.setInt(11, r.getPunetggioRapiditaConsegna());
-			st.executeUpdate();
+			st.setInt(1, s.getIDSpedizione());
+			st.setInt(2, r.getPunteggioComoditaLocker());
+			st.setString(3, r.getRecensione()); 
+			st.setInt(4, r.getPunteggioCostoSpedizione());
+			st.setInt(5, r.getPunteggioSoddisfazioneGenerale());
+			st.setInt(6, r.getPunteggioTempoSpedione());
+			st.setInt(7, r.getPunteggioSemplicita());
+			st.setInt(8, r.getPunteggioCompenso());
+			st.setInt(9, r.getPunetggioAffidabilita());
+			st.setInt(10, r.getPunetggioRapiditaConsegna());
+			st.execute();
 		//	conn.commit();
 			
 		}catch(Exception e) {
@@ -69,7 +68,7 @@ public class RecensioniDAO implements IRecensioniDAO{
 		IPuntoDeposito l1 = new Locker(a,1);
 		IPuntoDeposito l2 = new Locker(b,2);
 		
-		Recensioni r1=new Recensioni("ciao",1, 1,2,3,4,5,6,7);
+		Recensioni r1=new Recensioni("ciao",1, 1,2,3,4,5,3,4);
 		Spedizione s=new Spedizione(4, null, l1, l2);
 	//	System.out.printf("Recensione: "+ r1.getRecensione()+"\n");
 		RecensioniDAO r=new RecensioniDAO();

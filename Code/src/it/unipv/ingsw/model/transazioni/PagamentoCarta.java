@@ -6,7 +6,7 @@ import it.unipv.ingsw.exceptions.TransferException;
 public class PagamentoCarta implements IPagamentoEsterno{ 
 
 	public void pagaCarta(double amount) throws PaymentException{
-		System.out.println("QUI CARTA"); 
+		System.out.println("PAGAMENTO CARTA"); 
 		//LOGICA ESTERNA
 	}
 

@@ -19,7 +19,7 @@ public class CompositePuntiCarta extends CompositePagamentiStrategy{
 	public void effettuaPagamento(double amount,int puntiApp,Utente utente) throws PaymentException{ 
 		double temp=amount;
 		Saldo sal;
-		System.out.println("QUI PUNTI-CARTA");
+		System.out.println("PAGAMENTO PUNTI+CARTA");
 		
 		Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
 		

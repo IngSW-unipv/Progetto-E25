@@ -10,11 +10,10 @@ public class PagamentoSaldo implements IPagamento{ //aggiunto implements IPagame
 
 	//pagamento con saldo
 	public void effettuaPagamento(double amount,int puntiApp,Utente u) throws PaymentException{
-		System.out.println("QUI SALDO");
+		System.out.println("PAGAMENTO SALDO");
 		double temp;
 		Saldo sal;
 		Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
-		//model
 		if(u.getSaldo().getDenaro()<amount) {
 			throw new PaymentException();
 		}

@@ -17,7 +17,7 @@ public class CompositePuntiSaldo extends CompositePagamentiStrategy{
 	public void effettuaPagamento(double amount,int puntiApp,Utente utente) throws PaymentException{
 		double temp;
 		Saldo sal;
-		System.out.println("QUI PUNTI-SALDO");
+		System.out.println("PAGAMENTO PUNTI+SALDO");
 		
 		Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
 		//trasformo puntiApp in saldo

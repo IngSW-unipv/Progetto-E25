@@ -39,7 +39,7 @@ public class Spedizione {
 	private Itinerario itinerarioTot;
 	private MatchingService matchingService;
 	private List <Itinerario> itinerarioMancante; //i sottoitinerari che mancano fino alla fine della spedizione 
-	private Itinerario itinerarioCorrente; //itinerario che fornisco al carrier (FORSE NON VA QUI)
+	private Itinerario itinerarioCorrente; //itinerario a cui deve far riferimento il carrier
 	
 
 	private String statoSpedizione;

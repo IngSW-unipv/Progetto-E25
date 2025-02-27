@@ -5,10 +5,10 @@ package it.unipv.ingsw.model.spedizione;
 public class QRcode {
 	
 	private String codice; 
-	private boolean statoqr=false;
+	private boolean statoqr;
 	
 	public QRcode() {
-
+		statoqr = false;
 	}
 	
 	public void generaQRcode() { 

@@ -289,6 +289,6 @@ public class ProfiloUtenteController {
 		};
 		view.getTracciamentoButton().addActionListener(listener); //bottone per tracciare la spedizione
 	}
-
+	
 
 }

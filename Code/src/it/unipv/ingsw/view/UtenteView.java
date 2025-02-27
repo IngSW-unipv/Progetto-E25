@@ -24,6 +24,7 @@ public class UtenteView extends JFrame {
 	private GestoreSpedizioni gestoreSpedizioni;
     private EndUser currentUser;
     private JButton tracciamentoButton;
+    private JButton checkQR;
     
     private TracciamentoView tracciamentoView;
 
@@ -42,7 +43,7 @@ public class UtenteView extends JFrame {
 //		tracciamentoButton = new JButton("Traccia Spedizione");
 //		
 //		//impostazione layout e aggiunta del bottone
-//		setLayout(new FlowLayout());
+		setLayout(new FlowLayout());
 //		add(tracciamentoButton);
 		
 		
@@ -54,6 +55,7 @@ public class UtenteView extends JFrame {
 		trasferisci =new JButton("Trasferisci saldo"); 
 		tracciamento = new JButton("Tracciamento"); //aggiunto il bottone tracciamento
 		cancellaAccount =new JButton("Cancella account"); 
+		checkQR = new JButton ("Check QR");
 		
 		logout.setPreferredSize(new Dimension(90, 40));
 		cancellaAccount.setPreferredSize(new Dimension(90, 40));
@@ -121,7 +123,23 @@ public class UtenteView extends JFrame {
 			
 		});
 		
+		checkQR.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openQRcodeView(); //apre la finestra QRcodeView
+			}
+		});
+		
+		//aggiunge il bottone alla finestra
+		add(checkQR);
+		
+		// Impostazioni di visualizzazione
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);  // Per centrare la finestra
+        
 	}
+	
 	
 	public JButton getTracciamentoButton() {
 	        return tracciamentoButton;
@@ -203,6 +221,12 @@ public class UtenteView extends JFrame {
 		//mostra il bottone Tracciamento dopo il login
 		tracciamento.setVisible(true);
 	}
+	
+	// Metodo per aprire la finestra QRcodeView
+    private void openQRcodeView() {
+        QRcodeView qrView = new QRcodeView();
+        qrView.setVisible(true);  // Mostra la finestra QRcode
+    }
 	
 
 	public JButton getCancellaAccount() {

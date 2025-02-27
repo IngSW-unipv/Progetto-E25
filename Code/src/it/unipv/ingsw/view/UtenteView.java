@@ -3,26 +3,40 @@ package it.unipv.ingsw.view;
 import javax.swing.*;
 
 import it.unipv.ingsw.model.utenze.Utente;
+import it.unipv.ingsw.model.spedizione.GestoreSpedizioni;
+import it.unipv.ingsw.model.spedizione.MatchingService;
+import it.unipv.ingsw.model.utenze.EndUser;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
 public class UtenteView extends JFrame {
 
 	private JPanel azioniPan,risultatoPan,infoPan;
-	private JButton modifica,logout,avviaSped,prendiInCarico,trasferisci, ricarica, cancellaAccount;
+	private JButton modifica,logout,avviaSped,prendiInCarico,trasferisci, ricarica, tracciamento;
+	private JButton  cancellaAccount;
 	private JLabel infoUtenteLab, saldo;
 	private JScrollPane scrollAzioni, scrollRisultato;
 	private double saldoUtente = 0.0; 
     private int puntiApp = 0;   
+	private GestoreSpedizioni gestoreSpedizioni;
+    private EndUser currentUser;
+    private JButton tracciamentoButton;
+
+    
+    private TracciamentoView tracciamentoView;
 
 	public UtenteView(Utente utente) {
 		
 		 saldoUtente=utente.getSaldo().getDenaro();
 	     puntiApp=utente.getSaldo().getPuntiApp();
 	        
+		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //setLocationRelativeTo(null); 
         //setVisible(true);
@@ -32,12 +46,20 @@ public class UtenteView extends JFrame {
 		this.setLayout(new BorderLayout());
 		this.setVisible(true);
 		
+//		tracciamentoButton = new JButton("Traccia Spedizione");
+//		
+//		//impostazione layout e aggiunta del bottone
+//		setLayout(new FlowLayout());
+//		add(tracciamentoButton);
+		
+		
 		modifica =new JButton("Modifica profilo");
 		avviaSped =new JButton("Avvia spedizione");
 		prendiInCarico =new JButton("Prendi in carico spedizione");
 		logout =new JButton("Logout");
 		ricarica =new JButton("Ricarica saldo");
 		trasferisci =new JButton("Trasferisci saldo"); 
+		tracciamento = new JButton("Tracciamento"); //aggiunto il bottone tracciamento
 		cancellaAccount =new JButton("Cancella account"); 
 		
 		logout.setPreferredSize(new Dimension(90, 40));
@@ -47,6 +69,8 @@ public class UtenteView extends JFrame {
 		prendiInCarico.setPreferredSize(new Dimension(110, 40));
 		trasferisci.setPreferredSize(new Dimension(200, 70));
 		ricarica.setPreferredSize(new Dimension(200, 70));
+		tracciamento.setPreferredSize(new Dimension(150, 40)); //imposta le dimensioni del bottone
+
 		
 		modifica.setFocusable(true); //non schiacciabile fino ad approvazione admin
 		logout.setFocusable(false);
@@ -56,6 +80,8 @@ public class UtenteView extends JFrame {
 		prendiInCarico.setVisible(true);
 		trasferisci.setVisible(true);
 		ricarica.setVisible(true);
+		tracciamento.setVisible(false); //invisibile inizialmente
+
 		
 		azioniPan=new JPanel();
 		risultatoPan=new JPanel();
@@ -83,6 +109,7 @@ public class UtenteView extends JFrame {
 		bar.add(avviaSped);
 		bar.add(prendiInCarico);
 		bar.add(logout);
+		bar.add(tracciamento); //aggiungo il bottone alla barra
 		bar.add(cancellaAccount);
 		
 		scrollAzioni = new JScrollPane(azioniPan, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -91,6 +118,28 @@ public class UtenteView extends JFrame {
 		this.add(bar, BorderLayout.NORTH);
 		this.add(scrollAzioni, BorderLayout.CENTER);
 		this.add(infoPan, BorderLayout.SOUTH);
+		
+		//listener per il button tracciamento
+		tracciamento.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//quando il bottone tracciamento viene cliccato, apre la finistra tracciamnto
+				apriFinestraTracciamento();
+			}
+			
+		});
+		
+		
+//		// Impostazioni di visualizzazione
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setLocationRelativeTo(null);  // Per centrare la finestra
+        
+	}
+	
+	
+	public JButton getTracciamentoButton() {
+	        return tracciamentoButton;
 	}
 	
 	public int displayConfirm() {
@@ -154,12 +203,33 @@ public class UtenteView extends JFrame {
 		return ricarica;
 	}
 	
+	public void apriFinestraTracciamento() {
+		if (tracciamentoView == null) {
+			tracciamentoView = new TracciamentoView(gestoreSpedizioni, currentUser);
+		}
+	}
+	
+	public void setGestoreSpedizioni(GestoreSpedizioni gestoreSpedizioni) {
+		this.gestoreSpedizioni = gestoreSpedizioni;
+	}
+	
+	public void setEndUser(EndUser currentUser) {
+		this.currentUser = currentUser;
+		tracciamento.setVisible(true); //mostra il bottone Tracciamento dopo il login
+
+		
+	}
+	
+	
 
 	public JButton getCancellaAccount() {
 		return cancellaAccount;
 	}
 
 public static void main(String[] args) {
+	GestoreSpedizioni gestoreSpedizioni = new GestoreSpedizioni(new MatchingService());
+    EndUser currentUser = new EndUser("user@example.com", "password", "Destinatario", null, null, null, null, null);
+	
     // Imposta l'aspetto dell'interfaccia grafica in modo più fluido (threading Swing)
     SwingUtilities.invokeLater(new Runnable() {
         @Override
@@ -169,6 +239,8 @@ public static void main(String[] args) {
         	UtenteView utenteView = new UtenteView(u);
             // Puoi usare il metodo setVisible(true) per mostrare la finestra
         	utenteView.setVisible(true);
+        	utenteView.setGestoreSpedizioni(gestoreSpedizioni);
+        	utenteView.setEndUser(currentUser);
         }
     });
 }

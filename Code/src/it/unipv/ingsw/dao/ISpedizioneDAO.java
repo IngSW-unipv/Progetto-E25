@@ -11,4 +11,6 @@ public interface ISpedizioneDAO {
 	
 	void addSpedizione(Spedizione spedizione);
 	
+	Spedizione aggiornaStatoSpedizione(Spedizione spedizione, String stato);
+	
 }

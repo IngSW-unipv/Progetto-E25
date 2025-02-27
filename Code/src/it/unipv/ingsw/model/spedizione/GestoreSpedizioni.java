@@ -6,11 +6,16 @@ import java.sql.Blob;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
+import it.unipv.ingsw.dao.IPuntoDepositoDAO;
+import it.unipv.ingsw.dao.ISpedizioneDAO;
+import it.unipv.ingsw.dao.LockerDAO;
+import it.unipv.ingsw.dao.SpedizioneDAO;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
 import it.unipv.ingsw.model.utenze.ASuperUser;
@@ -22,9 +27,20 @@ import it.unipv.ingsw.model.utenze.*;
 public class GestoreSpedizioni {
 
 	private MatchingService matchingService;
+	private ISpedizioneDAO spedizioneDAO;
+	private IPuntoDepositoDAO puntoDepositoDAO;
+	private IPuntoDeposito puntoDeposito;
+	private QRcode qrcode;
+	private static final double TASSOCOMPENSOSOLDI = 0.8;
+	private static final double TASSOCOMPENSOPUNTI = 0.2;
+	
+	
+	private List<Spedizione> spedizioniCompatibili; // variabile di istanza
 	
 	public GestoreSpedizioni(MatchingService matchingService) {
 		this.matchingService = matchingService;
+		spedizioneDAO = new SpedizioneDAO();
+		puntoDepositoDAO = new LockerDAO();
 	}
 	
 	//metodo avvio spedizione
@@ -72,8 +88,25 @@ public class GestoreSpedizioni {
 		//ricerca delle spedizioni compatibili
 		List<Spedizione> spedizioniCompatibili = matchingService.trovaSpedizioniCompatibili(carrier.getItinerario());
 		
+		Iterator<Spedizione> iterator = spedizioniCompatibili.iterator();
+		while (iterator.hasNext()) {
+		    Spedizione s = iterator.next();
+		    //genero i QRcode
+			qrcode = new QRcode();
+			qrcode.generaQRcode();
+			carrier.addQRcode(qrcode);
+			
+			//prenoto i puntiDeposito di arrivo
+			puntoDeposito = puntoDepositoDAO.selectPuntoDeposito(s.getItinerarioCorrente().getFine());
+		    
+		    if (!puntoDeposito.checkDisponibilita(s.getPacco(), qrcode.getQRcode())) {
+		    	//se non c'è disponibilità non ne tengo conto
+		    	System.out.println("non c'è disponibilita!!");
+		    	
+//		        iterator.remove(); <----- momentaneamente rimosso per errore nel metodo di verifica disponibilità
+		    }
+		}
 		return spedizioniCompatibili;
-		
 	}
 	
 	//accetto la presa in carico delle spedizioni compatibili
@@ -83,10 +116,33 @@ public class GestoreSpedizioni {
 		
 		for(Spedizione s : spedizioniCompatibili) {
 			s.setStatoSpedizione("IN_TRANSITO");
-			//aggiorno lo stato della spedizione dal DAO
+			//aggiorno lo stato della spedizione col DAO
+			spedizioneDAO.aggiornaStatoSpedizione(s, s.getStatoSpedizione());
 			
+			//assegno un compenso
+			double distanza = s.getItinerarioCorrente().getInizio().distanza(s.getItinerarioCorrente().getFine());
+			
+			double compensoSoldi = distanza*TASSOCOMPENSOSOLDI;
+			int compensoPuntiApp = (int) (distanza*TASSOCOMPENSOPUNTI);
+			
+			carrier.getCompenso().setDenaro(carrier.getCompenso().getDenaro() + compensoSoldi);
+			carrier.getCompenso().setPuntiApp(carrier.getCompenso().getPuntiApp() + compensoPuntiApp);
+			
+			//setto s.itinerarioTOT con un nuovo punto di partenza (forse dovrebbe esser fatto quando consegna il pacco)
+			s.setItinerarioTot(new Itinerario(s.getItinerarioCorrente().getFine(), s.getItinerarioTot().getFine()));
 		}
 	}
+	
+    // Metodo per cercare una spedizione dato un codice QR
+    public Spedizione getSpedizioneByCodiceQR(String codice) {
+		// Cerca la spedizione corrispondente al codice QR
+        for (Spedizione spedizione : spedizioniCompatibili) {
+            if (spedizione.getCodice().equals(codice)) {
+                return spedizione;  // Ritorna la spedizione trovata
+            }
+        }
+        return null;  // Ritorna null se non trova una spedizione corrispondente
+    }
 	
 	
 	

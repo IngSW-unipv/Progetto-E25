@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 public class Recensioni {
 
 	private String recensione_scritta;
+	private int comodita_locker;
 	private int costo_spedizione;
 	private int soddisfazione_generale;
 	private int tempo_spedizione;
@@ -16,8 +17,9 @@ public class Recensioni {
 	private int affidabilita;
 	private int rapidita_consegna;
 	
-	public Recensioni(String testo, int punteggio_costo, int punteggio_soddisfazione, int punteggio_tempo_sp, int punteggio_semplicita, int punteggio_compenso, int punteggio_affidabilita, int punteggio_rapidita_consegna) {
+	public Recensioni(String testo,int punteggio_comodita_locker, int punteggio_costo, int punteggio_soddisfazione, int punteggio_tempo_sp, int punteggio_semplicita, int punteggio_compenso, int punteggio_affidabilita, int punteggio_rapidita_consegna) {
 		this.recensione_scritta=testo;
+		this.comodita_locker=punteggio_comodita_locker;
 		this.costo_spedizione=punteggio_costo;
 		this.soddisfazione_generale=punteggio_soddisfazione;
 		this.tempo_spedizione=punteggio_tempo_sp;
@@ -39,6 +41,15 @@ public class Recensioni {
 		}catch(IOException e){
 			System.out.printf("Errore durante inserimento recensione");	
 		}
+	}
+	
+	public void vautaComoditaLocker(int punteggio) {
+		if(punteggio<0 && punteggio>5) {
+			System.out.printf("Errore inserimento");
+		}else {
+			comodita_locker=punteggio;
+		}
+		
 	}
 	
 	public void vautaCostoSpedizione(int punteggio) {
@@ -104,6 +115,10 @@ public class Recensioni {
 	}
 	public int getPunteggioCostoSpedizione() {
 		return costo_spedizione;
+	}
+	
+	public int getPunteggioComoditaLocker() {
+		return comodita_locker;
 	}
 	public int getPunteggioSoddisfazioneGenerale() {
 		return soddisfazione_generale;

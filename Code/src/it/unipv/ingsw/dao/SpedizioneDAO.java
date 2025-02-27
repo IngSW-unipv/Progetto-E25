@@ -16,6 +16,7 @@ import it.unipv.ingsw.model.spedizione.shippable.Pacco;
 import it.unipv.ingsw.model.spedizione.shippable.Size;
 import it.unipv.ingsw.model.utenze.Destinatario;
 import it.unipv.ingsw.model.utenze.Mittente;
+import it.unipv.ingsw.model.utenze.Utente;
 
 public class SpedizioneDAO implements ISpedizioneDAO{
 
@@ -111,16 +112,16 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		}
 		
 		//fare natural join tra questa query, mittente e destinatario. poi, where idmittente=?, maildestinatario=? 
-	try {
-			String query1= "SELECT * FROM SPEDIZIONE NATURAL JOIN UTENTE where idmittente=? and iddestinatario=?";
+/*	try {
+			String query1= "SELECT * FROM SPEDIZIONE NATURAL JOIN UTENTE where email=? and IDspedizione=?;";
 			st=conn.prepareStatement(query1);
 			st.setString(1,spedizione.getMittente().getMail());
-			st.setString(2,spedizione.getDestinatario().getMail());
+			st.setInt(2,spedizione.getIDSpedizione());
 			rs=st.executeQuery();
 			
 		}catch(Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		
 		
@@ -128,12 +129,55 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		
 	}
 	
+	public Spedizione aggiornaStatoSpedizione(Spedizione spedizione, String stato) {
+		
+		conn = DBConnection.startConnection(conn);
+		PreparedStatement st1, st2;
+		Spedizione spedizioneModificata = spedizione;
+		
+		try {
+		//verifico se la spedizione esiste
+		String query = "SELECT IDspedizione FROM `ShipUp`.`spedizione` WHERE `IDspedizione` = ?";
+		st1 = conn.prepareStatement(query);
+		st1.setInt(1, spedizione.getIDSpedizione());
+		ResultSet rs = st1.executeQuery();
+		
+		//se non esiste la setta a null
+		if (!rs.next()) {
+			spedizioneModificata = null;
+		} else {
+		//aggiorno lo stato della spedizione
+		String query1 = "UPDATE `ShipUp`.`spedizione` s SET s.statoSpedizione = ? WHERE s.IDspedizione = ?";
+
+		
+		st2 = conn.prepareStatement(query1);
+		st2.setString(1, stato);
+		st2.setInt(2, spedizione.getIDSpedizione());
+		
+		st2.executeUpdate();
+		
+		//aggiorno lo stato
+		spedizioneModificata.setStatoSpedizione(stato);
+		
+		}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeConnection(conn);
+		}
+		
+		return spedizioneModificata;
+	}
+
+	
 	public static void main(String[] args) {
 		SpedizioneDAO sd = new SpedizioneDAO();
 		List<Spedizione> spedizioni = sd.selectAllInAttesa();
-		for(Spedizione sped : spedizioni) {
-			System.out.println(sped.getIDSpedizione());
-		}
+		Spedizione s = spedizioni.get(0);
+		
+		sd.aggiornaStatoSpedizione(s, "test");
+		
 		
 	}
 	

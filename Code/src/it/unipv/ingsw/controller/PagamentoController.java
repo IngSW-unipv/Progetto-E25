@@ -27,15 +27,16 @@ public class PagamentoController {
 	private Utente model;
 	private UtenteView view; 
 	private Spedizione spedizione;
+	private double costoSped;
 	private PagamentoView pagamentoView;
 	private AvviaSpedizioneView avView;
 	private UtenteDAO utenteDAO;
 	
-	public PagamentoController(Utente model, Spedizione spedizione,PagamentoView pagamentoView) {
+	public PagamentoController(Utente model, Spedizione spedizione,PagamentoView pagamentoView, double costoSped) {
 		this.model=model;
 		this.spedizione=spedizione;
 		this.pagamentoView=pagamentoView;
-		//scegliPagamentoInit();
+		this.costoSped=costoSped;
 		pagaInit();
 	}
 
@@ -108,13 +109,45 @@ public class PagamentoController {
 	        // Esegui il pagamento
 	        boolean b = false;
 	        Pagamento p = new Pagamento(mode);
-	        b = p.provaPagamento(model.getSaldo().getDenaro(), model.getSaldo().getPuntiApp(), mode, model);
+	        b = p.provaPagamento(costoSped, model.getSaldo().getPuntiApp(), mode, model);
 
 	        // Aggiorna la UI per riflettere il pagamento eseguito (opzionale)
 	        // Forse una finestra di conferma, un aggiornamento del saldo, ecc.
-	        JOptionPane.showMessageDialog(null, "Pagamento eseguito con successo!");
+	        if(selectedIndex == 0 || selectedIndex == 1 || selectedIndex == 3)
+	        	JOptionPane.showMessageDialog(null, "Pagamento eseguito con successo!");
 	    }
 
-	    new ProfiloUtenteController(model, new UtenteView()); 
+	    new ProfiloUtenteController(model, new UtenteView(model)); 
 	}
-}
+
+		          
+
+		//double exW = model.getCl().getWallet();
+		
+        //double saldo =  Double.parseDouble(pagamentoView.getSaldoField().getText());
+       // double saldoUtente =  Double.parseDouble(pagamentoView.getSaldoUtente().getText()); //GUARDO
+        //int punti = Integer.parseInt(pagamentoView.getPuntiField().getText());
+        //String numeroCarta = pagamentoView.getNumeroCartaFieldInput().getText();
+        //String cvv = pagamentoView.getCvvField().getText();
+       // double amount = Double.parseDouble(pagamentoView.getAmountField().getText());
+       
+		/*Pagamento pay=new Pagamento(mode, model.getCl().getEmail(), "shipup"); //getUtente
+		IStdPrimePaymentStrategy stdprimestr = StdPrimePaymentFactory.getInstance().getStrategy(model.getCl().getPrime());
+		double total = stdprimestr.pay( model.getCart().getTotal() );
+		try {
+			pay.provaPagamento(total, puntiApp)
+			model.makeOrder();
+			view.displayInfo("Payment of: "+ total + "euro succesfully ended");
+			view.setInfoLabText(model.getCart().getSkuqty().size());						
+		} catch (PaymentException ex) {
+			view.displayWarn(ex.getMessage());
+		} catch (IllegalArgumentException exx) {
+			model.getCl().setWallet(exW);
+			view.displayWarn(exx.getMessage());
+		}
+											
+			}
+				view.setWalletLabImp(model.getCl().getWallet());
+			}
+		};*/
+	}

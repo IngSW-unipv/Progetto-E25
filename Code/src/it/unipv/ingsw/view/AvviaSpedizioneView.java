@@ -1,6 +1,9 @@
 package it.unipv.ingsw.view;
+
 import javax.swing.*;
 import java.awt.*;
+
+import it.unipv.ingsw.controller.*;
 
 public class AvviaSpedizioneView extends JFrame {
 

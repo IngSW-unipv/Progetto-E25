@@ -1,10 +1,13 @@
 package it.unipv.ingsw.view;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.BorderLayout;
 
-public class UtentiDaConvalidareView extends JFrame {
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+public class PanoramicaUtentiView extends JFrame {
     private JTable usersTable;
     private DefaultTableModel tableModel;
 

@@ -130,12 +130,7 @@ public class GestoreSpedizioni {
 			
 			//setto s.itinerarioTOT con un nuovo punto di partenza (forse dovrebbe esser fatto quando consegna il pacco)
 			s.setItinerarioTot(new Itinerario(s.getItinerarioCorrente().getFine(), s.getItinerarioTot().getFine()));
-			
-			//invia il codice QR via notifica e mail
-			String codiceQR = s.getCodice().getQRcode();
-			String messaggio = "Hai preso in carico la spedizione: " + s.getIDSpedizione() + ". Ecco il tuo codice QR: " + codiceQR;
-			carrier.inviaNotificaCarrier(messaggio);
-	        carrier.inviaEmailCarrier("Codice QR Spedizione", messaggio);
+	
 		}
 	}
 	

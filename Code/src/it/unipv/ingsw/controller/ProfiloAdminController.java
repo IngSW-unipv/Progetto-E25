@@ -1,5 +1,6 @@
 package it.unipv.ingsw.controller;
 
+import it.unipv.ingsw.model.utenze.Admin;
 import it.unipv.ingsw.view.AdminView;
 import it.unipv.ingsw.view.MainView;
 import it.unipv.ingsw.view.UtentiDaConvalidareView;
@@ -9,9 +10,11 @@ import javax.swing.JOptionPane;
 public class ProfiloAdminController {
     
     private AdminView adminView;
+    private Admin admin;
     
-    public ProfiloAdminController(AdminView adminView) {
+    public ProfiloAdminController(Admin admin, AdminView adminView) {
         this.adminView = adminView;
+        this.admin = admin;
         initController();
     }
     
@@ -52,12 +55,4 @@ public class ProfiloAdminController {
         
     }
     
-    
-    
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            AdminView adminView = new AdminView();
-            new ProfiloAdminController(adminView);
-        });
-    }
 }

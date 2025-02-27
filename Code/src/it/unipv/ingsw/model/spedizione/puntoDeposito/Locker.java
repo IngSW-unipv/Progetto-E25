@@ -26,11 +26,11 @@ public class Locker implements IPuntoDeposito{
 //	private Map<String, Spedizione> mappaQR= new HashMap<>(); //ha come chiave codice QR e valore l'oggetto spedizione
 	private int IDscompartimento;
 	private int IDlocker;
-	private LocalDateTime dataDeposito;
+	private Date dataDeposito;
 	
 	public Locker(Coordinate posizione, int Idlocker) {
 		this.posizione = posizione;
-//		dataDeposito = null; //inizialmente nessuna data di deposito
+		dataDeposito = null; //inizialmente nessuna data di deposito
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
 //		this.mappaQR = new HashMap<>();
 	}
@@ -80,12 +80,12 @@ public class Locker implements IPuntoDeposito{
 		return IDscompartimento;
 	}
 	
-	public void registraDeposito(LocalDateTime localDateTime) {
-		this.dataDeposito = localDateTime;
-		System.out.println("Deposito Registrato: " + localDateTime);
+	public void registraDeposito(Date data) {
+		this.dataDeposito = data;
+		System.out.println("Deposito Registrato: " + data);
 	}
 	
-	private LocalDateTime getDataDeposito() {
+	private Date getDataDeposito() {
 		return dataDeposito;
 	}
 	
@@ -100,7 +100,7 @@ public class Locker implements IPuntoDeposito{
 		String codiceQR = codice.getQRcode();
 		
 		//verifica se il codice esiste nella mappa dei QR che il locker aspetta
-		if(!mappaQRcode.containsKey(codiceQR)) {
+		if(mappaQRcode.containsKey(codiceQR)) {
 			System.out.println("Errore: Il codice QR non è valido");
 		}
 		System.out.println("Codice QR valido: " + codiceQR);
@@ -126,7 +126,7 @@ public class Locker implements IPuntoDeposito{
 			sc.Open();
 			System.out.println("Scompartimento aperto!");
 				
-			this.registraDeposito(LocalDateTime.now());
+			this.registraDeposito(dataDeposito);
 				
 			mappaQRcode.remove(codiceQR); //elimina dalla mappa il codiceQR scansionato
 			System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");

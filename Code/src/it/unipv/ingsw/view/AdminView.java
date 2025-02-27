@@ -30,7 +30,7 @@ public class AdminView extends JFrame{
 		this.setVisible(true);
 		
 		convalida =new JButton("Convalida profilo utenti in attesa");
-		disattiva =new JButton("Disattiva account carrier");
+		disattiva =new JButton("Disattiva account utente");
 		aggiungiTempo =new JButton("Aggiungi tempo al carrier");
 		logout =new JButton("Logout");		
 		logout.setPreferredSize(new Dimension(90, 40));

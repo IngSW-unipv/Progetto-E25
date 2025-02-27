@@ -25,7 +25,6 @@ public class InfoUtenteDaConvalidareView extends JFrame {
         setSize(400, 300);
         setLocationRelativeTo(null);
         
-        // Pannello per i dettagli
         JPanel detailsPanel = new JPanel();
         detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
         
@@ -48,14 +47,12 @@ public class InfoUtenteDaConvalidareView extends JFrame {
         detailsPanel.add(fotoDocumentoLabel);
         detailsPanel.add(statoProfiloLabel);
         
-        // Pannello per i bottoni
         JPanel buttonsPanel = new JPanel();
         validateButton = new JButton("Convalida Profilo");
         invalidateButton = new JButton("Non convalidare Profilo");
         buttonsPanel.add(validateButton);
         buttonsPanel.add(invalidateButton);
         
-        // Layout finale
         setLayout(new BorderLayout());
         add(detailsPanel, BorderLayout.CENTER);
         add(buttonsPanel, BorderLayout.SOUTH);

@@ -270,6 +270,25 @@ public class UtenteDAO implements IUtenteDAO {
 		return result;
 	}
 	
+	public void impostaStatoUtente(Utente utente, boolean stato) {
+		conn = DBConnection.startConnection(conn);
+		PreparedStatement st1;
+
+		try {
+			String query = "UPDATE `ShipUp`.`utente` u SET u.statoProfilo = ? WHERE u.id = ?";
+	
+			st1 = conn.prepareStatement(query);
+			st1.setBoolean(1, stato);
+			st1.setInt(2, utente.getIdUtente());
+			st1.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		DBConnection.closeConnection(conn);
+	}
+	
 	public static void main(String[] args) {
 		UtenteDAO u=new UtenteDAO();
 		Utente result = u.getUtenteByEmailPassword("email","pwd");

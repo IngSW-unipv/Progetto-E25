@@ -9,7 +9,7 @@ import java.awt.GridLayout;
 public class UtenteView extends JFrame {
 
 	private JPanel azioniPan,risultatoPan,infoPan;
-	private JButton modifica,logout,avviaSped,prendiInCarico,trasferisci, ricarica;
+	private JButton modifica,logout,avviaSped,prendiInCarico,trasferisci, ricarica, cancellaAccount;
 	private JLabel infoUtenteLab, saldo;
 	private JScrollPane scrollAzioni, scrollRisultato;
 
@@ -30,8 +30,10 @@ public class UtenteView extends JFrame {
 		logout =new JButton("Logout");
 		ricarica =new JButton("Ricarica saldo");
 		trasferisci =new JButton("Trasferisci saldo"); 
+		cancellaAccount =new JButton("Cancella account"); 
 		
 		logout.setPreferredSize(new Dimension(90, 40));
+		cancellaAccount.setPreferredSize(new Dimension(90, 40));
 		modifica.setPreferredSize(new Dimension(90, 40));
 		avviaSped.setPreferredSize(new Dimension(90, 40));
 		prendiInCarico.setPreferredSize(new Dimension(110, 40));
@@ -41,6 +43,7 @@ public class UtenteView extends JFrame {
 		modifica.setFocusable(true); //non schiacciabile fino ad approvazione admin
 		logout.setFocusable(false);
 		avviaSped.setFocusable(false);
+		cancellaAccount.setFocusable(false);
 		prendiInCarico.setFocusable(false);
 		prendiInCarico.setVisible(true);
 		trasferisci.setVisible(true);
@@ -72,6 +75,7 @@ public class UtenteView extends JFrame {
 		bar.add(avviaSped);
 		bar.add(prendiInCarico);
 		bar.add(logout);
+		bar.add(cancellaAccount);
 		
 		scrollAzioni = new JScrollPane(azioniPan, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollRisultato = new JScrollPane(risultatoPan, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -140,6 +144,11 @@ public class UtenteView extends JFrame {
 
 	public JButton getRicarica() {
 		return ricarica;
+	}
+	
+
+	public JButton getCancellaAccount() {
+		return cancellaAccount;
 	}
 
 public static void main(String[] args) {

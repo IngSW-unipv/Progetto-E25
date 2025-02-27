@@ -149,7 +149,32 @@ public class UtenteDAO implements IUtenteDAO {
 		return utenteModificato; // Restituisce l'utente con i dati aggiornati
 }
 
+	public boolean deleteUtente(Utente u) {
 
+		conn = DBConnection.startConnection(conn);
+		PreparedStatement st1;
+
+		boolean esito = true;
+
+		try {
+			
+			
+			String query = "delete from `utente` where (`email` = '"+u.getMail()+"')";
+					
+			st1 = conn.prepareStatement(query);
+
+			st1.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			esito = false;
+		}
+
+		DBConnection.closeConnection(conn);
+		return esito;
+
+	}
+	
 	@Override
     public ArrayList<Utente> selectAll() {
         ArrayList<Utente> result = new ArrayList<>();
@@ -183,7 +208,6 @@ public class UtenteDAO implements IUtenteDAO {
 	public static void main(String[] args) {
 		UtenteDAO u=new UtenteDAO();
 		Utente result = u.getUtenteByEmailPassword("email","pwd");
-		
         System.out.println(result.toString());
 		
 		

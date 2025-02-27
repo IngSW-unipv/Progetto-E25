@@ -91,11 +91,11 @@ public class GestoreSpedizioni {
 	}
 	
     // Metodo per cercare una spedizione dato un codice QR
-    public Spedizione getSpedizioneByCodiceQR(String codiceInserito) {
+    public Spedizione getSpedizioneByCodiceQR(String codice) {
 		// Cerca la spedizione corrispondente al codice QR
-        for (Spedizione s : spedizioniCompatibili) {
-            if (s.getCodice().equals(codiceInserito)) {
-                return s;  // Ritorna la spedizione trovata
+        for (Spedizione spedizione : spedizioniCompatibili) {
+            if (spedizione.getCodice().equals(codice)) {
+                return spedizione;  // Ritorna la spedizione trovata
             }
         }
         return null;  // Ritorna null se non trova una spedizione corrispondente

@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 
 import it.unipv.ingsw.model.spedizione.Coordinate;
 import it.unipv.ingsw.model.spedizione.GestoreSpedizioni;
+import it.unipv.ingsw.model.spedizione.MatchingService;
 import it.unipv.ingsw.model.spedizione.Spedizione;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
@@ -85,13 +86,6 @@ public class TracciamentoView {
 					statoSpedizioneArea.setText("Codice non valido.");
 				}
 				
-//				//verifica ed aggiorna lo stato della spedizione
-//				if (codiceInserito.equals(spedizione.getCodice())) {
-//					String stato = spedizione.getStatoSpedizione();
-//					statoSpedizioneArea.setText("Stato spedizione: " + stato);
-//				} else {
-//					statoSpedizioneArea.setText("Codice non valido");
-//				}
 			}
 			
 		});
@@ -110,7 +104,9 @@ public class TracciamentoView {
 //
 //			@Override
 //			public void run() {
-//				new TracciamentoView();
+//				GestoreSpedizioni gestoreSpedizioni = new GestoreSpedizioni(new MatchingService());
+//				EndUser currentUser = new EndUser();
+//				new TracciamentoView(gestoreSpedizioni, currentUser);
 //			}
 //			
 //		});

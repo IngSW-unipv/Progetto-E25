@@ -88,6 +88,10 @@ public class Spedizione {
 		// serve per il test
 	}
 
+	public Spedizione(int i, String string, String string2, Object object, String string3, String string4, int j, int k,
+			int l) {
+	}
+
 	public Itinerario getItinerarioTot() {
 		return itinerarioTot;
 	}

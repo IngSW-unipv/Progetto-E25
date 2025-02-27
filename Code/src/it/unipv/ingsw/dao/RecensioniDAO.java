@@ -19,9 +19,10 @@ public class RecensioniDAO implements IRecensioniDAO{
 	public RecensioniDAO() {
 		this.schema = "ShipUp";
 	}
+
 	
 	@Override
-	public void addRecensione(Recensioni r, Spedizione s) {
+	public void addRecensione(Recensioni r, int i) {
 		
 		conn = DBConnection.startConnection(conn);
 		
@@ -39,7 +40,7 @@ public class RecensioniDAO implements IRecensioniDAO{
 			String query= "INSERT INTO `ShipUp`.`recensione` (`IDspedizione`,`comoditaLocker`, `testo`, `costoSpedizione` , `soddisfazioneGenerale`, `tempoSpedizione`, `semplicita`, `compenso`, `affidabilita`, `rapiditaConsegna`)"
 					+ " VALUES(?,?,?,?,?,?,?,?,?,?)";
 			st=conn.prepareStatement(query);
-			st.setInt(1, s.getIDSpedizione());
+			st.setInt(1, i);
 			st.setInt(2, r.getPunteggioComoditaLocker());
 			st.setString(3, r.getRecensione()); 
 			st.setInt(4, r.getPunteggioCostoSpedizione());
@@ -72,6 +73,6 @@ public class RecensioniDAO implements IRecensioniDAO{
 		Spedizione s=new Spedizione(4, null, l1, l2);
 	//	System.out.printf("Recensione: "+ r1.getRecensione()+"\n");
 		RecensioniDAO r=new RecensioniDAO();
-		r.addRecensione(r1, s);
+		r.addRecensione(r1, 4);
 	}
 }

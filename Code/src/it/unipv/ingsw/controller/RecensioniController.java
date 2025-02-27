@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import it.unipv.ingsw.recensioni.*;
 import it.unipv.ingsw.view.*;
 import it.unipv.ingsw.dao.*;
+import it.unipv.ingsw.model.spedizione.Spedizione;
 
 public class RecensioniController {
 	
@@ -20,10 +21,11 @@ public class RecensioniController {
 	private int rapidita_consegna;
 	private RecensioniView recensioniView;
 	private RecensioniDAO recensioniDAO;
-	
 
-	public RecensioniController() {
-		
+	public RecensioniController(RecensioniView view) {
+		this.recensioniView=view;
+		this.recensioniDAO=new RecensioniDAO();
+		invioRecensione();
 	}
 
 	
@@ -47,11 +49,12 @@ public class RecensioniController {
 				
 				try {
 					Recensioni r=new Recensioni(recensione_scritta,punteggio_comodita_locker, punteggio_costo_spedizione,punteggio_soddisfazione_generale, punteggio_tempo_spedizione,punteggio_semplicita, punteggio_compenso, punteggio_affidabilita,punteggio_rapidita_consegna );
-					recensioniDAO.addRecensione(r);
+					recensioniDAO.addRecensione(r,4);
 					
 					recensioniView.setVisible(false);
 				}catch(Exception e) {
 					System.out.printf("Perche non funzioni");
+					e.printStackTrace();
 					
 				}
 			}

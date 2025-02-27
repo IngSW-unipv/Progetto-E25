@@ -20,6 +20,7 @@ public class RecensioniController {
 	private int rapidita_consegna;
 	private RecensioniView recensioniView;
 	private RecensioniDAO recensioniDAO;
+	
 
 	public RecensioniController() {
 		

@@ -67,29 +67,39 @@ public class ProfiloUtenteController {
     private Itinerario it;
 	private LockerDAO lockerDAO;
 	private SpedizioneDAO spedizioneDAO;
+	private MatchingService ms;
+	private GestoreSpedizioni gs;
 	
 	public ProfiloUtenteController(Utente model, UtenteView view) {
 		this.model=model;
 		this.view=view;
 		utenteDAO=new UtenteDAO();
+		lockerDAO= new LockerDAO();
+		ms = new MatchingService();
+		gs = new GestoreSpedizioni(ms);
 		modificaProfiloInit();
 		avvioSpedizioneInit();
 		prendiInCaricoSpedizioneInit();
 		logOutInit();
 		cancellaAccountInit();
 		ricaricaSaldoInit();
+		storicoSpedizioniInit();
 	}
 		
 	//costruttore per logout
 	public ProfiloUtenteController(Utente model, MainView mainView) {
 		this.model=model;
 		this.mainView=mainView;
+		utenteDAO=new UtenteDAO();
+		lockerDAO= new LockerDAO();
 	}
 	
 	//costruttore per ricaricaSaldo
 	public ProfiloUtenteController(Utente model, PagamentoEsternoView pagamentoEsternoView) {
 		this.model=model;
 		this.pagamentoEsternoView=pagamentoEsternoView;
+		utenteDAO=new UtenteDAO();
+		lockerDAO= new LockerDAO();
 	}
 	
 	private void modificaProfiloInit() {
@@ -143,7 +153,6 @@ public class ProfiloUtenteController {
 				manageAction();
 			}
 			private void manageAction() {
-				
 				avviaSpedizioneView = new AvviaSpedizioneView();
 				okAvviaSpedizioneButton();
 			}
@@ -163,38 +172,48 @@ public class ProfiloUtenteController {
 	            double lockerInizioY = Double.parseDouble(avviaSpedizioneView.getLockerInizioYField().getText());
 	            double lockerDestinazioneX = Double.parseDouble(avviaSpedizioneView.getLockerDestinazioneXField().getText());
 	            double lockerDestinazioneY = Double.parseDouble(avviaSpedizioneView.getLockerDestinazioneYField().getText());
-	            JComboBox dimPacco = avviaSpedizioneView.getDimPaccoField(); //menù a tendina
+	            int selectedIndex;
+	            selectedIndex = avviaSpedizioneView.getDimPaccoField().getSelectedIndex();
 	            double pesoPacco = Double.parseDouble(avviaSpedizioneView.getPesoPaccoField().getText());
 	            String copertura = avviaSpedizioneView.getCoperturaField().getText();
-				
-				MatchingService ms=new MatchingService();
-				GestoreSpedizioni gs = new GestoreSpedizioni(ms);
 				Destinatario d=new Destinatario(mailDest); 
 				Coordinate ci=new Coordinate(lockerInizioX,lockerInizioY);
 				Coordinate cf=new Coordinate(lockerDestinazioneX,lockerDestinazioneY);
-				Size selectedDim = (Size) ((JComboBox) dimPacco).getSelectedItem();		
-				  switch (selectedDim) {
-			            case S:
+				Size taglia= null;
+				  switch (selectedIndex) {
+			            case 0:
+			            	taglia = Size.S;
 			                // Logica per dimensione Small (S)
 			                break;
-			            case M:
+			            case 1:
+			            	taglia = Size.M;
 			                // Logica per dimensione Medium (M)
 			                break;
-			            case L:
+			            case 2:
+			            	taglia = Size.L;
 			                // Logica per dimensione Large (L)
 			                break;
-			            case XL:
+			            case 3:
+			            	taglia =Size.XL;
 			                // Logica per dimensione Extra Large (XL)
 			                break;
 			        }
-			        IShippable p=new Pacco(selectedDim,pesoPacco);
+			        IShippable p=new Pacco(taglia,pesoPacco);
 			        IPuntoDeposito ipi,ipf;
+			        System.out.println(ci);
 			        ipi=lockerDAO.selectPuntoDeposito(ci);
 			        ipf=lockerDAO.selectPuntoDeposito(cf);
+			        System.out.println(ipf.toString());
 			        Spedizione s=new Spedizione(); //fittizia, sbagliato
 				try {
 					// AVVIA SPEDIZIONE
+				
+					//AVVIOSPEDDAOO
 					s=gs.avvioSpedizione(model, ipi, ipf, d, s, p); //avvioSpedizione da modificare
+					//System.out.println(s);
+					System.out.println(s.getDataDeposito());
+					System.out.println(s.getAssicurazione());
+					System.out.println(s.getStatoSpedizione());
 					avviaSpedizioneView.setVisible(false);
 					view.setVisible(false);
 				
@@ -252,8 +271,8 @@ public class ProfiloUtenteController {
 	                itinerarioCarrierView.setVisible(false);
 	                //view.setVisible(false);
 	                
-		                //new ItinerarioCarrierController(itinerarioCarrierView, carrier);
-		                //new ProfiloUtenteController(model, view);
+//		                new ItinerarioCarrierController(itinerarioCarrierView, carrier);
+//		                new ProfiloUtenteController(model, view);
 	                
 	                new CarrierController(new CarrierView(), carrier);
 	                
@@ -349,4 +368,31 @@ public class ProfiloUtenteController {
 		ricaricaSaldoView.getConfirmButton().addActionListener(okRicaricaListener); //bottone di ricarica saldo
 	}
 	
+	private void storicoSpedizioniInit() {
+		ActionListener listener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+				
+				ricaricaSaldoView = new RicaricaSaldoView();
+				okSpedizioniButton();
+			}
+		};
+		view.getRicarica().addActionListener(listener); 
+	} 
+	
+	private void okSpedizioniButton() {
+		ActionListener okRicaricaListener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+					double importoInserito=0.0;
+					importoInserito= ricaricaSaldoView.getAmount();
+					new ProfiloUtenteController(model, new PagamentoEsternoView(importoInserito));
+			}
+		};
+		ricaricaSaldoView.getConfirmButton().addActionListener(okRicaricaListener); //bottone di ricarica saldo
+	}
 }

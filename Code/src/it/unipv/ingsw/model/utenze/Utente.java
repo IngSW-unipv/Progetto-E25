@@ -65,6 +65,15 @@ public class Utente extends ASuperUser implements Subject<Admin>{
 	
 	//getter
 
+	//------------ DEBUG --------------- DA RIMUOVERE --------------------
+	public Utente(int i, String string, String string2, boolean b) {
+		// TODO Auto-generated constructor stub
+		this.idUtente = i;
+		this.nome = string;
+		this.cognome = string2;
+		this.statoProfilo = b;
+	}
+
 	public String getNome() {
 		return nome;
 	}

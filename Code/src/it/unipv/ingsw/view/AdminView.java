@@ -15,8 +15,7 @@ import javax.swing.SwingUtilities;
 
 public class AdminView extends JFrame{
 	private JPanel azioniPan,risultatoPan;
-	private JButton modifica,logout,avviaSped,prendiInCarico;
-	private JLabel infoUtenteLab, saldo;
+	private JButton convalida,logout,disattiva,aggiungiTempo;
 	private JScrollPane scrollAzioni, scrollRisultato;
 
 	public AdminView() {
@@ -30,27 +29,27 @@ public class AdminView extends JFrame{
 		this.setLayout(new BorderLayout());
 		this.setVisible(true);
 		
-		modifica =new JButton("Convalida profilo utenti in attesa");
-		avviaSped =new JButton("Disattiva account carrier");
-		prendiInCarico =new JButton("Aggiungi tempo al carrier");
+		convalida =new JButton("Convalida profilo utenti in attesa");
+		disattiva =new JButton("Disattiva account carrier");
+		aggiungiTempo =new JButton("Aggiungi tempo al carrier");
 		logout =new JButton("Logout");		
 		logout.setPreferredSize(new Dimension(90, 40));
-		modifica.setPreferredSize(new Dimension(90, 40));
-		avviaSped.setPreferredSize(new Dimension(90, 40));
-		prendiInCarico.setPreferredSize(new Dimension(110, 40));
-		modifica.setFocusable(true); //non schiacciabile fino ad approvazione admin
+		convalida.setPreferredSize(new Dimension(90, 40));
+		disattiva.setPreferredSize(new Dimension(90, 40));
+		aggiungiTempo.setPreferredSize(new Dimension(110, 40));
+		convalida.setFocusable(true); //non schiacciabile fino ad approvazione admin
 		logout.setFocusable(false);
-		avviaSped.setFocusable(false);
-		prendiInCarico.setFocusable(false);
-		prendiInCarico.setVisible(true);
+		disattiva.setFocusable(false);
+		aggiungiTempo.setFocusable(false);
+		aggiungiTempo.setVisible(true);
 		azioniPan=new JPanel();
 		risultatoPan=new JPanel();		
 		azioniPan.setLayout(new GridLayout(10, 10));
 		risultatoPan.setLayout(new GridLayout(10, 10));
 		JToolBar bar=new JToolBar();
-		bar.add(modifica);
-		bar.add(avviaSped);
-		bar.add(prendiInCarico);
+		bar.add(convalida);
+		bar.add(disattiva);
+		bar.add(aggiungiTempo);
 		bar.add(logout);
 		
 		scrollAzioni = new JScrollPane(azioniPan, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -72,8 +71,8 @@ public class AdminView extends JFrame{
 		return risultatoPan;
 	}	
 
-	public JButton getModificaProfilo() {
-		return modifica;
+	public JButton getConvalida() {
+		return convalida;
 	}
 
 	
@@ -81,36 +80,16 @@ public class AdminView extends JFrame{
 		return logout;
 	}
 	
-	public JButton getAvviaSpedizione() {
-		return avviaSped;
-	}
-	
-	public JLabel getInfoUtenteLab() {
-		return infoUtenteLab;
+	public JButton getDisattiva() {
+		return disattiva;
 	}
 
-	public void setInfoUtenteLab(JLabel infoLab) {
-		this.infoUtenteLab = infoLab;
-	}
-	
-	public void setInfoLabText() {
-		this.infoUtenteLab.setText("");
-	}
-	
-	public void setSaldoLabImp(double tot) {
-		this.saldo.setText("Saldo: "+ tot +" euro");
-	}
-	
-	public JLabel getSaldoLab() {
-		return this.saldo;
+	public JButton getAggiungiTempo() {
+		return aggiungiTempo;
 	}
 
-	public JButton getPrendiInCaricoSpedizioneButton() {
-		return prendiInCarico;
-	}
-
-	public void setPrendiInCaricoSpedizione(JButton prendiInCarico) {
-		this.prendiInCarico = prendiInCarico;
+	public void setAggiungiTempo(JButton prendiInCarico) {
+		this.aggiungiTempo = prendiInCarico;
 	}
 
 public static void main(String[] args) {

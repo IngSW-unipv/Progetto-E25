@@ -58,7 +58,6 @@ public class RecensioniDAO implements IRecensioniDAO{
 		}
 		
 		DBConnection.closeConnection(conn);
-	//	System.out.printf("it works");
 	}
 
 	

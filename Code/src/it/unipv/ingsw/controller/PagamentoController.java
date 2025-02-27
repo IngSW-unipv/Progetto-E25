@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 import it.unipv.ingsw.dao.UtenteDAO;
 import it.unipv.ingsw.exceptions.PaymentException;
 import it.unipv.ingsw.model.spedizione.Spedizione;
+import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
+import it.unipv.ingsw.model.spedizione.shippable.IShippable;
 import it.unipv.ingsw.model.transazioni.CompositePuntiCarta;
 import it.unipv.ingsw.model.transazioni.CompositePuntiSaldo;
 import it.unipv.ingsw.model.transazioni.CompositeSaldoCarta;
@@ -31,12 +33,11 @@ public class PagamentoController {
     private int costoPunti;
     private PagamentoView pagamentoView;
     private AvviaSpedizioneView avView;
-    private UtenteDAO utenteDAO;
     
-    public PagamentoController(Utente model, Spedizione spedizione, PagamentoView pagamentoView, double costoSped, int costoPunti) {
+    public PagamentoController(Utente model, PagamentoView pagamentoView, Spedizione spedizione, double costoSped, int costoPunti) {
         this.model = model;
-        this.spedizione = spedizione;
         this.pagamentoView = pagamentoView;
+        this.spedizione = spedizione;
         this.costoSped = costoSped;
         this.costoPunti = costoPunti;
         pagaInit();
@@ -62,23 +63,17 @@ public class PagamentoController {
         ActionListener okListener = new ActionListener() {
         	
             public void actionPerformed(ActionEvent e) {
-            	System.out.println("entro 1 volta");
                 manageAction();
             }
 
             private void manageAction() {
-                // Ottieni l'indice selezionato dalla JComboBox
-            	System.out.println("1");
                 int selectedIndex;
                 double saldo = Double.parseDouble(pagamentoView.getSaldoField().getText());
                 String numeroCarta = pagamentoView.getNumeroCartaFieldInput().getText();
                 selectedIndex = pagamentoView.getOpzioneMetodoPagamentoField().getSelectedIndex();
                 
                 try {
-                    // Dichiarazione della variabile mode
                     IPagamento mode = null;
-                    System.out.println("2");
-                    // Switch per selezionare la modalità di pagamento in base alla selezione
                     switch (selectedIndex) {
                         case 0:
                             // Solo saldo
@@ -107,23 +102,18 @@ public class PagamentoController {
                         default:
                             break;
                     }
-
-                    // Esegui il pagamento se mode non è nullo
+                    
                     if (mode != null) {
                         boolean b = false;
                         Pagamento p = new Pagamento(mode);
                         b = p.provaPagamento(costoSped, costoPunti, mode, model);
-                        
-                        // Aggiorna la UI per riflettere il pagamento eseguito (opzionale)
+                                               
                         if(selectedIndex == 0 || selectedIndex == 1 || selectedIndex == 3)
     			        	JOptionPane.showMessageDialog(null, "Pagamento eseguito con successo!");
                     }
-                    // Reindirizzamento alla view UtenteView
-                    // Non chiudere il programma, solo cambia la view
-                    new ProfiloUtenteController(model, new UtenteView(model));  // Crea la nuova view senza chiudere il programma
+                    new ProfiloUtenteController(model, new UtenteView(model)); 
                     
-                    // Importante: aggiorna anche la logica se necessario per visualizzare correttamente la nuova view
-                    pagamentoView.setVisible(false); // Nascondi la view del pagamento se necessario
+                    pagamentoView.setVisible(false); 
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(pagamentoView, "Errore nel pagamento: " + e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
                 }

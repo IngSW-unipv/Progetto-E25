@@ -30,7 +30,7 @@ public class GestoreSpedizioni {
 	private ISpedizioneDAO spedizioneDAO;
 	private IPuntoDepositoDAO puntoDepositoDAO;
 	private IPuntoDeposito puntoDeposito;
-	private QRcode qrcode= new QRcode();
+	private QRcode qrcode;
 	private static final double TASSOCOMPENSOSOLDI = 0.8;
 	private static final double TASSOCOMPENSOPUNTI = 0.2;
 	
@@ -41,15 +41,16 @@ public class GestoreSpedizioni {
 		this.matchingService = matchingService;
 		spedizioneDAO = new SpedizioneDAO();
 		puntoDepositoDAO = new LockerDAO();
+		qrcode = new QRcode();
 	}
 	
 	//metodo avvio spedizione
-	public Spedizione avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, IPuntoDeposito punto_deposito_destinazione, ASuperUser destinatario, Spedizione spedizione, IShippable spedibile) {
+	public Spedizione avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, IPuntoDeposito punto_deposito_destinazione, ASuperUser destinatario, IShippable spedibile) {
+		Spedizione spedizione= new Spedizione();
 		
 		spedizione.setCodice(qrcode.generaQRcode());
 		
 		Mittente mittente_spedizione= new Mittente(utente.getMail(), null, utente.getNome(), utente.getCognome(), utente.getNumeroTelefono(), utente.getIndirizzoCivico(), utente.getDataNascita(), utente.getFotoDocumento());
-		System.out.printf("dettagli mittente: "+ utente.getMail());
 		Destinatario destinatario_spedizione= new Destinatario(destinatario.getMail());
 		spedizione.setMittente(mittente_spedizione);
 		spedizione.setPartenza(punto_deposito_partenza);
@@ -57,11 +58,10 @@ public class GestoreSpedizioni {
 		spedizione.setDestinatario(destinatario_spedizione);
 		spedizione.setPacco(spedibile);
 		
-		if(spedizione.getPacco()==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
-		
-		spedizione.setCodice(qrcode.generaQRcode());
-		boolean controllo_disponibilita=punto_deposito_partenza.checkDisponibilita(spedizione.getPacco(), spedizione.getCodice().getQRcode());
-		
+		if(spedizione.getPacco()==null || destinatario==null) 
+			System.out.println("i campi obbligatori non sono stati completati");
+		//boolean controllo_disponibilita=punto_deposito_partenza.checkDisponibilita(spedizione.getPacco(), spedizione.getCodice().getQRcode());
+		boolean controllo_disponibilita=true;
 		if(controllo_disponibilita==false) {
 			System.out.printf("Nel locker scelto non c'è disponibilità\n");
 		}else {
@@ -269,7 +269,7 @@ public class GestoreSpedizioni {
 		Carrier car = new Carrier(ic);
 		
 		
-		gs.avvioSpedizione(car, l7, l8, car, null, null);
+		gs.avvioSpedizione(car, l7, l8, car, null);
 	
 		gs.presaInCaricoSpedizione(car);
 		

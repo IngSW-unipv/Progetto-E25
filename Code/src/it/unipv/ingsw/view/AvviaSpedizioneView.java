@@ -2,6 +2,8 @@ package it.unipv.ingsw.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import it.unipv.ingsw.controller.*;
 
@@ -87,10 +89,23 @@ public class AvviaSpedizioneView extends JFrame {
 	    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 	    setVisible(true);
+	    
+		dimPaccoField.addActionListener(new ActionListener() {
+	         @Override
+	         public void actionPerformed(ActionEvent e) {
+	             // Recupera l'indice selezionato
+	             int selectedIndex = dimPaccoField.getSelectedIndex();
+	             
+	             // Verifica se l'indice cambia correttamente
+	             System.out.println("Indice selezionato nel listener della ComboBox: " + selectedIndex);
+
+	             // Verifica anche la voce selezionata nella ComboBox
+	             String selectedOption = (String) dimPaccoField.getSelectedItem();
+	             System.out.println("Opzione selezionata: " + selectedOption);
+	         }
+	     });
+	    
 	}
-
-
-
 
 
 	public JTextField getMailDestField() {
@@ -175,7 +190,10 @@ public class AvviaSpedizioneView extends JFrame {
 	public void setConfirmButton(JButton confirmButton) {
 		this.confirmButton = confirmButton;
 	}
-
+	
+	
+	
+	
 	public static void main(String[] args) {
 	    // Imposta l'aspetto dell'interfaccia grafica in modo più fluido (threading Swing)
 	    SwingUtilities.invokeLater(new Runnable() {

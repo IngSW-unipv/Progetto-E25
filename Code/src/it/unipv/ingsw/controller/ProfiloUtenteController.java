@@ -75,8 +75,6 @@ public class ProfiloUtenteController {
 		this.view=view;
 		utenteDAO=new UtenteDAO();
 		lockerDAO= new LockerDAO();
-		ms = new MatchingService();
-		gs = new GestoreSpedizioni(ms);
 		modificaProfiloInit();
 		avvioSpedizioneInit();
 		prendiInCaricoSpedizioneInit();
@@ -176,9 +174,9 @@ public class ProfiloUtenteController {
 	            selectedIndex = avviaSpedizioneView.getDimPaccoField().getSelectedIndex();
 	            double pesoPacco = Double.parseDouble(avviaSpedizioneView.getPesoPaccoField().getText());
 	            String copertura = avviaSpedizioneView.getCoperturaField().getText();
-				Destinatario d=new Destinatario(mailDest); 
-				Coordinate ci=new Coordinate(lockerInizioX,lockerInizioY);
-				Coordinate cf=new Coordinate(lockerDestinazioneX,lockerDestinazioneY);
+				Destinatario d=new Destinatario(mailDest); //da passare
+				Coordinate ci=new Coordinate(lockerInizioX,lockerInizioY); //da passare
+				Coordinate cf=new Coordinate(lockerDestinazioneX,lockerDestinazioneY); //da passare
 				Size taglia= null;
 				  switch (selectedIndex) {
 			            case 0:
@@ -198,26 +196,30 @@ public class ProfiloUtenteController {
 			                // Logica per dimensione Extra Large (XL)
 			                break;
 			        }
-			        IShippable p=new Pacco(taglia,pesoPacco);
+			        IShippable p=new Pacco(taglia,pesoPacco); //da passare
 			        IPuntoDeposito ipi,ipf;
-			        System.out.println(ci);
+			        System.out.println(ci.getLongitudine());
+			        System.out.println(ci.getLatitudine());
+			        System.out.println(cf.getLongitudine());
+			        System.out.println(cf.getLatitudine()); //OK
 			        ipi=lockerDAO.selectPuntoDeposito(ci);
 			        ipf=lockerDAO.selectPuntoDeposito(cf);
-			        System.out.println(ipf.toString());
-			        Spedizione s=new Spedizione(); //fittizia, sbagliato
+			        ms = new MatchingService();
+					gs = new GestoreSpedizioni(ms);
+					
+					
 				try {
 					// AVVIA SPEDIZIONE
-				
-					//AVVIOSPEDDAOO
-					s=gs.avvioSpedizione(model, ipi, ipf, d, s, p); //avvioSpedizione da modificare
-					//System.out.println(s);
-					System.out.println(s.getDataDeposito());
-					System.out.println(s.getAssicurazione());
-					System.out.println(s.getStatoSpedizione());
+					Spedizione s1;
+					s1=gs.avvioSpedizione(model, ipi, ipf, d, p); //avvioSpedizione da modificare
+					System.out.println("GGG: "+ s1);
+					System.out.println("io: "+s1.getDataDeposito());
+					System.out.println("tu: "+s1.getAssicurazione());
+					System.out.println("lei: "+s1.getStatoSpedizione());
 					avviaSpedizioneView.setVisible(false);
 					view.setVisible(false);
-				
-					new PagamentoController(model,s, new PagamentoView(lockerInizioX,costoPuntiApp,model),lockerInizioX, costoPuntiApp);	//costo spedizione effettivo, metodo Zein
+					System.out.println("PROVO");
+					new PagamentoController(model,s1, new PagamentoView(lockerInizioX,costoPuntiApp,model),lockerInizioX, costoPuntiApp);	//costo spedizione effettivo, metodo Zein
 					
 				} catch (Exception e) {
 					//JOptionPane.showMessageDialog(model, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);

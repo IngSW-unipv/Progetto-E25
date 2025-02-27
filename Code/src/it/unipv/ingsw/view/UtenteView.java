@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
 public class UtenteView extends JFrame {
 
 	private JPanel azioniPan,risultatoPan,infoPan;
-	private JButton modifica,logout,avviaSped,prendiInCarico,trasferisci, ricarica, tracciamento;
+	private JButton modifica,logout,avviaSped,prendiInCarico,trasferisci, ricarica, tracciamento, storicoSpedizione;
 	private JButton  cancellaAccount;
 	private JLabel infoUtenteLab, saldo;
 	private JScrollPane scrollAzioni, scrollRisultato;
@@ -60,7 +60,8 @@ public class UtenteView extends JFrame {
 		ricarica =new JButton("Ricarica saldo");
 		trasferisci =new JButton("Trasferisci saldo"); 
 		tracciamento = new JButton("Tracciamento"); //aggiunto il bottone tracciamento
-		cancellaAccount =new JButton("Cancella account"); 
+		cancellaAccount =new JButton("Cancella account");
+		storicoSpedizione =new JButton("Storico spedizioni"); 
 		
 		logout.setPreferredSize(new Dimension(90, 40));
 		cancellaAccount.setPreferredSize(new Dimension(90, 40));
@@ -69,6 +70,7 @@ public class UtenteView extends JFrame {
 		prendiInCarico.setPreferredSize(new Dimension(110, 40));
 		trasferisci.setPreferredSize(new Dimension(200, 70));
 		ricarica.setPreferredSize(new Dimension(200, 70));
+		storicoSpedizione.setPreferredSize(new Dimension(200, 70));
 		tracciamento.setPreferredSize(new Dimension(150, 40)); //imposta le dimensioni del bottone
 
 		
@@ -79,6 +81,7 @@ public class UtenteView extends JFrame {
 		prendiInCarico.setFocusable(false);
 		prendiInCarico.setVisible(true);
 		trasferisci.setVisible(true);
+		storicoSpedizione.setVisible(true);
 		ricarica.setVisible(true);
 		tracciamento.setVisible(false); //invisibile inizialmente
 
@@ -103,6 +106,7 @@ public class UtenteView extends JFrame {
 		infoPan.add(saldo);
 		infoPan.add(ricarica);
 		infoPan.add(trasferisci);
+		infoPan.add(storicoSpedizione);
 		
 		JToolBar bar=new JToolBar();
 		bar.add(modifica);

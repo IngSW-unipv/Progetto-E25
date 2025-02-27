@@ -18,7 +18,7 @@ public class UtenteView extends JFrame {
 
 	private JPanel azioniPan,risultatoPan,infoPan;
 	private JButton modifica,logout,avviaSped,prendiInCarico,trasferisci, ricarica, tracciamento;
-	private JButton modifica,logout,avviaSped,prendiInCarico,trasferisci, ricarica, cancellaAccount;
+	private JButton  cancellaAccount;
 	private JLabel infoUtenteLab, saldo;
 	private JScrollPane scrollAzioni, scrollRisultato;
 	private GestoreSpedizioni gestoreSpedizioni;

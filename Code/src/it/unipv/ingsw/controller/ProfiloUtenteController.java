@@ -33,18 +33,19 @@ import it.unipv.ingsw.model.transazioni.PagamentoStrategyFactory;
 import it.unipv.ingsw.model.utenze.ASuperUser;
 import it.unipv.ingsw.model.utenze.Carrier;
 import it.unipv.ingsw.model.utenze.Destinatario;
-import it.unipv.ingsw.model.utenze.EndUser;
 import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.view.AvviaSpedizioneView;
+import it.unipv.ingsw.view.CancellaAccountView;
 import it.unipv.ingsw.view.CarrierView;
 import it.unipv.ingsw.view.ItinerarioCarrierView;
-//import it.unipv.ingsw.view.LogOutView;
+import it.unipv.ingsw.view.LogOutView;
 import it.unipv.ingsw.view.LoginAdminView;
 import it.unipv.ingsw.view.MainView;
 import it.unipv.ingsw.view.ModificaProfiloView;
+import it.unipv.ingsw.view.PagamentoEsternoView;
 import it.unipv.ingsw.view.PagamentoView;
 import it.unipv.ingsw.view.PrendiInCaricoSpedizioneView;
-import it.unipv.ingsw.view.TracciamentoView;
+import it.unipv.ingsw.view.RicaricaSaldoView;
 import it.unipv.ingsw.view.UtenteView;
 import it.unipv.ingsw.dao.*;
 
@@ -56,15 +57,16 @@ public class ProfiloUtenteController {
 	private MainView mainView;
 	private ModificaProfiloView modificaProfiloView;
 	private AvviaSpedizioneView avviaSpedizioneView;
-//	private LogOutView logOutView;
+	private LogOutView logOutView;
+	private CancellaAccountView cancellaAccountView;
+	private PagamentoEsternoView pagamentoEsternoView;
+	private RicaricaSaldoView ricaricaSaldoView;
 	private PagamentoView pagamentoView;
 	private ItinerarioCarrierView itinerarioCarrierView;
 	private UtenteDAO utenteDAO;
     private Itinerario it;
 	private LockerDAO lockerDAO;
 	private SpedizioneDAO spedizioneDAO;
-	private GestoreSpedizioni gestoreSpedizioni;
-	private EndUser currentUser;
 	
 	public ProfiloUtenteController(Utente model, UtenteView view) {
 		this.model=model;
@@ -74,13 +76,22 @@ public class ProfiloUtenteController {
 		avvioSpedizioneInit();
 		prendiInCaricoSpedizioneInit();
 		logOutInit();
+		cancellaAccountInit();
+		ricaricaSaldoInit();
 	}
-	
+		
 	//costruttore per logout
 	public ProfiloUtenteController(Utente model, MainView mainView) {
 		this.model=model;
 		this.mainView=mainView;
 	}
+	
+	//costruttore per ricaricaSaldo
+	public ProfiloUtenteController(Utente model, PagamentoEsternoView pagamentoEsternoView) {
+		this.model=model;
+		this.pagamentoEsternoView=pagamentoEsternoView;
+	}
+	
 	private void modificaProfiloInit() {
 		ActionListener listener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -116,7 +127,7 @@ public class ProfiloUtenteController {
 					}
 					modificaProfiloView.setVisible(false);
 					view.setVisible(false);
-					new ProfiloUtenteController(utente, new UtenteView());	//magari schermata d'attesa convalida profilo?
+					new ProfiloUtenteController(utente, new UtenteView(utente));	//magari schermata d'attesa convalida profilo?
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(modificaProfiloView, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}
@@ -125,7 +136,7 @@ public class ProfiloUtenteController {
 		};
 		modificaProfiloView.getConfirmButton().addActionListener(okModificaListener); //bottone di conferma moodifiche 
 	}
-	
+		
 	private void avvioSpedizioneInit() {
 		ActionListener listener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -148,6 +159,7 @@ public class ProfiloUtenteController {
 			private void manageAction() {
 				String mailDest = avviaSpedizioneView.getMailDestField().getText();
 	            double lockerInizioX = Double.parseDouble(avviaSpedizioneView.getLockerInizioXField().getText());
+	            int costoPuntiApp=10;
 	            double lockerInizioY = Double.parseDouble(avviaSpedizioneView.getLockerInizioYField().getText());
 	            double lockerDestinazioneX = Double.parseDouble(avviaSpedizioneView.getLockerDestinazioneXField().getText());
 	            double lockerDestinazioneY = Double.parseDouble(avviaSpedizioneView.getLockerDestinazioneYField().getText());
@@ -155,13 +167,13 @@ public class ProfiloUtenteController {
 	            double pesoPacco = Double.parseDouble(avviaSpedizioneView.getPesoPaccoField().getText());
 	            String copertura = avviaSpedizioneView.getCoperturaField().getText();
 				
-	            MatchingService ms=new MatchingService();
+				MatchingService ms=new MatchingService();
 				GestoreSpedizioni gs = new GestoreSpedizioni(ms);
 				Destinatario d=new Destinatario(mailDest); 
 				Coordinate ci=new Coordinate(lockerInizioX,lockerInizioY);
 				Coordinate cf=new Coordinate(lockerDestinazioneX,lockerDestinazioneY);
 				Size selectedDim = (Size) ((JComboBox) dimPacco).getSelectedItem();		
-			        switch (selectedDim) {
+				  switch (selectedDim) {
 			            case S:
 			                // Logica per dimensione Small (S)
 			                break;
@@ -175,21 +187,22 @@ public class ProfiloUtenteController {
 			                // Logica per dimensione Extra Large (XL)
 			                break;
 			        }
-				IShippable p=new Pacco(selectedDim,pesoPacco);
-				IPuntoDeposito ipi,ipf;
-				ipi=lockerDAO.selectPuntoDeposito(ci);
-				ipf=lockerDAO.selectPuntoDeposito(cf);
-				Spedizione s=new Spedizione(); //fittizia, sbagliato
+			        IShippable p=new Pacco(selectedDim,pesoPacco);
+			        IPuntoDeposito ipi,ipf;
+			        ipi=lockerDAO.selectPuntoDeposito(ci);
+			        ipf=lockerDAO.selectPuntoDeposito(cf);
+			        Spedizione s=new Spedizione(); //fittizia, sbagliato
 				try {
 					// AVVIA SPEDIZIONE
 					s=gs.avvioSpedizione(model, ipi, ipf, d, s, p); //avvioSpedizione da modificare
 					avviaSpedizioneView.setVisible(false);
 					view.setVisible(false);
-					new PagamentoController(model,s, new PagamentoView(lockerInizioX));	//costo spedizione effettivo, metodo Zein
+				
+					new PagamentoController(model,s, new PagamentoView(lockerInizioX,costoPuntiApp,model),lockerInizioX, costoPuntiApp);	//costo spedizione effettivo, metodo Zein
+					
 				} catch (Exception e) {
 					//JOptionPane.showMessageDialog(model, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
 				}
-				spedizioneDAO.addSpedizione(s); //non so se si fa cosi?
 			
 			}
 		};
@@ -239,8 +252,8 @@ public class ProfiloUtenteController {
 	                itinerarioCarrierView.setVisible(false);
 	                //view.setVisible(false);
 	                
-//	                new ItinerarioCarrierController(itinerarioCarrierView, carrier);
-//	                new ProfiloUtenteController(model, view);
+		                //new ItinerarioCarrierController(itinerarioCarrierView, carrier);
+		                //new ProfiloUtenteController(model, view);
 	                
 	                new CarrierController(new CarrierView(), carrier);
 	                
@@ -251,6 +264,7 @@ public class ProfiloUtenteController {
 	        }
 	    });
 	}
+
 	private void logOutInit() {
 		ActionListener listener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -277,18 +291,62 @@ public class ProfiloUtenteController {
 		logOutView.getConfirmButton().addActionListener(okLogOutListener); //bottone di logout 
 	}
 	
-	public void tracciamentoSpedizioneInit() {
-		ActionListener listener = new ActionListener() {
+	private void cancellaAccountInit() {
+		ActionListener listener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manageAction();
 			}
 			private void manageAction() {
-				//apre la finestra di tracciamento
-				TracciamentoView.apriTracciamento(gestoreSpedizioni, currentUser); //model = utente corrente
+				
+				cancellaAccountView = new CancellaAccountView();
+				okCancellaAccountButton();
 			}
 		};
-		view.getTracciamentoButton().addActionListener(listener); //bottone per tracciare la spedizione
+		view.getCancellaAccount().addActionListener(listener); 
+	} 
+	
+	private void okCancellaAccountButton() {
+		ActionListener okCancellaAccountListener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+				boolean esitoCancellazione;
+				esitoCancellazione=utenteDAO.deleteUtente(model);
+				model=null;
+				if(esitoCancellazione)
+					new ProfiloUtenteController(model, new MainView());	//ritorna a view iniziale
+			}
+		};
+		cancellaAccountView.getConfirmButton().addActionListener(okCancellaAccountListener); //bottone di cancellazioneAccount 
 	}
 	
-
+	private void ricaricaSaldoInit() {
+		ActionListener listener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+				
+				ricaricaSaldoView = new RicaricaSaldoView();
+				okRicaricaSaldoButton();
+			}
+		};
+		view.getRicarica().addActionListener(listener); 
+	} 
+	
+	private void okRicaricaSaldoButton() {
+		ActionListener okRicaricaListener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+					double importoInserito=0.0;
+					importoInserito= ricaricaSaldoView.getAmount();
+					new ProfiloUtenteController(model, new PagamentoEsternoView(importoInserito));
+			}
+		};
+		ricaricaSaldoView.getConfirmButton().addActionListener(okRicaricaListener); //bottone di ricarica saldo
+	}
+	
 }

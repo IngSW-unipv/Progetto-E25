@@ -4,6 +4,6 @@ import it.unipv.ingsw.model.spedizione.*;
 
 public interface IRecensioniDAO {
 	
-	public void addRecensione(Recensioni r, Spedizione id);
+	public void addRecensione(Recensioni r, int i);
 
 }

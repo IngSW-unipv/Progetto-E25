@@ -1,13 +1,16 @@
 package it.unipv.ingsw.dao;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import it.unipv.ingsw.model.spedizione.Coordinate;
+import it.unipv.ingsw.model.spedizione.MatchingService;
 import it.unipv.ingsw.model.spedizione.Spedizione;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
@@ -17,6 +20,7 @@ import it.unipv.ingsw.model.spedizione.shippable.Size;
 import it.unipv.ingsw.model.utenze.Destinatario;
 import it.unipv.ingsw.model.utenze.Mittente;
 import it.unipv.ingsw.model.utenze.Utente;
+
 
 public class SpedizioneDAO implements ISpedizioneDAO{
 
@@ -93,8 +97,16 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		conn = DBConnection.startConnection(conn);
 		PreparedStatement st;
 		ResultSet rs;
+		
+		if (conn != null) {
+		    System.out.println("Connessione al database riuscita\n");
+		} else {
+		    System.out.println("Connessione al database fallita\n");
+		}
+		
 		try {
-			String query1= "INSERT INTO 'spedizione' ('statoSpedizione', 'dataAvvio', 'dataFine', 'mittente', 'destinatario', 'lockerIniziale', 'lockerFinale', 'assicurazione')";
+			String query1= "INSERT INTO `ShipUp`.`spedizione` (`statoSpedizione`, `dataAvvio`, `dataFine`, `mittente`, `destinatario`, `lockerIniziale`,`lockerFinale`, `assicurazione`)"
+					+ " VALUES(?,?,?,?,?,?,?,?)";
 			st = conn.prepareStatement(query1);
 			
 			st.setString(1, spedizione.getStatoSpedizione());
@@ -105,7 +117,7 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 			st.setInt(6, spedizione.getPartenza().getID()); 
 			st.setInt(7, spedizione.getPartenza().getID()); 
 			st.setInt(8, spedizione.getAssicurazione());
-			st.executeQuery();
+			st.executeUpdate();
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -173,6 +185,24 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 	
 	public static void main(String[] args) {
 		SpedizioneDAO sd = new SpedizioneDAO();
+		
+		Mittente m=new Mittente("email", null, null, null, null, null, null, null);
+		Destinatario d=new Destinatario("user2@example.com", null, null, null, null, null, null, null);
+		
+		Coordinate a = new Coordinate(4,5);
+		Coordinate b = new Coordinate(7,-2);
+		
+		IPuntoDeposito l1 = new Locker(a,1);
+		IPuntoDeposito l2 = new Locker(b,2);
+		
+		
+		Spedizione s2=new Spedizione(m, d, null, 10, l1, l2, null, null);
+		Date dateInizio=new Date();
+		s2.setDataInizio(dateInizio);
+		s2.setStatoSpedizione("In attesa nel locker partenza");
+		
+		sd.addSpedizione(s2);
+		
 		List<Spedizione> spedizioni = sd.selectAllInAttesa();
 //		Spedizione s = spedizioni.get(0);
 		if (!spedizioni.isEmpty()) {
@@ -184,6 +214,8 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		
 		
 //		sd.aggiornaStatoSpedizione(s, "test");
+		Spedizione s = spedizioni.get(0);
+		sd.aggiornaStatoSpedizione(s, "test");
 		
 		
 	}

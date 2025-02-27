@@ -221,13 +221,13 @@ public class UtenteDAO implements IUtenteDAO {
 
         try {
             st1 = conn.createStatement();
-            String query = "SELECT * FROM SUPERUSER NATURAL JOIN UTENTE";
+            String query = "SELECT * FROM utente NATURAL JOIN superuser";
             rs1 = st1.executeQuery(query);
 
             while (rs1.next()) {
             	
-                 u = new Utente(rs1.getString(1),rs1.getString(2),rs1.getString(4),rs1.getString(5),rs1.getString(6),rs1.getString(7),rs1.getString(8),rs1.getString(9));
-                 u.setIdUtente(rs1.getInt("ID"));
+            	u = new Utente(rs1.getString("email"),rs1.getString("password"),rs1.getString("nome"),rs1.getString("cognome"),rs1.getString("dataNascita"),rs1.getString("numeroTelefono"),rs1.getString("indirizzoCivico"),rs1.getString("fotoDocumento"));
+                u.setIdUtente(rs1.getInt("ID"));
                  result.add(u);
             }
             
@@ -239,6 +239,36 @@ public class UtenteDAO implements IUtenteDAO {
         DBConnection.closeConnection(conn);
         return result;
     }
+	
+	public ArrayList<Utente> utentiDisattivati(){
+		ArrayList<Utente> result = new ArrayList<>();
+		
+		conn = DBConnection.startConnection(conn);
+        Statement st1;
+        ResultSet rs1;
+        Utente u;
+
+        try {
+            st1 = conn.createStatement();
+            String query = "SELECT * FROM utente NATURAL JOIN superuser WHERE statoProfilo = false";
+            rs1 = st1.executeQuery(query);
+
+            while (rs1.next()) {
+            	
+            	//String mail, String password,String nome, String cognome, String dataNascita,String numeroTelefono, String indirizzoCivico, String fotoDocumento
+                 u = new Utente(rs1.getString("email"),rs1.getString("password"),rs1.getString("nome"),rs1.getString("cognome"),rs1.getString("dataNascita"),rs1.getString("numeroTelefono"),rs1.getString("indirizzoCivico"),rs1.getString("fotoDocumento"));
+                 u.setIdUtente(rs1.getInt("ID"));
+                 result.add(u);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        DBConnection.closeConnection(conn);
+		
+		return result;
+	}
 	
 	public static void main(String[] args) {
 		UtenteDAO u=new UtenteDAO();

@@ -14,9 +14,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import it.unipv.ingsw.model.spedizione.Coordinate;
+import it.unipv.ingsw.model.spedizione.GestoreSpedizioni;
 import it.unipv.ingsw.model.spedizione.Spedizione;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
+import it.unipv.ingsw.model.utenze.EndUser;
+import it.unipv.ingsw.model.utenze.Utente;
 
 public class TracciamentoView {
 	
@@ -24,6 +27,8 @@ public class TracciamentoView {
 	private JTextField codiceSpedizioneField;
 	private JTextArea statoSpedizioneArea;
 	private JButton tracciaButton;
+	private GestoreSpedizioni gestoreSpedizioni;
+    private EndUser currentUser;
 	
 	Coordinate a = new Coordinate(4,5);
 	Coordinate b = new Coordinate(7,-2);
@@ -31,7 +36,10 @@ public class TracciamentoView {
 	IPuntoDeposito l2 = new Locker(b,2);
 	private Spedizione spedizione = new Spedizione(null, null, null, 0, l1, l2, null, new Date(0));
 	
-	public TracciamentoView() {
+	public TracciamentoView(GestoreSpedizioni gestoreSpedizioni, EndUser currentUser) {
+		this.gestoreSpedizioni = gestoreSpedizioni;
+        this.currentUser = currentUser;
+		
 		
 		//creazione finestra
 		frame = new JFrame("Tracciamento Spedizione");
@@ -58,16 +66,32 @@ public class TracciamentoView {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//recupero il codice inserito
+				//recupera il codice inserito
 				String codiceInserito = codiceSpedizioneField.getText().trim();
 				
-				//verifica ed aggiorna lo stato della spedizione
-				if (codiceInserito.equals(spedizione.getCodice())) {
+				//recupera la sped. dalla lista nel GestoreSpedizioni
+				Spedizione spedizione = gestoreSpedizioni.getSpedizioneByCodiceQR(codiceInserito);
+				
+				//verifica se la spedizione è stata trovata
+				if (spedizione != null) {
+					//se la sped. esiste, si mostra il suo stato
 					String stato = spedizione.getStatoSpedizione();
 					statoSpedizioneArea.setText("Stato spedizione: " + stato);
+					
+					//aggiungo l'utente EndUser come osservatore della spedizione
+					spedizione.addObserver(currentUser);
 				} else {
-					statoSpedizioneArea.setText("Codice non valido");
+					//spedizione non trovata
+					statoSpedizioneArea.setText("Codice non valido.");
 				}
+				
+//				//verifica ed aggiorna lo stato della spedizione
+//				if (codiceInserito.equals(spedizione.getCodice())) {
+//					String stato = spedizione.getStatoSpedizione();
+//					statoSpedizioneArea.setText("Stato spedizione: " + stato);
+//				} else {
+//					statoSpedizioneArea.setText("Codice non valido");
+//				}
 			}
 			
 		});
@@ -76,17 +100,21 @@ public class TracciamentoView {
 		
 	}
 	
-	public static void main(String[] args) {
-		
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				new TracciamentoView();
-			}
-			
-		});
-		
+	public static void apriTracciamento(GestoreSpedizioni gestoreSpedizioni, EndUser currentUser) {
+		new TracciamentoView(gestoreSpedizioni, currentUser);
 	}
+	
+//	public static void main(String[] args) {
+//		
+//		SwingUtilities.invokeLater(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				new TracciamentoView();
+//			}
+//			
+//		});
+//		
+//	}
 	
 }

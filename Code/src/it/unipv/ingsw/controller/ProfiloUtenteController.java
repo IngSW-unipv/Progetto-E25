@@ -33,6 +33,7 @@ import it.unipv.ingsw.model.transazioni.PagamentoStrategyFactory;
 import it.unipv.ingsw.model.utenze.ASuperUser;
 import it.unipv.ingsw.model.utenze.Carrier;
 import it.unipv.ingsw.model.utenze.Destinatario;
+import it.unipv.ingsw.model.utenze.EndUser;
 import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.view.AvviaSpedizioneView;
 import it.unipv.ingsw.view.CarrierView;
@@ -43,6 +44,7 @@ import it.unipv.ingsw.view.MainView;
 import it.unipv.ingsw.view.ModificaProfiloView;
 import it.unipv.ingsw.view.PagamentoView;
 import it.unipv.ingsw.view.PrendiInCaricoSpedizioneView;
+import it.unipv.ingsw.view.TracciamentoView;
 import it.unipv.ingsw.view.UtenteView;
 import it.unipv.ingsw.dao.*;
 
@@ -61,6 +63,8 @@ public class ProfiloUtenteController {
     private Itinerario it;
 	private LockerDAO lockerDAO;
 	private SpedizioneDAO spedizioneDAO;
+	private GestoreSpedizioni gestoreSpedizioni;
+	private EndUser currentUser;
 	
 	public ProfiloUtenteController(Utente model, UtenteView view) {
 		this.model=model;
@@ -271,6 +275,19 @@ public class ProfiloUtenteController {
 			}
 		};
 		logOutView.getConfirmButton().addActionListener(okLogOutListener); //bottone di logout 
+	}
+	
+	public void tracciamentoSpedizioneInit() {
+		ActionListener listener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+				//apre la finestra di tracciamento
+				TracciamentoView.apriTracciamento(gestoreSpedizioni, currentUser); //model = utente corrente
+			}
+		};
+		view.getTracciamentoButton().addActionListener(listener); //bottone per tracciare la spedizione
 	}
 
 

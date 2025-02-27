@@ -35,6 +35,8 @@ public class GestoreSpedizioni {
 	private static final double TASSOCOMPENSOPUNTI = 0.2;
 	
 	
+	private List<Spedizione> spedizioniCompatibili; // variabile di istanza
+	
 	public GestoreSpedizioni(MatchingService matchingService) {
 		this.matchingService = matchingService;
 		spedizioneDAO = new SpedizioneDAO();
@@ -130,6 +132,17 @@ public class GestoreSpedizioni {
 			s.setItinerarioTot(new Itinerario(s.getItinerarioCorrente().getFine(), s.getItinerarioTot().getFine()));
 		}
 	}
+	
+    // Metodo per cercare una spedizione dato un codice QR
+    public Spedizione getSpedizioneByCodiceQR(String codiceInserito) {
+		// Cerca la spedizione corrispondente al codice QR
+        for (Spedizione s : spedizioniCompatibili) {
+            if (s.getCodice().equals(codiceInserito)) {
+                return s;  // Ritorna la spedizione trovata
+            }
+        }
+        return null;  // Ritorna null se non trova una spedizione corrispondente
+    }
 	
 	
 	

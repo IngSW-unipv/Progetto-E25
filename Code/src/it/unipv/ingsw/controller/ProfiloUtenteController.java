@@ -33,15 +33,18 @@ import it.unipv.ingsw.model.transazioni.PagamentoStrategyFactory;
 import it.unipv.ingsw.model.utenze.ASuperUser;
 import it.unipv.ingsw.model.utenze.Carrier;
 import it.unipv.ingsw.model.utenze.Destinatario;
+import it.unipv.ingsw.model.utenze.EndUser;
 import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.view.AvviaSpedizioneView;
 import it.unipv.ingsw.view.CarrierView;
 import it.unipv.ingsw.view.ItinerarioCarrierView;
+//import it.unipv.ingsw.view.LogOutView;
 import it.unipv.ingsw.view.LoginAdminView;
 import it.unipv.ingsw.view.MainView;
 import it.unipv.ingsw.view.ModificaProfiloView;
 import it.unipv.ingsw.view.PagamentoView;
 import it.unipv.ingsw.view.PrendiInCaricoSpedizioneView;
+import it.unipv.ingsw.view.TracciamentoView;
 import it.unipv.ingsw.view.UtenteView;
 import it.unipv.ingsw.dao.*;
 
@@ -50,14 +53,18 @@ public class ProfiloUtenteController {
 	private Utente model;
 	private Carrier carrier;
 	private UtenteView view; 
+	private MainView mainView;
 	private ModificaProfiloView modificaProfiloView;
 	private AvviaSpedizioneView avviaSpedizioneView;
+//	private LogOutView logOutView;
 	private PagamentoView pagamentoView;
 	private ItinerarioCarrierView itinerarioCarrierView;
 	private UtenteDAO utenteDAO;
     private Itinerario it;
 	private LockerDAO lockerDAO;
 	private SpedizioneDAO spedizioneDAO;
+	private GestoreSpedizioni gestoreSpedizioni;
+	private EndUser currentUser;
 	
 	public ProfiloUtenteController(Utente model, UtenteView view) {
 		this.model=model;
@@ -66,8 +73,14 @@ public class ProfiloUtenteController {
 		modificaProfiloInit();
 		avvioSpedizioneInit();
 		prendiInCaricoSpedizioneInit();
+		logOutInit();
 	}
 	
+	//costruttore per logout
+	public ProfiloUtenteController(Utente model, MainView mainView) {
+		this.model=model;
+		this.mainView=mainView;
+	}
 	private void modificaProfiloInit() {
 		ActionListener listener=new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -238,6 +251,44 @@ public class ProfiloUtenteController {
 	        }
 	    });
 	}
-
+	private void logOutInit() {
+		ActionListener listener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+				
+				logOutView = new LogOutView();
+				okLogOutButton();
+			}
+		};
+		view.getLogout().addActionListener(listener); 
+	} 
+	
+	private void okLogOutButton() {
+		ActionListener okLogOutListener=new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+				new ProfiloUtenteController(model, new MainView());	//ritorna a view iniziale	
+			}
+		};
+		logOutView.getConfirmButton().addActionListener(okLogOutListener); //bottone di logout 
+	}
+	
+	public void tracciamentoSpedizioneInit() {
+		ActionListener listener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				manageAction();
+			}
+			private void manageAction() {
+				//apre la finestra di tracciamento
+				TracciamentoView.apriTracciamento(gestoreSpedizioni, currentUser); //model = utente corrente
+			}
+		};
+		view.getTracciamentoButton().addActionListener(listener); //bottone per tracciare la spedizione
+	}
+	
 
 }

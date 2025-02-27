@@ -129,6 +129,10 @@ public class Spedizione {
 		return codice;
 	}
 	
+	public void setCodice(String codice) {
+		setCodice(codice);
+	}
+	
 	public void setPacco(IShippable shippable) {
 		this.shippable = shippable;
 	}

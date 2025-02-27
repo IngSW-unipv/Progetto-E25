@@ -120,6 +120,9 @@ public class Locker implements IPuntoDeposito{
 					sc.Open();
 				
 				this.registraDeposito(dataDeposito);
+				
+//				mappaQRcode.remove(codice); //elimina dalla mappa il codiceQR scansionato
+//				System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
 					
 				return true;
 			} else {
@@ -127,24 +130,6 @@ public class Locker implements IPuntoDeposito{
 				return false;
 			}
 	}
-
-//	public void apriScompartimento(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isMittenteDeposita) {
-//		if (checkQR(codice, spedizione, isRitiro, isMittenteDeposita) == true) {
-//			
-//			int IDscompartimento = getIDscompartimento(); //ottiene l'ID dello Scompartimento
-//			Scompartimento scompartimento = getScompartimento(IDscompartimento); //ottiene lo scompartimento proprio
-//			scompartimento.Open();
-//			
-//			this.registraDeposito(new Date());
-//			
-//			//elimina dalla mappa il codiceQR scansionato
-//			mappaQRcode.remove(codice); //elimina dalla mappa il codiceQR scansionato
-//			System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
-//			
-//		} else {
-//			System.out.println("Codice QR non valido. Impossibile aprire lo scompartimento.");
-//		}
-//	}
 
 //	@Override
 //	public boolean checkQRsecondo(String codice) {

@@ -162,6 +162,8 @@ public class Locker implements IPuntoDeposito{
 	public boolean checkDisponibilita(IShippable daSpedire, String codice) {
 				Integer id_salvare=0;
 				boolean controllo=false;
+				
+				
 				for(Integer c: scompartimenti.keySet()) {
 					if(scompartimenti.get(c).isOccupato()==false && scompartimenti.get(c).getSize()== daSpedire.getSize()) {
 						System.out.printf("Scompartimento libero "+ c+"\n");
@@ -169,6 +171,7 @@ public class Locker implements IPuntoDeposito{
 						controllo=true;
 					}
 				}
+				
 				
 				if(controllo==false) {
 					return false; 

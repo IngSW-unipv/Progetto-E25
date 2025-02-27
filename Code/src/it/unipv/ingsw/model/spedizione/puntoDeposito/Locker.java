@@ -90,7 +90,7 @@ public class Locker implements IPuntoDeposito{
 	
 	
 	//metodo che funziona sia per il carrier che per il destinatario
-	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isMittenteDeposita) {
+	public boolean checkQR(QRcode codice, Spedizione spedizione, boolean isRitiro, boolean isMittenteDeposita, boolean isPresaInCarico) {
 		
 		MatchingService m = new MatchingService();
 		GestoreSpedizioni gs = new GestoreSpedizioni(m);
@@ -112,17 +112,22 @@ public class Locker implements IPuntoDeposito{
 				System.out.println("Il pacco è stato ritirato dal destinatario. Stato aggiornato a 'Consegnato'.");
 			}
 			
+			if (isPresaInCarico) {
+				 spedizione.setStatoSpedizione("IN_TRANSITO");
+		         System.out.println("Il carrier ha preso in carico la spedizione. Stato aggiornato a 'IN_TRANSITO'.");
+			}
 				
 				//se il qr valido, procede ed apre lo sc associato
 				System.out.println("Codice QR valido: " + codiceQR);
 				int s = mappaQRcode.get(codiceQR);
 				Scompartimento sc = scompartimenti.get(s);
 					sc.Open();
+					System.out.println("Scompartimento aperto!");
 				
 				this.registraDeposito(dataDeposito);
 				
-//				mappaQRcode.remove(codice); //elimina dalla mappa il codiceQR scansionato
-//				System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
+				mappaQRcode.remove(codice); //elimina dalla mappa il codiceQR scansionato
+				System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
 					
 				return true;
 			} else {

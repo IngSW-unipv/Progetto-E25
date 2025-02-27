@@ -43,6 +43,8 @@ public class TestRitira_DepositaPacco {
 		//chiama il metodo ritiraPacco
 		gs.ritiraPacco(codice, spedizione, true, (Locker) l1);
 		
+		spedizione.notifyObservers();
+		
 		//stampa per verifcare lo stato prima e dopo
 		System.out.println("Stato spedizione dopo il ritiro: " + spedizione.getStatoSpedizione());
 		
@@ -69,7 +71,7 @@ public class TestRitira_DepositaPacco {
 		Spedizione spedizione = new Spedizione(12345, null, l6, l7);
 		spedizione.addObserver(user);
 		
-		Scompartimento sc = new Scompartimento(3, Size.S);
+		Scompartimento sc = new Scompartimento(2, Size.S);
 		
 		((Locker) l6).getScompartimenti().put(3, sc);
 		((Locker) l6).getMappaQRcode().put(codice.getQRcode(), 3);
@@ -83,13 +85,12 @@ public class TestRitira_DepositaPacco {
 		//stampa per verifcare lo stato prima e dopo
 		System.out.println("Stato spedizione dopo il deposito: " + spedizione.getStatoSpedizione());
 		
-//		spedizione.notifyObservers(); si può non mettere perché una volta che cambia lo stato della spedizione viene chiamato il metodo notify
 		
 		//verifica che lo stato sped. sia stato aggiornato correttamente
 		assertEquals("In attesa.", spedizione.getStatoSpedizione()); //L'utente dovrebbe ricevere la mail dell'aggiornamento 
 		
 		
-		
+		spedizione.notifyObservers(); //si può non mettere perché una volta che cambia lo stato della spedizione viene chiamato il metodo notify
 		
 		
 		

@@ -150,7 +150,7 @@ public class GestoreSpedizioni {
 	public void ritiraPacco(QRcode codice, Spedizione spedizione, boolean isRitiro, Locker locker) {
 		
 		//verifica il QR con locker, passando false per 'isMittenteDeposita'
-		boolean codiceValido = locker.checkQR(codice, spedizione, true, false);
+		boolean codiceValido = locker.checkQR(codice, spedizione, true, false, false);
 		
 		
 		//metodo che chiama il metodo checkQR nella classe Locker
@@ -163,7 +163,7 @@ public class GestoreSpedizioni {
 		
 		//verifica il QR con locker, passando true per 'isMittenteDeposita' e false a 'isRitiro'
 		
-		boolean codiceValido = locker.checkQR(codice, spedizione, false, isMittenteDeposita);
+		boolean codiceValido = locker.checkQR(codice, spedizione, false, isMittenteDeposita, false);
 		
 		if (!codiceValido) {
 			System.out.println("Errore: Il codice QR non è valido.");

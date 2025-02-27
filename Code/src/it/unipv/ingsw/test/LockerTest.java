@@ -26,7 +26,7 @@ public class LockerTest {
 		
 		//dataDeposito è 2 giorni fa
 //		System.currentTimeMillis() - 86400000L * 2
-		Spedizione spedizione = new Spedizione(null, null, null, 0, l1, l2, null, new Date(System.currentTimeMillis() - 86400000L * 4));
+		Spedizione spedizione = new Spedizione(null, null, null, 0, l1, l2, null, new Date(System.currentTimeMillis() - 86400000L * 2));
 		
 		MatchingService m = new MatchingService();
 		GestoreSpedizioni gs = new GestoreSpedizioni(m);
@@ -43,9 +43,9 @@ public class LockerTest {
 		
 		
 		//testa il metodo checkQR() con la condizione che il pacco è stato ritirato dal destinatario
-		boolean result = ((Locker) l1).checkQR(codice, spedizione, false, true); //true indica che il codice è valido ed è stato ritirato il pacco
+		boolean result = ((Locker) l1).checkQR(codice, spedizione, false, false, true); //true indica che il codice è valido ed è stato ritirato il pacco
 		
-		gs.verificaTempoDeposito(spedizione, new Date(System.currentTimeMillis() - 86400000L * 4), false);
+		gs.verificaTempoDeposito(spedizione, new Date(System.currentTimeMillis() - 86400000L * 2), false);
 		
 		//verifica che lo stato della spedizione sia "Consegnato"
 		assertTrue(result);
@@ -82,7 +82,7 @@ public class LockerTest {
 //	((Locker) l4).aggiungiScompartimento(new Scompartimento(2, Size.M));
 	
 	//test di checkQR() quando il pacco non viene ritirato in tempo
-	boolean result = ((Locker) l4).checkQR(codice, spedizione, false, true); //false indica che pacco non ritirato
+	boolean result = ((Locker) l4).checkQR(codice, spedizione, false, true, false); //false indica che pacco non ritirato
 	
 	gs.depositaPacco(codice, spedizione, true, (Locker) l4);
 	

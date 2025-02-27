@@ -73,13 +73,13 @@ public class SpedizioneTest {
 //		boolean isRitiro = true;
 //		boolean isMittenteDeposita = false;
 		
-		gs.ritiraPacco(codice, spedizione, true, (Locker) l1);
+		gs.depositaPacco(codice, spedizione, true, (Locker) l1);
 
 		//boolean result = l1.checkQR(codice, spedizione, isRitiro, isMittenteDeposita);
 		
 		//assertTrue(result, "Codice QR valido.");
 		
-		assertEquals("Consegnato.", spedizione.getStatoSpedizione());
+		assertEquals("In attesa.", spedizione.getStatoSpedizione());
 	}
 	
 }

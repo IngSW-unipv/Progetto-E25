@@ -6,7 +6,6 @@ import it.unipv.ingsw.view.*;
 import java.util.ArrayList;
 import java.util.Date;
 
-import it.unipv.ingsw.controller.ItinerarioCarrierController;
 import it.unipv.ingsw.controller.MainController;
 import it.unipv.ingsw.controller.ProfiloUtenteController;
 import it.unipv.ingsw.model.spedizione.Coordinate;

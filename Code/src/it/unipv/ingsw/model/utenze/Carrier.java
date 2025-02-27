@@ -65,6 +65,19 @@ public class Carrier extends Utente{
 		this.compenso = compenso;
 	}
 
+	@Override
+    public void inviaNotificaCarrier(String messaggio) {
+        // Implementazione della notifica tramite l'app
+        System.out.println("Notifica per " + getNome() + ": " + messaggio);
+    }
+
+    @Override
+    public void inviaEmailCarrier(String soggetto, String corpo) {
+        // Implementazione dell'invio email
+        System.out.println("Email inviata a " + getMail());
+        System.out.println("Oggetto: " + soggetto);
+        System.out.println("Corpo: " + corpo);
+    }
 	
 	
 	

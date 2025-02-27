@@ -56,6 +56,20 @@ public class Admin extends ASuperUser implements Observer<Utente>{
 		this.matricola = matricola;
 	}
 
+	@Override
+	public void inviaNotificaCarrier(String messaggio) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void inviaEmailCarrier(String soggetto, String corpo) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+
 
 }
 

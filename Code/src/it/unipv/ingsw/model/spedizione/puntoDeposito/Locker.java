@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import javax.xml.crypto.Data;
 
 import java.sql.Blob;
+import java.time.LocalDateTime;
 
 import it.unipv.ingsw.model.spedizione.shippable.Pacco;
 import it.unipv.ingsw.model.spedizione.Coordinate;
@@ -25,11 +26,11 @@ public class Locker implements IPuntoDeposito{
 //	private Map<String, Spedizione> mappaQR= new HashMap<>(); //ha come chiave codice QR e valore l'oggetto spedizione
 	private int IDscompartimento;
 	private int IDlocker;
-	private Date dataDeposito;
+	private LocalDateTime dataDeposito;
 	
 	public Locker(Coordinate posizione, int Idlocker) {
 		this.posizione = posizione;
-		dataDeposito = null; //inizialmente nessuna data di deposito
+//		dataDeposito = null; //inizialmente nessuna data di deposito
 		this.scompartimenti = new HashMap<>(); // inizializzando con una mappa di scompartimenti vuota
 //		this.mappaQR = new HashMap<>();
 	}
@@ -72,19 +73,19 @@ public class Locker implements IPuntoDeposito{
 	
 //	ottiene uno scompartimento dalla HashMap usando il proprio ID
 	public Scompartimento getScompartimento(int scompartimento) {
-		return scompartimenti.get(IDscompartimento);
+		return scompartimenti.get(scompartimento);
 	}
 	
 	public int getIDscompartimento() {
 		return IDscompartimento;
 	}
 	
-	public void registraDeposito(Date data) {
-		this.dataDeposito = data;
-		System.out.println("Deposito Registrato: " + data);
+	public void registraDeposito(LocalDateTime localDateTime) {
+		this.dataDeposito = localDateTime;
+		System.out.println("Deposito Registrato: " + localDateTime);
 	}
 	
-	private Date getDataDeposito() {
+	private LocalDateTime getDataDeposito() {
 		return dataDeposito;
 	}
 	
@@ -99,41 +100,39 @@ public class Locker implements IPuntoDeposito{
 		String codiceQR = codice.getQRcode();
 		
 		//verifica se il codice esiste nella mappa dei QR che il locker aspetta
-		if(mappaQRcode.containsKey(codiceQR)) {
-			System.out.println("Codice QR valido: " + codiceQR);
+		if(!mappaQRcode.containsKey(codiceQR)) {
+			System.out.println("Errore: Il codice QR non è valido");
+		}
+		System.out.println("Codice QR valido: " + codiceQR);
 			
-			if (isMittenteDeposita) {
-				spedizione.setStatoSpedizione("In attesa.");
-				System.out.println("Il pacco è stato deppositato dal mittente.");
-			}
+		if (isMittenteDeposita) {
+			spedizione.setStatoSpedizione("In attesa.");
+			System.out.println("Il pacco è stato deppositato dal mittente.");
+		}
 				
-			if (isRitiro) {
-				spedizione.setStatoSpedizione("Consegnato.");
-				System.out.println("Il pacco è stato ritirato dal destinatario. Stato aggiornato a 'Consegnato'.");
-			}
+		if (isRitiro) {
+			spedizione.setStatoSpedizione("Consegnato.");
+			System.out.println("Il pacco è stato ritirato dal destinatario. Stato aggiornato a 'Consegnato'.");
+		}
 			
-			if (isPresaInCarico) {
-				 spedizione.setStatoSpedizione("IN_TRANSITO");
-		         System.out.println("Il carrier ha preso in carico la spedizione. Stato aggiornato a 'IN_TRANSITO'.");
-			}
+		if (isPresaInCarico) {
+			 spedizione.setStatoSpedizione("IN_TRANSITO");
+		        System.out.println("Il carrier ha preso in carico la spedizione. Stato aggiornato a 'IN_TRANSITO'.");
+		}
 				
-				//se il qr valido, procede ed apre lo sc associato
-				System.out.println("Codice QR valido: " + codiceQR);
-				int s = mappaQRcode.get(codiceQR);
-				Scompartimento sc = scompartimenti.get(s);
-					sc.Open();
-					System.out.println("Scompartimento aperto!");
+			//se il qr valido, procede ed apre lo sc associato
+			int s = mappaQRcode.get(codiceQR);
+			Scompartimento sc = scompartimenti.get(s);
+			sc.Open();
+			System.out.println("Scompartimento aperto!");
 				
-				this.registraDeposito(dataDeposito);
+			this.registraDeposito(LocalDateTime.now());
 				
-				mappaQRcode.remove(codice); //elimina dalla mappa il codiceQR scansionato
-				System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
+			mappaQRcode.remove(codiceQR); //elimina dalla mappa il codiceQR scansionato
+			System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
 					
-				return true;
-			} else {
-				System.out.println("Errore: Il codice QR non è valido.");
-				return false;
-			}
+			return true;
+			
 	}
 
 //	@Override

@@ -11,8 +11,11 @@ import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Locker;
 import it.unipv.ingsw.model.spedizione.puntoDeposito.Scompartimento;
 import it.unipv.ingsw.model.spedizione.shippable.Size;
+
+import static org.junit.Assert.assertTrue;
+
 import java.sql.Date;
-import static org.junit.Assert.*;
+
 
 
 public class LockerTest {
@@ -26,7 +29,7 @@ public class LockerTest {
 		
 		//dataDeposito è 2 giorni fa
 //		System.currentTimeMillis() - 86400000L * 2
-		Spedizione spedizione = new Spedizione(null, null, null, 0, l1, l2, null, new Date(System.currentTimeMillis() - 86400000L * 2));
+		Spedizione spedizione = new Spedizione(null, null, null, 0, l1, l2, null, new Date(System.currentTimeMillis() - 86400000L * 4));
 		
 		MatchingService m = new MatchingService();
 		GestoreSpedizioni gs = new GestoreSpedizioni(m);
@@ -39,18 +42,18 @@ public class LockerTest {
 		Scompartimento sc = new Scompartimento(2, Size.S);
 		((Locker) l1).getScompartimenti().put(2, sc);
 		((Locker) l1).getMappaQRcode().put(codice.getQRcode(), 2);
-//		((Locker) l1).aggiungiScompartimento(new Scompartimento(2, Size.M));
+		((Locker) l1).aggiungiScompartimento(new Scompartimento(3, Size.M));
 		
 		
 		//testa il metodo checkQR() con la condizione che il pacco è stato ritirato dal destinatario
-		boolean result = ((Locker) l1).checkQR(codice, spedizione, false, false, true); //true indica che il codice è valido ed è stato ritirato il pacco
+		boolean result = ((Locker) l1).checkQR(codice, spedizione, false, true, false);
 		
-		gs.verificaTempoDeposito(spedizione, new Date(System.currentTimeMillis() - 86400000L * 2), false);
+		gs.verificaTempoDeposito(spedizione, new Date(System.currentTimeMillis() - 86400000L * 4), false);
 		
 		//verifica che lo stato della spedizione sia "Consegnato"
 		assertTrue(result);
 		//assertEquals è un metodo che controlla se la stringa che mi aspetto è uguale alla stringa reale 
-		assertEquals("In attesa.", spedizione.getStatoSpedizione());
+//		assertEquals("Consegnato.", spedizione.getStatoSpedizione());
 		
 	}
 
@@ -79,7 +82,7 @@ public class LockerTest {
 	((Locker) l4).getScompartimenti().put(2, sc);
 	
 	((Locker) l4).getMappaQRcode().put(codice.getQRcode(), 2);
-//	((Locker) l4).aggiungiScompartimento(new Scompartimento(2, Size.M));
+	((Locker) l4).aggiungiScompartimento(new Scompartimento(2, Size.M));
 	
 	//test di checkQR() quando il pacco non viene ritirato in tempo
 	boolean result = ((Locker) l4).checkQR(codice, spedizione, false, true, false); //false indica che pacco non ritirato

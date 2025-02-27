@@ -71,7 +71,7 @@ public class TestRitira_DepositaPacco {
 		Spedizione spedizione = new Spedizione(12345, null, l6, l7);
 		spedizione.addObserver(user);
 		
-		Scompartimento sc = new Scompartimento(2, Size.S);
+		Scompartimento sc = new Scompartimento(3, Size.S);
 		
 		((Locker) l6).getScompartimenti().put(3, sc);
 		((Locker) l6).getMappaQRcode().put(codice.getQRcode(), 3);

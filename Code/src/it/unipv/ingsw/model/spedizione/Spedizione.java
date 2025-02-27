@@ -83,6 +83,11 @@ public class Spedizione {
 	}
 	
 	
+	public Spedizione(String string, Itinerario itinerarioSpedizione1, Itinerario itinerarioSpedizioneTot1,
+			QRcode qrcode) {
+		// serve per il test
+	}
+
 	public Itinerario getItinerarioTot() {
 		return itinerarioTot;
 	}
@@ -198,6 +203,7 @@ public class Spedizione {
 		this.statoSpedizione = statoSpedizione;
 		//notifica gli Observers ad ogni aggiornamento
 		notifyObservers();
+//		System.out.println("Stato spedizione aggiornato a: " + statoSpedizione);
 	}
 	
 	//notify observers

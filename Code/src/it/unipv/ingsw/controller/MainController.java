@@ -28,6 +28,7 @@ public class MainController {
 	LoginAdminView loginAdminView;
 	UtenteDAO utenteDAO;
 	AdminDAO adminDAO;
+	Utente utente;
 	
 	public MainController(MainView mainView) {
 		this.mainView=mainView;
@@ -80,12 +81,12 @@ public class MainController {
 				String email = loginUtenteView.getEmailField().getText();
 	            String password = String.valueOf(loginUtenteView.getPasswordField().getPassword());
 				try {
-					Utente utente;
 					utente = utenteDAO.getUtenteByEmailPassword(email, password);
 					System.out.println(utente.toString());
 					loginUtenteView.setVisible(false);
 					mainView.setVisible(false);
-					new ProfiloUtenteController(utente, new UtenteView());
+					utenteDAO.getSaldoEPuntiAppByUtente(utente); //aggiorna saldo e restituisce saldo aggiornato
+					new ProfiloUtenteController(utente, new UtenteView(utente));
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(loginUtenteView, "Campi errati", "Errore", JOptionPane.ERROR_MESSAGE);
 				}

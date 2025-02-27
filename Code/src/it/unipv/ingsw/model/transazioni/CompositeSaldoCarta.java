@@ -19,7 +19,7 @@ public class CompositeSaldoCarta extends CompositePagamentiStrategy {
 	public void effettuaPagamento(double amount,int puntiApp,Utente utente) throws PaymentException{ 
 		double temp=amount;
 		Saldo sal;
-		System.out.println("QUI SALDO-CARTA");
+		System.out.println("PAGAMENTO SALDO+CARTA");
 		Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
 		temp-=utente.getSaldo().getDenaro(); //utilizzo una variabile temp per vedere se ho saldo sufficiente per pagare
 		if(temp<=0) { //Posso pagare con saldo, non c'è bisogno di carta!

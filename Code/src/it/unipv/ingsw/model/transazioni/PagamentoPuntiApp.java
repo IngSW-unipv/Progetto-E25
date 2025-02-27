@@ -10,7 +10,7 @@ public class PagamentoPuntiApp implements IPagamento{ //aggiunto implements IPag
 		
 		//pagamento con puntiApp
 		public void effettuaPagamento(double amount,int puntiApp,Utente utente) throws PaymentException{ 
-			System.out.println("QUI PUNTIAPP");
+			System.out.println("PAGAMENTO PUNTIAPP");
 			int temp;
 			Saldo sal;
 			Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();

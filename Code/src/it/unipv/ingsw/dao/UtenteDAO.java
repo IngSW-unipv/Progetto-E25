@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unipv.ingsw.model.utenze.ASuperUser;
+import it.unipv.ingsw.model.utenze.Saldo;
 import it.unipv.ingsw.model.utenze.Utente;
 
 import java.sql.Blob;
@@ -79,6 +80,7 @@ public class UtenteDAO implements IUtenteDAO {
 			rs1=st1.executeQuery();
 			if(rs1.next()) {
 				result= new Utente(rs1.getString("email"),rs1.getString("password"),rs1.getString("nome"), rs1.getString("cognome"),rs1.getString("dataNascita"),rs1.getString("numeroTelefono"),rs1.getString("indirizzoCivico"),rs1.getString("fotoDocumento"));
+				result.setIdUtente(rs1.getInt("ID"));
 			}
 			
 		} catch  (Exception e) { 
@@ -137,6 +139,7 @@ public class UtenteDAO implements IUtenteDAO {
 		utenteModificato.setFotoDocumento(fotoDocumento);
 		utenteModificato.setPassword(password);
 		utenteModificato.setStatoProfilo(true); // Aggiorna lo stato del profilo
+		utenteModificato.setIdUtente(rs.getInt("id"));
 		}
 		
 		} catch (Exception e) {
@@ -175,6 +178,38 @@ public class UtenteDAO implements IUtenteDAO {
 
 	}
 	
+	 // Nuovo metodo che legge Saldo e Punti App per un utente dato email e password
+    public Saldo getSaldoEPuntiAppByUtente(Utente u) {
+        conn = DBConnection.startConnection(conn);
+        PreparedStatement st;
+        ResultSet rs;
+        Saldo saldo = null;
+
+        try {
+            // Query per ottenere i campi quantitaDenaro e puntiApp
+            String query = "select * from utente u join saldo s where u.id = s.idutente and u.id = ?";
+            st = conn.prepareStatement(query);
+            st.setInt(1, u.getIdUtente());
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+                double quantitaDenaro = rs.getDouble("quantitaDenaro");
+                int puntiApp = rs.getInt("puntiApp");
+                u.getSaldo().setDenaro(quantitaDenaro);
+                u.getSaldo().setPuntiApp(puntiApp);
+                //saldo.setDenaro(quantitaDenaro);
+                //saldo.setPuntiApp(puntiApp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBConnection.closeConnection(conn);
+        }
+
+        return u.getSaldo();
+    }
+
 	@Override
     public ArrayList<Utente> selectAll() {
         ArrayList<Utente> result = new ArrayList<>();
@@ -192,7 +227,7 @@ public class UtenteDAO implements IUtenteDAO {
             while (rs1.next()) {
             	
                  u = new Utente(rs1.getString(1),rs1.getString(2),rs1.getString(4),rs1.getString(5),rs1.getString(6),rs1.getString(7),rs1.getString(8),rs1.getString(9));
-
+                 u.setIdUtente(rs1.getInt("ID"));
                  result.add(u);
             }
             

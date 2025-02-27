@@ -2,6 +2,7 @@ package it.unipv.ingsw.view;
 
 import javax.swing.*;
 
+import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.model.spedizione.GestoreSpedizioni;
 import it.unipv.ingsw.model.spedizione.MatchingService;
 import it.unipv.ingsw.model.utenze.EndUser;
@@ -21,6 +22,8 @@ public class UtenteView extends JFrame {
 	private JButton  cancellaAccount;
 	private JLabel infoUtenteLab, saldo;
 	private JScrollPane scrollAzioni, scrollRisultato;
+	private double saldoUtente = 0.0; 
+    private int puntiApp = 0;   
 	private GestoreSpedizioni gestoreSpedizioni;
     private EndUser currentUser;
     private JButton tracciamentoButton;
@@ -28,8 +31,11 @@ public class UtenteView extends JFrame {
     
     private TracciamentoView tracciamentoView;
 
-	public UtenteView() {
+	public UtenteView(Utente utente) {
 		
+		 saldoUtente=utente.getSaldo().getDenaro();
+	     puntiApp=utente.getSaldo().getPuntiApp();
+	        
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //setLocationRelativeTo(null); 
@@ -88,12 +94,12 @@ public class UtenteView extends JFrame {
 		infoUtenteLab.setPreferredSize(new Dimension(200,80));
 		infoUtenteLab.setText("Profilo utente:				");
 		infoUtenteLab.setPreferredSize(new Dimension(200,80));
-		infoUtenteLab.setText("Saldo: 0$");
+		infoUtenteLab.setText("Saldo: "+saldoUtente+"€");
 		infoPan.add(infoUtenteLab);
 		
 		saldo=new JLabel();
 		saldo.setPreferredSize(new Dimension(200,80));
-		saldo.setText("PuntiApp: 0");
+		saldo.setText("PuntiApp: "+puntiApp);
 		infoPan.add(saldo);
 		infoPan.add(ricarica);
 		infoPan.add(trasferisci);
@@ -229,7 +235,8 @@ public static void main(String[] args) {
         @Override
         public void run() {
             // Crea una nuova istanza di UtenteView
-        	UtenteView utenteView = new UtenteView();
+        	Utente u=new Utente();
+        	UtenteView utenteView = new UtenteView(u);
             // Puoi usare il metodo setVisible(true) per mostrare la finestra
         	utenteView.setVisible(true);
         	utenteView.setGestoreSpedizioni(gestoreSpedizioni);

@@ -22,6 +22,7 @@ public class Utente extends ASuperUser implements Subject<Admin>{
 	private String fotoDocumento;
 	private Saldo saldo;
 	private boolean statoProfilo;
+	private int idUtente;
 	private List<Admin> listAdmin;
 	private String formatoNome = "^[A-Za-zàèéìòóùçÁÉÍÓÚÑñ ]{1,100}$"; // Consente lettere, accenti e spazi
 	private String formatoMail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-zA-Z]{2,}$"; //formato nomemail@example.com
@@ -154,6 +155,15 @@ public class Utente extends ASuperUser implements Subject<Admin>{
 	        return filePath != null && filePath.toLowerCase().endsWith(".png");
 	 }
 	 
+	 
+	public int getIdUtente() {
+		return idUtente;
+	}
+
+	public void setIdUtente(int idUtente) {
+		this.idUtente = idUtente;
+	}
+
 	private void fieldCheck(String mail, String password, String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, String fotoDocumento) throws EmptyFieldException, SQLException, IOException, WrongFieldException {
 		if ( mail.isEmpty() || nome.isEmpty() || cognome.isEmpty() || dataNascita.isEmpty() || numeroTelefono.isEmpty() || indirizzoCivico.isEmpty()|| password.equals("") ) //
 		{

@@ -12,8 +12,10 @@ public class PagamentoEsternoView extends JFrame {
     private JTextField cvvField;
     private JTextField totalField;  // Campo per il totale da pagare
     private JButton confirmButton;
+    private double cifraDaPagare=0.0;
     
-    public PagamentoEsternoView() { 
+    public PagamentoEsternoView(double amount) { 
+    	this.cifraDaPagare=amount;
         setTitle("Pagamento carta di credito esterno");
         setLayout(new BorderLayout(10, 10));    
 
@@ -39,7 +41,9 @@ public class PagamentoEsternoView extends JFrame {
         // Etichetta e campo per il totale
         JLabel totalLabel = new JLabel("  Totale da pagare:");
         totalLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        totalField = new JTextField("100.00");  // Imposta il totale iniziale (esempio: 100)
+        totalField = new JTextField();
+        totalField.setText(String.valueOf(cifraDaPagare));
+        //totalField = new JTextField(totalField);  // Imposta il totale iniziale (esempio: 100)
         totalField.setFont(new Font("Arial", Font.BOLD, 14));
         totalField.setBorder(BorderFactory.createLineBorder(new Color(0, 123, 255), 2));  
         totalField.setEditable(false);  // Impedisce la modifica del campo
@@ -100,7 +104,7 @@ public class PagamentoEsternoView extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new PagamentoEsternoView().setVisible(true);
+                new PagamentoEsternoView(12.3).setVisible(true);
             }
         });
     }

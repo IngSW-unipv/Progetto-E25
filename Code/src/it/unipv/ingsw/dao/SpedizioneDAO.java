@@ -174,9 +174,16 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 	public static void main(String[] args) {
 		SpedizioneDAO sd = new SpedizioneDAO();
 		List<Spedizione> spedizioni = sd.selectAllInAttesa();
-		Spedizione s = spedizioni.get(0);
+//		Spedizione s = spedizioni.get(0);
+		if (!spedizioni.isEmpty()) {
+			 Spedizione s = spedizioni.get(0);
+			 System.out.println("Prima spedizione trovata: " + s);
+		} else {
+			System.out.println("Nessuna spedizione trovata!");
+		}
 		
-		sd.aggiornaStatoSpedizione(s, "test");
+		
+//		sd.aggiornaStatoSpedizione(s, "test");
 		
 		
 	}

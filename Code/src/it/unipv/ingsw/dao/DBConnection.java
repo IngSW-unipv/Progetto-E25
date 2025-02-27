@@ -90,4 +90,9 @@ public class DBConnection {
 		}
 		return conn;
 	}
+	
+	public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(dbURL, username, password);
+    }
+	
 }

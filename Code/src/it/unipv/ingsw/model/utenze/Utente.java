@@ -267,4 +267,16 @@ public class Utente extends ASuperUser implements Subject<Admin>{
 	public String toString() {
 		return "Utente- Mail:" +super.getMail()+ ", Password:"+super.getPassword()+", Nome:" + nome + ", Cognome:" + cognome + ", Numero di telefono:" +numeroTelefono+ ", Indirizzo civico:" + indirizzoCivico+ ", dataNascita=" + dataNascita;
 	}
+
+	@Override
+	public void inviaNotificaCarrier(String messaggio) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void inviaEmailCarrier(String soggetto, String corpo) {
+		// TODO Auto-generated method stub
+		
+	}
 }

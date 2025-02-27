@@ -114,4 +114,9 @@ public abstract class ASuperUser {
     public boolean isLoggedIn() {
         return utenteLoggato;
     }
+
+    public abstract void inviaNotificaCarrier(String messaggio);
+
+    public abstract void inviaEmailCarrier(String soggetto, String corpo);
+    
 }

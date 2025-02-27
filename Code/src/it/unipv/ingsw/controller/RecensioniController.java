@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import it.unipv.ingsw.recensioni.*;
 import it.unipv.ingsw.view.*;
 import it.unipv.ingsw.dao.*;
+import it.unipv.ingsw.model.spedizione.Spedizione;
 
 public class RecensioniController {
 	
@@ -21,8 +22,10 @@ public class RecensioniController {
 	private RecensioniView recensioniView;
 	private RecensioniDAO recensioniDAO;
 
-	public RecensioniController() {
-		
+	public RecensioniController(RecensioniView view) {
+		this.recensioniView=view;
+		this.recensioniDAO=new RecensioniDAO();
+		invioRecensione();
 	}
 
 	
@@ -34,6 +37,7 @@ public class RecensioniController {
 			
 			public void manageAction() {
 				String recensione_scritta=recensioniView.getRecensione().getText();
+				int punteggio_comodita_locker=Integer.valueOf(recensioniView.getPunteggioComoditaLocker().getText()); //da modificare
 				int punteggio_costo_spedizione= Integer.valueOf(recensioniView.getPunteggioCostoSpedizione().getText());
 				int punteggio_soddisfazione_generale=Integer.valueOf(recensioniView.getPunteggioSoddisfazioneGenerale().getText());
 				int punteggio_tempo_spedizione=Integer.valueOf(recensioniView.getPunteggioTempoSpedione().getText());
@@ -44,15 +48,19 @@ public class RecensioniController {
 				
 				
 				try {
-					Recensioni r=new Recensioni(recensione_scritta, punteggio_costo_spedizione,punteggio_soddisfazione_generale, punteggio_tempo_spedizione,punteggio_semplicita, punteggio_compenso, punteggio_affidabilita,punteggio_rapidita_consegna );
-					recensioniDAO.addRecensione(r);
+					Recensioni r=new Recensioni(recensione_scritta,punteggio_comodita_locker, punteggio_costo_spedizione,punteggio_soddisfazione_generale, punteggio_tempo_spedizione,punteggio_semplicita, punteggio_compenso, punteggio_affidabilita,punteggio_rapidita_consegna );
+					recensioniDAO.addRecensione(r,4);
 					
+					recensioniView.setVisible(false);
 				}catch(Exception e) {
 					System.out.printf("Perche non funzioni");
+					e.printStackTrace();
 					
 				}
 			}
 		};
+		
+		recensioniView.getButton().addActionListener(invioRecensioneListener);
 		
 	
 	}//fine metodo

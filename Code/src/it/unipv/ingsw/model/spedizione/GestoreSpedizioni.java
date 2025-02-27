@@ -130,6 +130,12 @@ public class GestoreSpedizioni {
 			
 			//setto s.itinerarioTOT con un nuovo punto di partenza (forse dovrebbe esser fatto quando consegna il pacco)
 			s.setItinerarioTot(new Itinerario(s.getItinerarioCorrente().getFine(), s.getItinerarioTot().getFine()));
+			
+			//invia il codice QR via notifica e mail
+			String codiceQR = s.getCodice().getQRcode();
+			String messaggio = "Hai preso in carico la spedizione: " + s.getIDSpedizione() + ". Ecco il tuo codice QR: " + codiceQR;
+			carrier.inviaNotificaCarrier(messaggio);
+	        carrier.inviaEmailCarrier("Codice QR Spedizione", messaggio);
 		}
 	}
 	
@@ -150,7 +156,7 @@ public class GestoreSpedizioni {
 	public void ritiraPacco(QRcode codice, Spedizione spedizione, boolean isRitiro, Locker locker) {
 		
 		//verifica il QR con locker, passando false per 'isMittenteDeposita'
-		boolean codiceValido = locker.checkQR(codice, spedizione, true, false);
+		boolean codiceValido = locker.checkQR(codice, spedizione, true, false, false);
 		
 		
 		//metodo che chiama il metodo checkQR nella classe Locker
@@ -163,7 +169,7 @@ public class GestoreSpedizioni {
 		
 		//verifica il QR con locker, passando true per 'isMittenteDeposita' e false a 'isRitiro'
 		
-		boolean codiceValido = locker.checkQR(codice, spedizione, false, isMittenteDeposita);
+		boolean codiceValido = locker.checkQR(codice, spedizione, false, isMittenteDeposita, false);
 		
 		if (!codiceValido) {
 			System.out.println("Errore: Il codice QR non è valido.");
@@ -194,17 +200,17 @@ public class GestoreSpedizioni {
 		}
 	}
 	
-	public void aggiornaStatoSpedizione(Spedizione spedizione, boolean isRitiro) {
-		//pacco ritirato dal destinatario
-		if (isRitiro) {
-			spedizione.setStatoSpedizione("Consegnato");
-			System.out.println("Il pacco è stato ritirato.\nStato aggiornato a 'Consegna'.");
-		} else {
-			//pacco depositato dal carrier
-			spedizione.setStatoSpedizione("In attesa");
-			System.out.println("Il pacco è stato depositato nel locker ed è in attesa per il ritiro. \nStato aggiornato a 'In attesa'.");
-		}
-	}
+//	public void aggiornaStatoSpedizione(Spedizione spedizione, boolean isRitiro) {
+//		//pacco ritirato dal destinatario
+//		if (isRitiro) {
+//			spedizione.setStatoSpedizione("Consegnato");
+//			System.out.println("Il pacco è stato ritirato.\nStato aggiornato a 'Consegna'.");
+//		} else {
+//			//pacco depositato dal carrier
+//			spedizione.setStatoSpedizione("In attesa");
+//			System.out.println("Il pacco è stato depositato nel locker ed è in attesa per il ritiro. \nStato aggiornato a 'In attesa'.");
+//		}
+//	}
 	
 	
 	
@@ -274,6 +280,14 @@ public class GestoreSpedizioni {
 
 		
 		
+	}
+
+	public static double getTassocompensosoldi() {
+		return TASSOCOMPENSOSOLDI;
+	}
+
+	public static double getTassocompensopunti() {
+		return TASSOCOMPENSOPUNTI;
 	}
 	
 

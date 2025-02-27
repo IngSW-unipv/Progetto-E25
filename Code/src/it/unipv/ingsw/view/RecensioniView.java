@@ -7,11 +7,13 @@ import java.awt.Dimension;
 import java.awt.TextArea;
 
 import javax.swing.*;
+import it.unipv.ingsw.controller.*;
 
 public class RecensioniView extends JFrame {
 	
 //	private JPanel panel;
 	private JTextArea recensione;
+	private JTextArea comodita_locker;
 	private JTextArea costo_spedizione;
 	private JTextArea soddisfazione_generale;
 	private JTextArea tempo_spedizione;
@@ -19,6 +21,8 @@ public class RecensioniView extends JFrame {
 	private JTextArea compenso;
 	private JTextArea affidabilita;
 	private JTextArea rapidita_consegna;
+	
+	private JButton button;
 	
 	public RecensioniView() {
 		
@@ -44,44 +48,50 @@ public class RecensioniView extends JFrame {
 		soddisfazione_generale.setBackground(Color.LIGHT_GRAY);
 		panel.add(soddisfazione_generale);
 		
-		JLabel label3=new JLabel("Punteggio costo spedizione");
+		JLabel label3=new JLabel("Punteggio comodita locker");
 		panel.add(label3);
+		comodita_locker= new JTextArea();
+		comodita_locker.setBackground(Color.LIGHT_GRAY);
+		panel.add(comodita_locker);
+		
+		JLabel label4=new JLabel("Punteggio costo spedizione");
+		panel.add(label4);
 		costo_spedizione= new JTextArea();
 		costo_spedizione.setBackground(Color.LIGHT_GRAY);
 		panel.add(costo_spedizione);
 		
-		JLabel label4=new JLabel("Punteggio tempo spedizione");
-		panel.add(label4);
+		JLabel label5=new JLabel("Punteggio tempo spedizione");
+		panel.add(label5);
 		tempo_spedizione= new JTextArea();
 		tempo_spedizione.setBackground(Color.LIGHT_GRAY);
 		panel.add(tempo_spedizione);
 		
-		JLabel label5=new JLabel("Punteggio semplicita");
-		panel.add(label5);
+		JLabel label6=new JLabel("Punteggio semplicita");
+		panel.add(label6);
 		semplicita= new JTextArea();
 		semplicita.setBackground(Color.LIGHT_GRAY);
 		panel.add(semplicita);
 		
-		JLabel label6=new JLabel("Punteggio compenso");
-		panel.add(label6);
+		JLabel label7=new JLabel("Punteggio compenso");
+		panel.add(label7);
 		compenso= new JTextArea();
 		compenso.setBackground(Color.LIGHT_GRAY);
 		panel.add(compenso);
 
-		JLabel label7=new JLabel("Punteggio affidabilita");
-		panel.add(label7);
+		JLabel label8=new JLabel("Punteggio affidabilita");
+		panel.add(label8);
 		affidabilita= new JTextArea();
 		affidabilita.setBackground(Color.LIGHT_GRAY);
 		panel.add(affidabilita);
 		
-		JLabel label8=new JLabel("Punteggio rapidita consegna");
-		panel.add(label8);
+		JLabel label9=new JLabel("Punteggio rapidita consegna");
+		panel.add(label9);
 		rapidita_consegna= new JTextArea();
 		rapidita_consegna.setBackground(Color.LIGHT_GRAY);
 		panel.add(rapidita_consegna);
 	
 		
-		JButton button=new JButton("Invia recensione");
+		button=new JButton("Invia recensione");
 		panel.add(button);
 		
 		add(panel);
@@ -93,6 +103,10 @@ public class RecensioniView extends JFrame {
 	
 	public JTextArea getRecensione() {
 		return recensione;
+	}
+	
+	public JTextArea getPunteggioComoditaLocker() {
+		return comodita_locker;
 	}
 	
 	public JTextArea getPunteggioCostoSpedizione() {
@@ -118,6 +132,10 @@ public class RecensioniView extends JFrame {
 		return rapidita_consegna;
 	}
 	
+	public JButton getButton() {
+		return button;
+	}
+	
 	
 
 		
@@ -126,6 +144,7 @@ public class RecensioniView extends JFrame {
 	        @Override
 	        public void run() {
 	        	RecensioniView r=new RecensioniView();
+	        	RecensioniController controller = new RecensioniController(r);
 	        	r.setVisible(true);
 	        }
 	    });

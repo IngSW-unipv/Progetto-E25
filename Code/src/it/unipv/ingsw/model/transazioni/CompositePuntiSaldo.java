@@ -15,19 +15,20 @@ public class CompositePuntiSaldo extends CompositePagamentiStrategy{
 	
 	//pagamento con puntiApp e saldo
 	public void effettuaPagamento(double amount,int puntiApp,Utente utente) throws PaymentException{
-		double temp;
+		double temp,sconto,prezzoFinale,prezzoScontato;
 		Saldo sal;
 		System.out.println("PAGAMENTO PUNTI+SALDO");
-		
 		Mittente m=(Mittente) Singleton.getInstance().getUtenteLoggato();
 		//trasformo puntiApp in saldo
-		amount-=(super.convertiPuntiInSaldo(utente.getSaldo().getPuntiApp()));
-		if(utente.getSaldo().getDenaro()<amount) {
-			throw new PaymentException();
-		}
+		sconto=super.convertiPuntiInSaldo(utente.getSaldo().getPuntiApp());
+		prezzoScontato = amount-sconto;
+		//mostrare a video prezzoScontato
+		
+		if(utente.getSaldo().getDenaro()<prezzoScontato) 
+			throw new PaymentException(); //anche popup
 		else {
-			temp=utente.getSaldo().getDenaro();
-			temp=temp-puntiApp;
+			prezzoFinale = amount + sconto;
+			temp=utente.getSaldo().getDenaro()-prezzoFinale;
 			sal=new Saldo(temp,0);
 			utente.setSaldo(sal);
 		}

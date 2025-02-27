@@ -29,8 +29,10 @@ public abstract class CompositePagamentiStrategy implements IPagamento{
 	    // Ogni 100 punti corrispondono a 1 euro
 	    double conversioneSoldi = punti / 100.0;
 	    double amount=0;
+	    System.out.println(conversioneSoldi);
 	    // Aggiungi l'equivalente in euro alla variabile amount
 	    amount += conversioneSoldi;
+	    System.out.println(amount);
 	    
 	    return amount;
 	}

@@ -38,7 +38,7 @@ import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.view.AvviaSpedizioneView;
 import it.unipv.ingsw.view.CarrierView;
 import it.unipv.ingsw.view.ItinerarioCarrierView;
-import it.unipv.ingsw.view.LogOutView;
+//import it.unipv.ingsw.view.LogOutView;
 import it.unipv.ingsw.view.LoginAdminView;
 import it.unipv.ingsw.view.MainView;
 import it.unipv.ingsw.view.ModificaProfiloView;
@@ -56,7 +56,7 @@ public class ProfiloUtenteController {
 	private MainView mainView;
 	private ModificaProfiloView modificaProfiloView;
 	private AvviaSpedizioneView avviaSpedizioneView;
-	private LogOutView logOutView;
+//	private LogOutView logOutView;
 	private PagamentoView pagamentoView;
 	private ItinerarioCarrierView itinerarioCarrierView;
 	private UtenteDAO utenteDAO;

@@ -111,16 +111,16 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		}
 		
 		//fare natural join tra questa query, mittente e destinatario. poi, where idmittente=?, maildestinatario=? 
-	try {
-			String query1= "SELECT * FROM SPEDIZIONE NATURAL JOIN UTENTE where idmittente=? and iddestinatario=?";
+/*	try {
+			String query1= "SELECT * FROM SPEDIZIONE NATURAL JOIN UTENTE where email=? and IDspedizione=?;";
 			st=conn.prepareStatement(query1);
 			st.setString(1,spedizione.getMittente().getMail());
-			st.setString(2,spedizione.getDestinatario().getMail());
+			st.setInt(2,spedizione.getIDSpedizione());
 			rs=st.executeQuery();
 			
 		}catch(Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		
 		
@@ -128,7 +128,7 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
 		SpedizioneDAO sd = new SpedizioneDAO();
 		List<Spedizione> spedizioni = sd.selectAllInAttesa();
 		for(Spedizione sped : spedizioni) {

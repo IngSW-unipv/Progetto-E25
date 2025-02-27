@@ -13,122 +13,68 @@ public class LockerPaccoDAO {
 	private Connection conn;
 	
 	
-	public LockerPaccoDAO() {
+	public LockerPaccoDAO(Connection conn) {
 		this.schema = "ShipUp";
+		this.conn = conn;
 	}
 	
+	 // Inserisce un'associazione tra locker e spedizione
+	 public boolean inserisciLockerPacco(int idLocker, int idSpedizione) {
+	        String query = "INSERT INTO locker_pacco (IDlocker, IDspedizione) VALUES (?, ?)";
+	        try (PreparedStatement st = conn.prepareStatement(query)) {
+	            st.setInt(1, idLocker);
+	            st.setInt(2, idSpedizione);
+	            return st.executeUpdate() > 0;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+	    }
+	 
+	// Ottiene l'ID del locker associato a una spedizione
+	    public Integer getLockerBySpedizione(int idSpedizione) {
+	        String query1 = "SELECT IDlocker FROM locker_pacco WHERE IDspedizione = ?";
+	        try (PreparedStatement st1 = conn.prepareStatement(query1)) {
+	            st1.setInt(1, idSpedizione);
+	            ResultSet rs = st1.executeQuery();
+	            if (rs.next()) {
+	                return rs.getInt("IDlocker");
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return null;
+	    }
+	    
+	 // Ottiene l'ID della spedizione associata a un locker
+	    public Integer getSpedizioneByLocker(int idLocker) {
+	        String query2 = "SELECT IDspedizione FROM locker_pacco WHERE IDlocker = ?";
+	        try (PreparedStatement st2 = conn.prepareStatement(query2)) {
+	            st2.setInt(1, idLocker);
+	            ResultSet rs = st2.executeQuery();
+	            if (rs.next()) {
+	                return rs.getInt("IDspedizione");
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return null;
+	    }
+	    
+	 // Rimuove un'associazione tra locker e spedizione
+	    public boolean rimuoviLockerPacco(int idLocker, int idSpedizione) {
+	        String query3 = "DELETE FROM locker_pacco WHERE IDlocker = ? AND IDspedizione = ?";
+	        try (PreparedStatement st3 = conn.prepareStatement(query3)) {
+	            st3.setInt(1, idLocker);
+	            st3.setInt(2, idSpedizione);
+	            return st3.executeUpdate() > 0;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+	    }
 	
-
-	public void assocciaPaccoLocker(int idLocker, int idSpedizione) {
-		Connection conn = null;
-        PreparedStatement st = null;
-        
-		try { 
-			conn = DBConnection.getConnection();
-			String query = "INSERT INTO locker_pacco (id_locker, id_spedizione) VALUES (?, ?)";
-			st = conn.prepareStatement(query);
-			st.setInt(1, idLocker);
-			st.setInt(2, idSpedizione);
-			st.executeUpdate();
-			
-			System.out.println("Pacco associato al locker con successo!");
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				 if (st != null) st.close();
-	             if (conn != null) conn.close();
-			} catch(SQLException e) {
-				e.printStackTrace();
-
-			}
-		}
-	}
-	
-//	 // Metodo per ottenere l'ID del locker associato a una spedizione
-//	public Integer getLockerBySpedizione(int idSpedizione) {
-//		 String query = "SELECT IDlocker FROM locker_pacco WHERE IDspedizione = ?";
-//	     Integer idLocker = null;
-//	     
-//	     try(Connection conn = DBConnection.getConnection();
-//	    	PreparedStatement st = conn.prepareStatement(query)) {
-//	    	 st.setInt(1, idSpedizione);
-//	    	 ResultSet rs = st.executeQuery();
-//	    	 
-//	    	 if(rs.next()) {
-//	    		 idLocker = rs.getInt("IDlocker");
-//	    	 }
-//	    	 
-//	     } catch(SQLException e) {
-//	    	 e.printStackTrace();
-//	     }
-//	     return idLocker;
-//	     
-//	}
-//	 // Metodo per ottenere tutte le spedizioni in un determinato locker
-//	public List<Integer> getSpedizioniByLocker(int idLocker) {
-//        String query = "SELECT IDspedizione FROM locker_pacco WHERE IDlocker = ?";
-//        List<Integer> spedizioni = new ArrayList<>();
-//
-//        try (Connection conn = DBConnection.getConnection();
-//             PreparedStatement st = conn.prepareStatement(query)) {
-//
-//            st.setInt(1, idLocker);
-//            ResultSet rs = st.executeQuery();
-//
-//            while (rs.next()) {
-//                spedizioni.add(rs.getInt("IDspedizione"));
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return spedizioni;
-//    }
-//	
-//	 // Metodo per rimuovere un pacco da un locker
-//    public void rimuoviPaccoDaLocker(int idLocker, int idSpedizione) {
-//        String query = "DELETE FROM locker_pacco WHERE IDlocker = ? AND IDspedizione = ?";
-//
-//        try (Connection conn = DBConnection.getConnection();
-//             PreparedStatement st = conn.prepareStatement(query)) {
-//
-//            st.setInt(1, idLocker);
-//            st.setInt(2, idSpedizione);
-//            st.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//    
-//    public static void main(String[] args) {
-//        LockerPaccoDAO dao = new LockerPaccoDAO();
-//
-//        // Associare un pacco a un locker
-//        dao.associaPaccoALocker(1, 1);
-//        System.out.println("Pacco associato al locker.");
-//
-//        // Recuperare il locker di una spedizione
-//        Integer locker = dao.getLockerBySpedizione(1);
-//        System.out.println("Locker della spedizione 1: " + locker);
-//
-//        // Recuperare tutte le spedizioni di un locker
-//        List<Integer> spedizioni = dao.getSpedizioniByLocker(1);
-//        System.out.println("Spedizioni nel locker 1: " + spedizioni);
-//
-//        // Rimuovere un pacco dal locker
-//        dao.rimuoviPaccoDaLocker(1, 1);
-//        System.out.println("Pacco rimosso dal locker.");
-//    }
-//
-//	private void associaPaccoALocker(int i, int j) {
-//		
-//	}
-	
-	public static void main(String[] args) {
+	public static void main1(String[] args) {
 	    try {
 	        Connection conn = DBConnection.getConnection();
 	        if (conn != null) {

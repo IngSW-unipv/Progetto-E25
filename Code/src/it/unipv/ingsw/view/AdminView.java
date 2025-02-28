@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 
 public class AdminView extends JFrame{
 	private JPanel azioniPan,risultatoPan;
-	private JButton convalida,logout,disattiva,aggiungiTempo;
+	private JButton convalida,logout,disattiva;
 	private JScrollPane scrollAzioni, scrollRisultato;
 
 	public AdminView() {
@@ -31,17 +31,13 @@ public class AdminView extends JFrame{
 		
 		convalida =new JButton("Convalida profilo utenti in attesa");
 		disattiva =new JButton("Disattiva account utente");
-		aggiungiTempo =new JButton("Aggiungi tempo al carrier");
 		logout =new JButton("Logout");		
 		logout.setPreferredSize(new Dimension(90, 40));
 		convalida.setPreferredSize(new Dimension(90, 40));
 		disattiva.setPreferredSize(new Dimension(90, 40));
-		aggiungiTempo.setPreferredSize(new Dimension(110, 40));
 		convalida.setFocusable(true); //non schiacciabile fino ad approvazione admin
 		logout.setFocusable(false);
 		disattiva.setFocusable(false);
-		aggiungiTempo.setFocusable(false);
-		aggiungiTempo.setVisible(true);
 		azioniPan=new JPanel();
 		risultatoPan=new JPanel();		
 		azioniPan.setLayout(new GridLayout(10, 10));
@@ -49,7 +45,6 @@ public class AdminView extends JFrame{
 		JToolBar bar=new JToolBar();
 		bar.add(convalida);
 		bar.add(disattiva);
-		bar.add(aggiungiTempo);
 		bar.add(logout);
 		
 		scrollAzioni = new JScrollPane(azioniPan, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -84,13 +79,6 @@ public class AdminView extends JFrame{
 		return disattiva;
 	}
 
-	public JButton getAggiungiTempo() {
-		return aggiungiTempo;
-	}
-
-	public void setAggiungiTempo(JButton prendiInCarico) {
-		this.aggiungiTempo = prendiInCarico;
-	}
 
 public static void main(String[] args) {
     // Imposta l'aspetto dell'interfaccia grafica in modo più fluido (threading Swing)

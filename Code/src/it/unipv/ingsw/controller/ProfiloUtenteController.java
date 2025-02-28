@@ -86,6 +86,8 @@ public class ProfiloUtenteController {
 		
 	//costruttore per logout
 	public ProfiloUtenteController(Utente model, MainView mainView) {
+		ms = new MatchingService();
+		gs = new GestoreSpedizioni(ms);
 		this.model=model;
 		this.mainView=mainView;
 		utenteDAO=new UtenteDAO();
@@ -94,6 +96,8 @@ public class ProfiloUtenteController {
 	
 	//costruttore per ricaricaSaldo
 	public ProfiloUtenteController(Utente model, PagamentoEsternoView pagamentoEsternoView) {
+		ms = new MatchingService();
+		gs = new GestoreSpedizioni(ms);
 		this.model=model;
 		this.pagamentoEsternoView=pagamentoEsternoView;
 		utenteDAO=new UtenteDAO();
@@ -302,7 +306,7 @@ public class ProfiloUtenteController {
 				manageAction();
 			}
 			private void manageAction() {
-				new ProfiloUtenteController(model, new MainView());	//ritorna a view iniziale	
+				new MainController(new MainView());	//ritorna a view iniziale	
 			}
 		};
 		logOutView.getConfirmButton().addActionListener(okLogOutListener); //bottone di logout 

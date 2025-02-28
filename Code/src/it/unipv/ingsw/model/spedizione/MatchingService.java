@@ -117,15 +117,25 @@ public class MatchingService {
 	    	for(Itinerario sottoItinerario : spedizione.getItinerarioMancante()) {
 	    		//controllo se il sottoitinerario è contenuto in quello del carrier 
 	    		if (itinerarioCarrier.contiene(sottoItinerario)) {
-	    			System.out.println("il sottoitinerario: ("+sottoItinerario.getInizio().getLongitudine()+","+sottoItinerario.getInizio().getLatitudine()+") -to- ("+sottoItinerario.getFine().getLongitudine()+","+sottoItinerario.getFine().getLatitudine()+")");
+	    			System.out.println("il sottoitinerario: ("+sottoItinerario.getInizio().getLongitudine()+","+sottoItinerario.getInizio().getLatitudine()+") -to- ("+sottoItinerario.getFine().getLongitudine()+","+sottoItinerario.getFine().getLatitudine()+") è contenuto in quello del carrier");
 	    			//punto di inizio gestito sopra,
 	    			//il punto di fine dell'itinerario corrente è il punto di fine dell'ultimo sottoitinerario (all'utlima iterazione raggiungo l'ultimo contenuto)
 	    			fine = sottoItinerario.getFine();
-		        }	
+		        }
+	    		else {
+	    			System.out.println("sottoitinerario ("+sottoItinerario.getInizio().getLongitudine()+","+sottoItinerario.getInizio().getLatitudine()+") -to- ("+sottoItinerario.getFine().getLongitudine()+","+sottoItinerario.getFine().getLatitudine()+ ") non è contenuto in quello del carrier");
+	    		}
 	    	}
 	    	
-	    	spedizione.setItinerarioCorrente(new Itinerario(inizio,fine));
-	    	spedizioniCompatibili.add(spedizione);
+	    	if(fine!=null) {
+	    		System.out.println("ho trovato almeno un sottoitinerario contenuto in quello del carrier");
+	    		spedizione.setItinerarioCorrente(new Itinerario(inizio,fine));
+		    	spedizioniCompatibili.add(spedizione);
+	    	}
+	    	else {
+	    		System.out.println("nessun sottoitinerario è contenuto in quello del carrier");
+	    	}
+	    	
 	        
 	    }
 	    

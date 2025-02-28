@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
+import it.unipv.ingsw.exceptions.NessunaSpedizioneCompatibileException;
 import it.unipv.ingsw.dao.IPuntoDepositoDAO;
 import it.unipv.ingsw.dao.ISpedizioneDAO;
 import it.unipv.ingsw.dao.LockerDAO;
@@ -86,10 +87,15 @@ public class GestoreSpedizioni {
 	}
 	
 	//prima fase di presa in carico di una spedizione (ricerca delle spedizioni compatibili)
-	public List<Spedizione> presaInCaricoSpedizione(Carrier carrier) {
+	public List<Spedizione> presaInCaricoSpedizione(Carrier carrier) throws NessunaSpedizioneCompatibileException {
 		
 		//ricerca delle spedizioni compatibili
 		List<Spedizione> spedizioniCompatibili = matchingService.trovaSpedizioniCompatibili(carrier.getItinerario());
+		
+		if(spedizioniCompatibili.isEmpty()) {
+    		throw new NessunaSpedizioneCompatibileException();
+    	}
+		
 		
 		Iterator<Spedizione> iterator = spedizioniCompatibili.iterator();
 		while (iterator.hasNext()) {
@@ -113,8 +119,12 @@ public class GestoreSpedizioni {
 	}
 	
 	//accetto la presa in carico delle spedizioni compatibili
-	public void accettaPresaInCarico(Carrier carrier, List<Spedizione> spedizioniCompatibili) {
+	public void accettaPresaInCarico(Carrier carrier, List<Spedizione> spedizioniCompatibili) throws NessunaSpedizioneCompatibileException {
 		//assegno al carrier tutte le spedizioni compatibili con il suo itinerario
+		if(spedizioniCompatibili.isEmpty()) {
+    		throw new NessunaSpedizioneCompatibileException();
+    	}
+		
 		carrier.assegnaSpedizioni(spedizioniCompatibili);
 		
 		for(Spedizione s : spedizioniCompatibili) {
@@ -131,9 +141,15 @@ public class GestoreSpedizioni {
 			carrier.getCompenso().setDenaro(carrier.getCompenso().getDenaro() + compensoSoldi);
 			carrier.getCompenso().setPuntiApp(carrier.getCompenso().getPuntiApp() + compensoPuntiApp);
 			
+//			System.out.println("-###-  ("+s.getItinerarioTot().getInizio().getLongitudine()+","+s.getItinerarioTot().getInizio().getLatitudine()+")-to-("+s.getItinerarioTot().getFine().getLongitudine()+","+s.getItinerarioTot().getFine().getLatitudine()+")");
 			//setto s.itinerarioTOT con un nuovo punto di partenza (forse dovrebbe esser fatto quando consegna il pacco)
 			s.setItinerarioTot(new Itinerario(s.getItinerarioCorrente().getFine(), s.getItinerarioTot().getFine()));
-	
+//			System.out.println("-###-  ("+s.getItinerarioTot().getInizio().getLongitudine()+","+s.getItinerarioTot().getInizio().getLatitudine()+")-to-("+s.getItinerarioTot().getFine().getLongitudine()+","+s.getItinerarioTot().getFine().getLatitudine()+")");
+			
+			Locker lockerFineTratta = (Locker) puntoDepositoDAO.selectPuntoDeposito(new Coordinate(s.getItinerarioTot().getInizio().getLongitudine(),s.getItinerarioTot().getInizio().getLatitudine()));
+			
+			spedizioneDAO.aggiornaPuntoDepositoIniziale(s, lockerFineTratta);
+			
 		}
 	}
 	
@@ -258,7 +274,12 @@ public class GestoreSpedizioni {
 		
 		gs.avvioSpedizione(car, l7, l8, car, null);
 	
-		gs.presaInCaricoSpedizione(car);
+		try {
+			gs.presaInCaricoSpedizione(car);
+		} catch (NessunaSpedizioneCompatibileException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		System.out.println("numero spedizioni assegnate:::"+car.getSpedizioniAssegnate().size());
 		System.out.println("---id spedizione assegnata:: "+car.getSpedizioniAssegnate().get(0).getIDSpedizione());

@@ -148,29 +148,29 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		Spedizione spedizioneModificata = spedizione;
 		
 		try {
-		//verifico se la spedizione esiste
-		String query = "SELECT IDspedizione FROM `ShipUp`.`spedizione` WHERE `IDspedizione` = ?";
-		st1 = conn.prepareStatement(query);
-		st1.setInt(1, spedizione.getIDSpedizione());
-		ResultSet rs = st1.executeQuery();
-		
-		//se non esiste la setta a null
-		if (!rs.next()) {
-			spedizioneModificata = null;
-		} else {
-		//aggiorno lo stato della spedizione
-		String query1 = "UPDATE `ShipUp`.`spedizione` s SET s.statoSpedizione = ? WHERE s.IDspedizione = ?";
-
-		
-		st2 = conn.prepareStatement(query1);
-		st2.setString(1, stato);
-		st2.setInt(2, spedizione.getIDSpedizione());
-		
-		st2.executeUpdate();
-		
-		//aggiorno lo stato
-		spedizioneModificata.setStatoSpedizione(stato);
-		
+			//verifico se la spedizione esiste
+			String query = "SELECT IDspedizione FROM `ShipUp`.`spedizione` WHERE `IDspedizione` = ?";
+			st1 = conn.prepareStatement(query);
+			st1.setInt(1, spedizione.getIDSpedizione());
+			ResultSet rs = st1.executeQuery();
+			
+			//se non esiste la setta a null
+			if (!rs.next()) {
+				spedizioneModificata = null;
+			} else {
+			//aggiorno lo stato della spedizione
+			String query1 = "UPDATE `ShipUp`.`spedizione` s SET s.statoSpedizione = ? WHERE s.IDspedizione = ?";
+	
+			
+			st2 = conn.prepareStatement(query1);
+			st2.setString(1, stato);
+			st2.setInt(2, spedizione.getIDSpedizione());
+			
+			st2.executeUpdate();
+			
+			//aggiorno lo stato
+			spedizioneModificata.setStatoSpedizione(stato);
+			
 		}
 		
 		} catch (Exception e) {
@@ -197,6 +197,44 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 	        return exists;
 	    }
 
+	public Spedizione aggiornaPuntoDepositoIniziale(Spedizione spedizione, IPuntoDeposito puntoDeposito) {
+		
+		conn = DBConnection.startConnection(conn);
+		PreparedStatement st1, st2;
+		Spedizione spedizioneModificata = spedizione;
+		
+		try {
+			//verifico se la spedizione esiste
+			String query = "SELECT IDspedizione FROM `ShipUp`.`spedizione` WHERE `IDspedizione` = ?";
+			st1 = conn.prepareStatement(query);
+			st1.setInt(1, spedizione.getIDSpedizione());
+			ResultSet rs = st1.executeQuery();
+			
+			//se non esiste la setta a null
+			if (!rs.next()) {
+				spedizioneModificata = null;
+			} else {
+			//aggiorno lo stato della spedizione
+			String query1 = "UPDATE `ShipUp`.`spedizione` s SET s.lockerIniziale = ? WHERE s.IDspedizione = ?";
+	
+			
+			st2 = conn.prepareStatement(query1);
+			st2.setInt(1, puntoDeposito.getID());
+			st2.setInt(2, spedizione.getIDSpedizione());
+			
+			st2.executeUpdate();
+			
+			spedizione.setPartenza(puntoDeposito);
+		}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeConnection(conn);
+		}
+		
+		return spedizioneModificata;
+	}
 	
 	public static void main(String[] args) {
 		SpedizioneDAO sd = new SpedizioneDAO();

@@ -9,6 +9,8 @@ import it.unipv.ingsw.model.spedizione.shippable.*;
 public interface IPuntoDeposito {
 	
 	public int getID();
+	
+	public void setID(int id);
 
 	public Coordinate getPosizione();
 	

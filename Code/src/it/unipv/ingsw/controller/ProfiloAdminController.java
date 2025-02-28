@@ -3,6 +3,8 @@ package it.unipv.ingsw.controller;
 import it.unipv.ingsw.model.utenze.Admin;
 import it.unipv.ingsw.view.AdminView;
 import it.unipv.ingsw.view.MainView;
+import it.unipv.ingsw.view.PanoramicaUtentiView;
+import it.unipv.ingsw.controller.PanoramicaUtentiController;
 import it.unipv.ingsw.view.UtentiDaConvalidareView;
 
 import javax.swing.JOptionPane;
@@ -28,8 +30,6 @@ public class ProfiloAdminController {
         // Aggiunge l'ActionListener per il pulsante Disattiva account carrier
         adminView.getDisattiva().addActionListener(e -> handleDisabilitaCarrier());
         
-        // Aggiunge l'ActionListener per il pulsante Aggiungi tempo al carrier
-        adminView.getAggiungiTempo().addActionListener(e -> handleAddTime());
     }
     
     private void handleLogout() {
@@ -48,11 +48,8 @@ public class ProfiloAdminController {
     }
     
     private void handleDisabilitaCarrier() {
-        
+        new PanoramicaUtentiController(new PanoramicaUtentiView());
     }
     
-    private void handleAddTime() {
-        
-    }
     
 }

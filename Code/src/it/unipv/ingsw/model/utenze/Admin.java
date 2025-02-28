@@ -27,7 +27,7 @@ public class Admin extends ASuperUser implements Observer<Utente>{
 	
 	@Override
 	public void update(Utente dato) {
-		System.out.println("il profilo dell'utente con email: '"+dato.getMail()+"' è stato modificato");
+		//System.out.println("il profilo dell'utente con email: '"+dato.getMail()+"' è stato modificato");
 		dato.setStatoProfilo(false);
 		//chiamare dao
 		utentiDaValidare.add(dato);

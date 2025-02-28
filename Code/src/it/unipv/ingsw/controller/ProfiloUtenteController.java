@@ -336,7 +336,7 @@ public class ProfiloUtenteController {
 				esitoCancellazione=utenteDAO.deleteUtente(model);
 				model=null;
 				if(esitoCancellazione)
-					new ProfiloUtenteController(model, new MainView());	//ritorna a view iniziale
+					new MainController(new MainView());	//ritorna a view iniziale
 			}
 		};
 		cancellaAccountView.getConfirmButton().addActionListener(okCancellaAccountListener); //bottone di cancellazioneAccount 

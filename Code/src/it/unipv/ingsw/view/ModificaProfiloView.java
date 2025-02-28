@@ -68,6 +68,9 @@ public class ModificaProfiloView extends JFrame {
 
 		setVisible(true);
 		
+		confirmButton.addActionListener(e -> {
+			JOptionPane.showMessageDialog(this, "Modifiche effettuate con successo", "Conferma", JOptionPane.INFORMATION_MESSAGE);
+		});
 	}
 
 

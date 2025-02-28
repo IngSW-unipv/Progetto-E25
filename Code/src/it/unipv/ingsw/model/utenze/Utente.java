@@ -178,36 +178,10 @@ public class Utente extends ASuperUser implements Subject<Admin>{
 		{
 			throw new EmptyFieldException();
 		}
+		//Per semplicitta' nel debug del codice
 		//if(!nome.matches(formatoNome) || !cognome.matches(formatoNome) || !mail.matches(formatoMail) || !password.matches(formatoPassword) || !numeroTelefono.matches(formatoNumero) || !indirizzoCivico.matches(formatoIndirizzo) || !isPng(fotoDocumento) ) { 
         	//throw new WrongFieldException();
 		//}	
-	}
-	
-	public Utente modificaProfilo(String mail,String password,String nome, String cognome, String numeroTelefono, String indirizzoCivico, String dataNascita, String fotoDocumento) { 
-		if(!super.isLoggedIn() || !statoProfilo) {
-		Utente utenteInAttesa = new Utente(); //parametri passati: null,ferri,34637738,null,...
-		if(mail != null && mail.matches(formatoMail) && !super.getMail().equals(mail)) 
-			utenteInAttesa.setMail(mail);
-		if(password != null && password.matches(formatoPassword) && !super.getPassword().equals(password)) 
-			utenteInAttesa.setPassword(password);
-		if(nome != null && nome.matches(formatoNome) && !this.nome.equals(nome)) 
-			utenteInAttesa.setNome(nome);
-		if(cognome != null && cognome.matches(formatoNome) && !this.cognome.equals(cognome)) 
-			utenteInAttesa.setCognome(cognome);
-		if(numeroTelefono != null && numeroTelefono.matches(formatoNumero) && !this.numeroTelefono.equals(numeroTelefono)) 
-			utenteInAttesa.setNumeroTelefono(numeroTelefono);
-		if(indirizzoCivico != null && indirizzoCivico.matches(formatoIndirizzo) && !this.indirizzoCivico.equals(indirizzoCivico)) 
-			utenteInAttesa.setIndirizzoCivico(indirizzoCivico);
-		if(dataNascita != null && !this.dataNascita.equals(dataNascita)) { 
-			utenteInAttesa.setDataNascita(dataNascita);
-		}
-		if(fotoDocumento != null && !this.fotoDocumento.equals(fotoDocumento))  //&& isPngImage(fotoDocumento)
-			utenteInAttesa.setFotoDocumento(fotoDocumento);
-		//notify()
-		return utenteInAttesa; //utente fittizio con modifiche
-		}
-		else
-			return null;
 	}
 	
 	public void cancellaAccount() {

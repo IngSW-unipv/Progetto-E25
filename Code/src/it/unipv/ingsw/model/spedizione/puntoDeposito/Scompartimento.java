@@ -5,6 +5,7 @@ import it.unipv.ingsw.model.spedizione.shippable.Size;
 
 public class Scompartimento {
 	
+	private int IDlocker;
 	private int IDscompartimento;
 	private Size dimensione;
 	private boolean occupato;
@@ -38,6 +39,10 @@ public class Scompartimento {
 
 	public void setOccupato(boolean occupato) {
 		this.occupato = occupato;
+	}
+
+	public int getID() {
+		return this.IDlocker;
 	}
 
 	

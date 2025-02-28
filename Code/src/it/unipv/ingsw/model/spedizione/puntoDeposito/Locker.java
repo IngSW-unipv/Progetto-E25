@@ -121,17 +121,38 @@ public class Locker implements IPuntoDeposito{
 		}
 				
 			//se il qr valido, procede ed apre lo sc associato
-			int s = mappaQRcode.get(codiceQR);
-			Scompartimento sc = scompartimenti.get(s);
-			sc.Open();
-			System.out.println("Scompartimento aperto!");
+//			int s = mappaQRcode.get(codiceQR);
+//			Scompartimento sc = scompartimenti.get(s);
+			
+		// Recupera lo scompartimento associato al codice QR
+	    int idScompartimento = mappaQRcode.get(codiceQR);
+	    Scompartimento sc = scompartimenti.get(idScompartimento);
+	    
+	 // Verifica che lo scompartimento esista
+	    if (sc == null) {
+	        System.out.println("Errore: Nessuno scompartimento associato al codice QR trovato.");
+	        return false;
+	    }
+	    
+	 // Ottieni l'ID del locker della destinazione (usando getDestinazione())
+	    int idLockerDestinazione = spedizione.getDestinazione().getID();
+	    
+	 // Controlla se lo scompartimento appartiene al locker corretto
+	    if (idLockerDestinazione != sc.getID()) {
+	        System.out.println("Errore: Il scompartimento trovato non appartiene al locker della spedizione. Impossibile aprire lo scompartimento");
+	        return false;
+	    }
+	    
+	    // Se esiste uno scompartimento associato alla spedizione in tale locker, aprilo
+	    sc.Open();
+	    System.out.println("Scompartimento aperto!");
+
+		this.registraDeposito(dataDeposito);
 				
-			this.registraDeposito(dataDeposito);
-				
-			mappaQRcode.remove(codiceQR); //elimina dalla mappa il codiceQR scansionato
-			System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
+		mappaQRcode.remove(codiceQR); //elimina dalla mappa il codiceQR scansionato
+		System.out.println("CodiceQR rimosso dalla mappa dei codici attesi");
 					
-			return true;
+		return true;
 			
 	}
 

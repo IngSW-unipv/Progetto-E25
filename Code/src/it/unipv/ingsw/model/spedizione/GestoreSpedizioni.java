@@ -42,10 +42,14 @@ public class GestoreSpedizioni {
 		this.matchingService = matchingService;
 		spedizioneDAO = new SpedizioneDAO();
 		puntoDepositoDAO = new LockerDAO();
+		qrcode = new QRcode();
 	}
 	
 	//metodo avvio spedizione
-	public Spedizione avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, IPuntoDeposito punto_deposito_destinazione, ASuperUser destinatario, Spedizione spedizione, IShippable spedibile) {
+	public Spedizione avvioSpedizione(Utente utente, IPuntoDeposito punto_deposito_partenza, IPuntoDeposito punto_deposito_destinazione, ASuperUser destinatario, IShippable spedibile) {
+		Spedizione spedizione= new Spedizione();
+		
+		spedizione.setCodice(qrcode.generaQRcode());
 		
 		Mittente mittente_spedizione= new Mittente(utente.getMail(), null, utente.getNome(), utente.getCognome(), utente.getNumeroTelefono(), utente.getIndirizzoCivico(), utente.getDataNascita(), utente.getFotoDocumento());
 		Destinatario destinatario_spedizione= new Destinatario(destinatario.getMail());
@@ -55,11 +59,10 @@ public class GestoreSpedizioni {
 		spedizione.setDestinatario(destinatario_spedizione);
 		spedizione.setPacco(spedibile);
 		
-		if(spedizione.getPacco()==null && destinatario==null) System.out.println("i campi obbligatori non sono stati completati");
-		
-		spedizione.getCodice();
-		boolean controllo_disponibilita=punto_deposito_partenza.checkDisponibilita(spedizione.getPacco(), spedizione.getCodice().getQRcode());
-		
+		if(spedizione.getPacco()==null || destinatario==null) 
+			System.out.println("i campi obbligatori non sono stati completati");
+		//boolean controllo_disponibilita=punto_deposito_partenza.checkDisponibilita(spedizione.getPacco(), spedizione.getCodice().getQRcode());
+		boolean controllo_disponibilita=true;
 		if(controllo_disponibilita==false) {
 			System.out.printf("Nel locker scelto non c'è disponibilità\n");
 		}else {
@@ -72,7 +75,7 @@ public class GestoreSpedizioni {
 		//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
 			System.out.printf("Finito avvioSpedizione\n");
 		}
-		
+		System.out.println("DENTRO"+spedizione.getDestinatario());
 		return spedizione;
 
 	}
@@ -281,6 +284,8 @@ public class GestoreSpedizioni {
 		Itinerario ic = new Itinerario(i,j);
 		Carrier car = new Carrier(ic);
 		
+		
+		gs.avvioSpedizione(car, l7, l8, car, null);
 	
 		try {
 			gs.presaInCaricoSpedizione(car);

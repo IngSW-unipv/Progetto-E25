@@ -14,7 +14,6 @@ public class TestPagamenti {
 
 	@Before
 	public void initTest() {
-		System.out.println("CIAO");
 	}
 
 	@Test
@@ -22,7 +21,7 @@ public class TestPagamenti {
 		double amount=1;
 		int punti=1;
 		pagamento=new Pagamento(PagamentoStrategyFactory.getPagamentoEsternoAdapter(new PagamentoCarta()));
-		assertTrue(pagamento.provaPagamento(amount,punti));
+		assertTrue(pagamento.provaPagamento(amount,punti, PagamentoStrategyFactory.getPagamentoEsternoAdapter(new PagamentoCarta()), null));
 	}
 	@Test
 	public void testPagamentoFailDenaro() throws PaymentException { //importo negativo
@@ -30,7 +29,7 @@ public class TestPagamenti {
 		int punti=1;
 		pagamento=new Pagamento(PagamentoStrategyFactory.getPagamentoEsternoAdapter(new PagamentoCarta()));
 		assertThrows(PaymentException.class, () -> {
-			pagamento.provaPagamento(amount,punti);
+			pagamento.provaPagamento(amount,punti, PagamentoStrategyFactory.getPagamentoEsternoAdapter(new PagamentoCarta()), null);
 		});
 	}
 	@Test
@@ -39,7 +38,7 @@ public class TestPagamenti {
 		int punti=-1;
 		pagamento=new Pagamento(PagamentoStrategyFactory.getPagamentoEsternoAdapter(new PagamentoCarta()));
 		assertThrows(PaymentException.class, () -> {
-			pagamento.provaPagamento(amount,punti);
+			pagamento.provaPagamento(amount,punti, PagamentoStrategyFactory.getPagamentoEsternoAdapter(new PagamentoCarta()), null);
 			});
 		}
 }

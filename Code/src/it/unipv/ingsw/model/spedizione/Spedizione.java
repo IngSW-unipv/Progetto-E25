@@ -34,8 +34,8 @@ public class Spedizione {
 	private Date dataFine;
 	private Date dataDeposito;
 //	private Date dataInizioSpedizione;
-	QRcode codice; //questo è il codice Qr
-	
+	private QRcode qrCodice; //questo è il codice Qr
+	private String codice;
 	private Itinerario itinerarioTot;
 	private MatchingService matchingService;
 	private List <Itinerario> itinerarioMancante; //i sottoitinerari che mancano fino alla fine della spedizione 
@@ -48,8 +48,6 @@ public class Spedizione {
 	
 	public Spedizione(Mittente mittente, Destinatario destinatario, IShippable shippable, int assicurazione, IPuntoDeposito a, IPuntoDeposito b, MatchingService m, Date dataDeposito) { 
 	
-		codice = new QRcode();//codice mittente
-	
 		this.mittente = mittente;
 		this.destinatario = destinatario;
 		this.shippable = shippable;
@@ -57,8 +55,8 @@ public class Spedizione {
 		this.partenza = a;
 		this.destinazione = b;
 		this.dataDeposito = null; //inizialmente nessuna data di deposito
-		this.codice = new QRcode();
-		this.codice.generaQRcode();
+		this.qrCodice = new QRcode();
+		this.codice=qrCodice.generaQRcode();
 	//	this.itinerario.setFine(destinazione.getPosizione());
 		
 		//matchingService = new MatchingService();
@@ -81,8 +79,11 @@ public class Spedizione {
 	public Spedizione() {
 		
 	}
-	
-	
+
+	public Spedizione(int iDSpedizione) {
+		IDSpedizione = iDSpedizione;
+	}
+
 	public Spedizione(String string, Itinerario itinerarioSpedizione1, Itinerario itinerarioSpedizioneTot1,
 			QRcode qrcode) {
 		// serve per il test
@@ -126,9 +127,15 @@ public class Spedizione {
 	
 	
 	public QRcode getCodice() {
-		return codice;
+		return qrCodice;
 	}
 	
+	
+	
+	public void setCodice(String codice) {
+		this.codice = codice;
+	}
+
 	public void setPacco(IShippable shippable) {
 		this.shippable = shippable;
 	}

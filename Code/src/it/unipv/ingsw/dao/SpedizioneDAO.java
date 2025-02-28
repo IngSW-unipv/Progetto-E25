@@ -182,6 +182,20 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		return spedizioneModificata;
 	}
 	
+	 public boolean lockerExists(int lockerID) {
+	        boolean exists = false;
+	        try (Connection conn = DBConnection.startConnection(null);
+	             PreparedStatement st = conn.prepareStatement("SELECT COUNT(*) FROM locker WHERE IDlocker = ?")) {
+	            st.setInt(1, lockerID);
+	            ResultSet rs = st.executeQuery();
+	            if (rs.next() && rs.getInt(1) > 0) {
+	                exists = true;
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return exists;
+	    }
 
 	public Spedizione aggiornaPuntoDepositoIniziale(Spedizione spedizione, IPuntoDeposito puntoDeposito) {
 		
@@ -240,21 +254,22 @@ public class SpedizioneDAO implements ISpedizioneDAO{
 		s2.setDataInizio(dateInizio);
 		s2.setStatoSpedizione("In attesa nel locker partenza");
 		
-		sd.addSpedizione(s2);
+//		sd.addSpedizione(s2);
 		
 		List<Spedizione> spedizioni = sd.selectAllInAttesa();
 //		Spedizione s = spedizioni.get(0);
 		if (!spedizioni.isEmpty()) {
 			 Spedizione s = spedizioni.get(0);
 			 System.out.println("Prima spedizione trovata: " + s);
+			 sd.aggiornaStatoSpedizione(s, "test");
 		} else {
 			System.out.println("Nessuna spedizione trovata!");
 		}
 		
 		
 //		sd.aggiornaStatoSpedizione(s, "test");
-		Spedizione s = spedizioni.get(0);
-		sd.aggiornaStatoSpedizione(s, "test");
+//		Spedizione s = spedizioni.get(0);
+//		sd.aggiornaStatoSpedizione(s, "test");
 		
 		
 	}

@@ -11,7 +11,7 @@ public class QRcode {
 		statoqr = false;
 	}
 	
-	public void generaQRcode() { 
+	public String generaQRcode() { 
 		String theAlphaNumericS;
 	    StringBuilder builder;
 	    final int j=7;
@@ -26,11 +26,17 @@ public class QRcode {
 	    
 	    codice=builder.toString();
 		//System.out.printf("Codice Qr generato: "+codice+ "\n");
-		statoqr=true;  
+	   
+		//statoqr=true;  
+		return codice;
 	}
 	
 	public String getQRcode() {
 		return codice;
+	}
+	
+	public void setQRcode(String codice) {
+		this.codice=codice;
 	}
 	
 	public void disabilitaQRcode() {

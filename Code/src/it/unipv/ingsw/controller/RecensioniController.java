@@ -53,7 +53,6 @@ public class RecensioniController {
 					
 					recensioniView.setVisible(false);
 				}catch(Exception e) {
-					System.out.printf("Perche non funzioni");
 					e.printStackTrace();
 					
 				}

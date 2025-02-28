@@ -72,7 +72,6 @@ public class LockerDAO implements IPuntoDepositoDAO{
 	        //impostiamo i parametri del PreparedStatement
 	        st.setDouble(1, c.getLongitudine());
 	        st.setDouble(2, c.getLatitudine());
-
 	        rs = st.executeQuery();
 
 	        if (rs.next()) {
@@ -95,11 +94,10 @@ public class LockerDAO implements IPuntoDepositoDAO{
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	    }
-
-	    DBConnection.closeConnection(conn);
-
-	    // Se l'oggetto Locker è stato trovato, lo restituiamo
+	    } finally {
+            DBConnection.closeConnection(conn);
+            
+        }
 	    return l;  // Se non trovato, ritorna null
 	}
 

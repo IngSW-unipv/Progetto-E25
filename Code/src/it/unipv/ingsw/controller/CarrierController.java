@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 
 import it.unipv.ingsw.dao.ISpedizioneDAO;
 import it.unipv.ingsw.dao.SpedizioneDAO;
+import it.unipv.ingsw.exceptions.NessunaSpedizioneCompatibileException;
 import it.unipv.ingsw.model.spedizione.GestoreSpedizioni;
 import it.unipv.ingsw.model.spedizione.MatchingService;
 import it.unipv.ingsw.model.spedizione.Spedizione;
@@ -45,36 +46,53 @@ public class CarrierController {
 //    	System.out.println("inizio-fine itinerario carrier::::");
 //    	System.out.println("("+carrier.getItinerario().getInizio().getLongitudine()+","+carrier.getItinerario().getInizio().getLatitudine()+")");
 //    	System.out.println("("+carrier.getItinerario().getFine().getLongitudine()+","+carrier.getItinerario().getFine().getLatitudine()+")");
-    	spedizioniCompatibili = gs.presaInCaricoSpedizione(carrier);
+    	try {
+			spedizioniCompatibili = gs.presaInCaricoSpedizione(carrier);
+			
+			DefaultTableModel tableModel = (DefaultTableModel) carrierView.getShipmentsTable().getModel();
+		    //rimuove eventuali righe esistenti
+		    tableModel.setRowCount(0);
+		        
+		    //aggiungo ogni spedizione come nuova riga nella tabella
+		    for (Spedizione sped : spedizioniCompatibili) {
+		    	Object[] rowData = {
+		    	sped.getIDSpedizione(),
+		        "("+sped.getItinerarioCorrente().getInizio().getLongitudine()+","+sped.getItinerarioCorrente().getInizio().getLatitudine()+")",
+		        "("+sped.getItinerarioCorrente().getFine().getLongitudine()+","+sped.getItinerarioCorrente().getFine().getLatitudine()+")",
+		        (double) Math.round(sped.getItinerarioCorrente().getInizio().distanza(sped.getItinerarioCorrente().getFine()) * 100) / 100 //formula per arrotondare a 2 decimali
+		                
+		    	};
+		        tableModel.addRow(rowData);
+		    }
+			
+		} catch (NessunaSpedizioneCompatibileException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+			carrierView.dispose();
+		}
     	
-        DefaultTableModel tableModel = (DefaultTableModel) carrierView.getShipmentsTable().getModel();
-        //rimuove eventuali righe esistenti
-        tableModel.setRowCount(0);
-        //aggiungo ogni spedizione come nuova riga nella tabella
-        for (Spedizione sped : spedizioniCompatibili) {
-            Object[] rowData = {
-                sped.getIDSpedizione(),
-                "("+sped.getItinerarioCorrente().getInizio().getLongitudine()+","+sped.getItinerarioCorrente().getInizio().getLatitudine()+")",
-                "("+sped.getItinerarioCorrente().getFine().getLongitudine()+","+sped.getItinerarioCorrente().getFine().getLatitudine()+")",
-                (double) Math.round(sped.getItinerarioCorrente().getInizio().distanza(sped.getItinerarioCorrente().getFine()) * 100) / 100 //formula per arrotondare a 2 decimali
-                
-            };
-            tableModel.addRow(rowData);
-        }
+       
     }
     
     private void acceptShipments() {
         //logica per accettare le spedizioni
-    	gs.accettaPresaInCarico(carrier, spedizioniCompatibili);
-    	//verifica 
-    	for (Spedizione sped : carrier.getSpedizioniAssegnate()) {
-    		System.out.println("id"+sped.getIDSpedizione()+
-                " ("+sped.getItinerarioCorrente().getInizio().getLongitudine()+","+sped.getItinerarioCorrente().getInizio().getLatitudine()+") "+
-                " ("+sped.getItinerarioCorrente().getFine().getLongitudine()+","+sped.getItinerarioCorrente().getFine().getLatitudine()+") "+
-                (double) Math.round(sped.getItinerarioCorrente().getInizio().distanza(sped.getItinerarioCorrente().getFine()) * 100) / 100); //formula per arrotondare a 2 decimali
-             
-        }
-        JOptionPane.showMessageDialog(carrierView, "Spedizioni accettate!\nRiceverai una mail con i QRcode per il ritiro e la consegna dei pacchi", "Informazione", JOptionPane.INFORMATION_MESSAGE);
-        carrierView.dispose();
+    	try {
+			gs.accettaPresaInCarico(carrier, spedizioniCompatibili);
+			
+			//verifica 
+	    	for (Spedizione sped : carrier.getSpedizioniAssegnate()) {
+	    		System.out.println("id"+sped.getIDSpedizione()+
+	                " ("+sped.getItinerarioCorrente().getInizio().getLongitudine()+","+sped.getItinerarioCorrente().getInizio().getLatitudine()+") "+
+	                " ("+sped.getItinerarioCorrente().getFine().getLongitudine()+","+sped.getItinerarioCorrente().getFine().getLatitudine()+") "+
+	                (double) Math.round(sped.getItinerarioCorrente().getInizio().distanza(sped.getItinerarioCorrente().getFine()) * 100) / 100); //formula per arrotondare a 2 decimali
+	             
+	        }
+	        JOptionPane.showMessageDialog(carrierView, "Spedizioni accettate!\nRiceverai una mail con i QRcode per il ritiro e la consegna dei pacchi", "Informazione", JOptionPane.INFORMATION_MESSAGE);
+	        
+			
+		} catch (NessunaSpedizioneCompatibileException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+		}
+    	carrierView.dispose();
     }
+    
 }

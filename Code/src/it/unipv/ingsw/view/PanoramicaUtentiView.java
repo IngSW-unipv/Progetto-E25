@@ -11,8 +11,8 @@ public class PanoramicaUtentiView extends JFrame {
     private JTable usersTable;
     private DefaultTableModel tableModel;
 
-    public UtentiDaConvalidareView() {
-        setTitle("Tutti gli utenti da convalidare:");
+    public PanoramicaUtentiView() {
+        setTitle("Tutti gli utenti:");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(600, 400);
         setLocationRelativeTo(null);

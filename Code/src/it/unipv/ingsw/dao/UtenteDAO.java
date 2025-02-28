@@ -123,7 +123,7 @@ public class UtenteDAO implements IUtenteDAO {
 		st2.setString(4, numeroTelefono);
 		st2.setString(5, indirizzoCivico);
 		st2.setString(6, fotoDocumento); // Se è un oggetto, altrimenti usa setString o altro metodo
-		st2.setBoolean(7, true);  // Assumendo che sia un booleano
+		st2.setBoolean(7, false);  // Assumendo che sia un booleano
 		st2.setString(8, password);
 		st2.setInt(9, rs.getInt("id"));
 		

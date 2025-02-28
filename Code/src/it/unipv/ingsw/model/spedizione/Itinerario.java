@@ -36,19 +36,19 @@ public class Itinerario {
 	//verifico se questo itinerario contiene un altro itinerario (considerando la tolleranza)
 	public boolean contiene(Itinerario altro) {
 		
-//		System.out.println(altro.getInizio().distanza(inizio, fine));	
-//		System.out.println(altro.getFine().distanza(inizio, fine));	
+		System.out.println("primo dato:"+altro.getInizio().distanza(inizio, fine));	
+		System.out.println("secondo dato:"+altro.getFine().distanza(inizio, fine));	
 		
-		if(altro.getInizio().distanza(inizio, fine)<TOLLERANZA && altro.getFine().distanza(inizio, fine)<TOLLERANZA) {
-			
+		if(Math.abs(altro.getInizio().distanza(inizio, fine))<TOLLERANZA && Math.abs(altro.getFine().distanza(inizio, fine))<TOLLERANZA) {
+			System.out.println("1--------");
 			//caso 1: l'itinerario del pacco è completamente contenuto nell'itinerario del carrier
-			if(altro.getFine().distanza(inizio, fine)<TOLLERANZA) {
-//				System.out.println("itinerario del pacco completamente contenuto nell'itinerario del carrier");
-				
+			if(Math.abs(altro.getFine().distanza(inizio, fine))<TOLLERANZA) {
+				System.out.println("itinerario del pacco completamente contenuto nell'itinerario del carrier");
+				System.out.println("2--------");
 			}
 			else {
 				//caso2: l'itinerario del pacco è parzialmente contenuto nell'itinerario del carrier
-//				System.out.println("itinerario del pacco parzialmente contenuto nell'itinerario del carrier");
+				System.out.println("itinerario del pacco parzialmente contenuto nell'itinerario del carrier");
 			}
 			
 			return true;

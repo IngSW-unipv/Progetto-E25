@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import it.unipv.ingsw.dao.UtenteDAO;
 import it.unipv.ingsw.model.utenze.Utente;
 import it.unipv.ingsw.view.InfoUtenteDaConvalidareView;
+import it.unipv.ingsw.view.PanoramicaUtentiView;
 import it.unipv.ingsw.view.UtentiDaConvalidareView;
 
 
@@ -18,9 +19,9 @@ public class PanoramicaUtentiController {
     private UtenteDAO utenteDAO;
     
     public PanoramicaUtentiController(PanoramicaUtentiView view) {
-        this.panoramicaUtentiController = view;
+        this.panoramicaUtentiView = view;
         utenteDAO = new UtenteDAO();
-        this.utenti = utenteDAO.utentiDisattivati();
+        this.utenti = utenteDAO.selectAll();
         riempiTabella();
         initController();
     }
@@ -64,5 +65,7 @@ public class PanoramicaUtentiController {
         });
         
         // Mostra la view
-    	utentiDaConvalidareView.setVisible(true);
+    	panoramicaUtentiView.setVisible(true);
     }
+    
+}

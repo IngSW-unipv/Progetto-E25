@@ -195,6 +195,11 @@ public class Locker implements IPuntoDeposito{
 	public Map<Integer, Scompartimento> getScompartimenti() {
 		return scompartimenti;
 	}
+	@Override
+	public void setID(int id) {
+		this.IDlocker = id;
+		
+	}
 
 
 }

@@ -3,14 +3,19 @@ package it.unipv.ingsw.dao;
 import java.util.List;
 
 import it.unipv.ingsw.model.spedizione.Spedizione;
+import it.unipv.ingsw.model.spedizione.puntoDeposito.IPuntoDeposito;
 
 
 public interface ISpedizioneDAO {
 
-	List<Spedizione> selectAllInAttesa();
+	public List<Spedizione> selectAllInAttesa();
 	
-	void addSpedizione(Spedizione spedizione);
+	public void addSpedizione(Spedizione spedizione);
 	
-	Spedizione aggiornaStatoSpedizione(Spedizione spedizione, String stato);
+	public Spedizione aggiornaStatoSpedizione(Spedizione spedizione, String stato);
+	
+	public Spedizione aggiornaPuntoDepositoIniziale(Spedizione spedizione, IPuntoDeposito puntoDeposito);
+	
+	
 	
 }

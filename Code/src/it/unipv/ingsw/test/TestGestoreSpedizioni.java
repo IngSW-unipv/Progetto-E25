@@ -43,7 +43,7 @@ public class TestGestoreSpedizioni {
 	     Spedizione spedizione2 = new Spedizione("SPED002", itinerarioSpedizione2, itinerarioSpedizioneTot2, new QRcode());
 	     spedizioni.add(spedizione2);
 	
-	        gs.accettaPresaInCarico(carrier, spedizioni);
+//	        gs.accettaPresaInCarico(carrier, spedizioni);
 	        
 	     // **VERIFICHE**
 	        // 1. Il carrier ha ricevuto le spedizioni

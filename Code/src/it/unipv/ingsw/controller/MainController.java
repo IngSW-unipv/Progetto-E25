@@ -137,7 +137,6 @@ public class MainController {
 				try {
 					Admin admin;
 					admin = adminDAO.getAdmin(matricola,email,password);
-					System.out.println("ciao"+admin.toString());
 					loginAdminView.setVisible(false);
 					mainView.setVisible(false);
 					new ProfiloAdminController(admin, new AdminView());

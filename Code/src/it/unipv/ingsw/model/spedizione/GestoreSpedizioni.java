@@ -74,7 +74,7 @@ public class GestoreSpedizioni {
 		//	this.mittente=(Mittente)utente;  //l'utente viene consideranto mittente 
 			System.out.printf("Finito avvioSpedizione\n");
 		}
-		
+		System.out.println("DENTRO"+spedizione.getDestinatario());
 		return spedizione;
 
 	}

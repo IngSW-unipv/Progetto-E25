@@ -54,19 +54,14 @@ public class AdminDAO implements IAdminDAO{
 			st1.setInt(2, matricola);
 			st1.setString(3, password);
 			rs1=st1.executeQuery();
-			System.out.println("qui");
 			if(rs1.next()) {
-				System.out.println("SI");
 				result= new Admin(rs1.getInt("matricola"), rs1.getString("email"),rs1.getString("password"));
 			}
-			System.out.println("NO");
 		} catch  (Exception e) { 
 			e.printStackTrace();
 		} finally {
 	        DBConnection.closeConnection(conn); 
 	    }
-		//System.out.println("qui");
-		//System.out.println(result);
 		return result;
 	}
 	

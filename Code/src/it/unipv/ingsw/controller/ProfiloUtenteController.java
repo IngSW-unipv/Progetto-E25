@@ -166,7 +166,6 @@ public class ProfiloUtenteController {
 			private void manageAction() {
 				String mailDest = avviaSpedizioneView.getMailDestField().getText();
 	            double lockerInizioX = Double.parseDouble(avviaSpedizioneView.getLockerInizioXField().getText());
-	            int costoPuntiApp=10;
 	            double lockerInizioY = Double.parseDouble(avviaSpedizioneView.getLockerInizioYField().getText());
 	            double lockerDestinazioneX = Double.parseDouble(avviaSpedizioneView.getLockerDestinazioneXField().getText());
 	            double lockerDestinazioneY = Double.parseDouble(avviaSpedizioneView.getLockerDestinazioneYField().getText());
@@ -212,14 +211,12 @@ public class ProfiloUtenteController {
 					// AVVIA SPEDIZIONE
 					Spedizione s1;
 					s1=gs.avvioSpedizione(model, ipi, ipf, d, p); //avvioSpedizione da modificare
-					System.out.println("GGG: "+ s1);
-					System.out.println("io: "+s1.getDataDeposito());
-					System.out.println("tu: "+s1.getAssicurazione());
-					System.out.println("lei: "+s1.getStatoSpedizione());
+					System.out.println(s1.getDestinatario());
 					avviaSpedizioneView.setVisible(false);
 					view.setVisible(false);
-					System.out.println("PROVO");
-					new PagamentoController(model,s1, new PagamentoView(lockerInizioX,costoPuntiApp,model),lockerInizioX, costoPuntiApp);	//costo spedizione effettivo, metodo Zein
+					int costoPuntiApp=10;
+					double costoSoldi=2.5;
+					new PagamentoController(model, new PagamentoView(costoSoldi,costoPuntiApp,model),s1,costoSoldi, costoPuntiApp);	//costo spedizione effettivo, metodo Zein
 					
 				} catch (Exception e) {
 					//JOptionPane.showMessageDialog(model, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
@@ -267,8 +264,7 @@ public class ProfiloUtenteController {
 	                it = new Itinerario(new Coordinate(startX,startY), new Coordinate(endX,endY));
 	                
 	                carrier.setItinerario(it);
-	                
-	                //System.out.println("latitudine inizio: "+carrier.getItinerario().getInizio().getLatitudine());
+	             
 	                
 	                itinerarioCarrierView.setVisible(false);
 	                //view.setVisible(false);

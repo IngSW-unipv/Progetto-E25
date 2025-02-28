@@ -79,8 +79,11 @@ public class Spedizione {
 	public Spedizione() {
 		
 	}
-	
-	
+
+	public Spedizione(int iDSpedizione) {
+		IDSpedizione = iDSpedizione;
+	}
+
 	public Spedizione(String string, Itinerario itinerarioSpedizione1, Itinerario itinerarioSpedizioneTot1,
 			QRcode qrcode) {
 		// serve per il test

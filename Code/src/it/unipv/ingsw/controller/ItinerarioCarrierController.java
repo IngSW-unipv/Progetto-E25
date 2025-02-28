@@ -28,11 +28,9 @@ public class ItinerarioCarrierController {
         this.view = view;
         this.carrier = carrier;
         initController();
-        System.out.println("costruttore");
     }
     
     private void initController() {
-    	System.out.println("ggggggggggggggg");
         // Registrazione dell'ActionListener sul bottone "Invia"
         view.getSendButton().addActionListener(new ActionListener() {	
             @Override
@@ -45,7 +43,6 @@ public class ItinerarioCarrierController {
     private void handleSendButton() {
         try {
             
-        	System.out.println("ffffffffffffff");
             //prendo e converto i valori inseriti nei campi della view
             double startX = Double.parseDouble(view.getStartXField().getText());
             double startY = Double.parseDouble(view.getStartYField().getText());
